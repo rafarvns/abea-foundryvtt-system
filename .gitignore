@@ -22,6 +22,3 @@ dist/
 *.zip
 *.tar.gz
 
-# others
-foundryvtt_v13_docs/
-.agent
