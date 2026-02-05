@@ -1,0 +1,48 @@
+<div class="weapons-tab-content">
+
+    <!-- Headers Grid -->
+    <div class="weapons-header-row">
+        <div class="weapon-header-line-left"></div>
+        <div class="weapon-damage-header">
+            <span>{{localize "ABEA.Item.Damage"}}</span>
+        </div>
+        <div class="weapon-header-line-right"></div>
+    </div>
+
+    <!-- Weapons List Grid -->
+    <div class="weapons-list-grid">
+        {{#each weapons as |item|}}
+        <div class="weapon-row-grid item" data-item-id="{{item.id}}" data-tooltip="{{item.system.description}}"
+            draggable="true">
+            <!-- Image -->
+            <div class="weapon-image">
+                <img src="{{item.img}}" title="{{item.name}}" />
+            </div>
+
+            <!-- Name Label -->
+            <div class="weapon-name-cell rollable" data-action="rollWeapon">
+                <span class="weapon-name-label">{{item.name}}</span>
+            </div>
+
+            <!-- Damage -->
+            <div class="weapon-damage-cell rollable" data-action="rollWeapon">
+                {{#if item.system.damage}}{{item.system.damage}}{{else}}—{{/if}}
+            </div>
+
+            <!-- Controls -->
+            <div class="skill-controls" style="justify-content: flex-end; display: flex; gap: 5px;">
+                <button type="button" class="icon-button item-edit" data-action="editItem"
+                    title="{{localize 'ABEA.Item.Edit'}}">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button type="button" class="icon-button item-delete" data-action="deleteItem"
+                    title="{{localize 'ABEA.Item.Delete'}}">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+
+</div>

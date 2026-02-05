@@ -1,0 +1,23 @@
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Node
+node_modules/
+package-lock.json
+
+# Foundry VTT
+world/
+backups/
+logs/
+*.db
+*.lock
+
+# Build / Zip
+dist/
+*.zip
+*.tar.gz

@@ -1,0 +1,41 @@
+<div class="abea-sheet-grid">
+  <aside class="sidebar-container">
+    {{> "systems/abea/templates/actor/parts/actor-sidebar.hbs"}}
+  </aside>
+
+  <main class="content-container">
+    <header class="sheet-header">
+      {{> "systems/abea/templates/actor/parts/actor-header.hbs"}}
+    </header>
+
+    <section class="condition-panel">
+      {{> "systems/abea/templates/actor/parts/actor-condition.hbs"}}
+    </section>
+
+    <nav class="sheet-tabs tabs" data-group="primary">
+      {{#each tabs.primary.tabs}}
+      <a class="item {{#if (eq ../tabs.primary.active id)}}active{{/if}}" data-tab="{{id}}" data-group="primary"
+        data-action="tab">
+        {{localize label}}
+      </a>
+      {{/each}}
+    </nav>
+
+    <section class="tab-content">
+      <div class="tab {{#if (eq tabs.primary.active 'skills')}}active{{/if}}" data-tab="skills" data-group="primary">
+        {{> "systems/abea/templates/actor/parts/actor-skills.hbs"}}
+      </div>
+      <div class="tab {{#if (eq tabs.primary.active 'weapons')}}active{{/if}}" data-tab="weapons" data-group="primary">
+        {{> "systems/abea/templates/actor/parts/actor-weapons.hbs"}}
+      </div>
+      <div class="tab {{#if (eq tabs.primary.active 'equipment')}}active{{/if}}" data-tab="equipment"
+        data-group="primary">
+        {{> "systems/abea/templates/actor/parts/actor-equipment.hbs"}}
+      </div>
+      <div class="tab {{#if (eq tabs.primary.active 'biography')}}active{{/if}}" data-tab="biography"
+        data-group="primary">
+        {{> "systems/abea/templates/actor/parts/actor-biography.hbs"}}
+      </div>
+    </section>
+  </main>
+</div>

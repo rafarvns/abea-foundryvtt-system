@@ -1,0 +1,66 @@
+{
+    "Actor": {
+        "types": [
+            "character"
+        ],
+        "character": {
+            "biography": {
+                "characteristics": "",
+                "history": ""
+            },
+            "details": {
+                "age": ""
+            },
+            "attributes": {
+                "defense": {
+                    "passive": 0,
+                    "active": 0
+                },
+                "energy": {
+                    "value": 10,
+                    "max": 10
+                },
+                "condition": {
+                    "resistance": 0,
+                    "resistanceMaxBonus": 0,
+                    "critical": 0,
+                    "notes": ""
+                },
+                "skillPoints": 0
+            },
+            "skills": [],
+            "currency": {
+                "gold": 0,
+                "silver": 0,
+                "bronze": 0,
+                "value": 0
+            }
+        }
+    },
+    "Item": {
+        "types": [
+            "item",
+            "weapon",
+            "skill"
+        ],
+        "item": {
+            "description": "",
+            "type": "",
+            "action": {
+                "type": "none",
+                "value": 0,
+                "isConsumable": false
+            }
+        },
+        "weapon": {
+            "description": "",
+            "damage": "",
+            "skillType": "",
+            "hands": "",
+            "range": ""
+        },
+        "skill": {
+            "description": ""
+        }
+    }
+}

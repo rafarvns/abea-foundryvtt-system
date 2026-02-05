@@ -1,0 +1,63 @@
+<div class="sidebar-content">
+    <div class="avatar-wrapper">
+        <img src="{{document.img}}" data-action="editImage" title="{{document.name}}" height="220" width="220"
+            style="cursor: pointer;" />
+    </div>
+
+    <div class="defense-panel">
+        <h3>{{localize "ABEA.Defense.Title"}}</h3>
+        <div class="defense-diamonds">
+            <div class="defense-diamond passive">
+                <div class="diamond"></div>
+                <div class="diamond-label">{{localize "ABEA.Defense.PassiveShort"}}</div>
+                <input name="system.attributes.defense.passive" type="number"
+                    value="{{system.attributes.defense.passive}}" />
+            </div>
+            <div class="defense-diamond active">
+                <div class="diamond"></div>
+                <div class="diamond-label">{{localize "ABEA.Defense.ActiveShort"}}</div>
+                <input name="system.attributes.defense.active" type="number"
+                    value="{{system.attributes.defense.active}}" />
+            </div>
+        </div>
+    </div>
+
+    <div class="energy-panel">
+        <h3>{{localize "ABEA.Energy.Title"}}</h3>
+        <div class="energy-circles">
+            <div class="energy-circle-container">
+                <div class="energy-circle">
+                    <input name="system.attributes.energy.value" type="number"
+                        value="{{system.attributes.energy.value}}" />
+                </div>
+                <div class="energy-label">{{localize "ABEA.Energy.Current"}}</div>
+            </div>
+            <div class="energy-circle-container">
+                <div class="energy-circle">
+                    <input name="system.attributes.energy.max" type="number" value="{{system.attributes.energy.max}}" />
+                </div>
+                <div class="energy-label">{{localize "ABEA.Energy.Max"}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="favorites-panel">
+        <h3>{{localize "ABEA.Favorites.Title"}}</h3>
+        <div class="favorites-grid">
+            {{#each favorites}}
+            <div class="favorite-item {{#unless this.name}}empty{{/unless}}" data-index="{{this.index}}" {{#if
+                this.name}}draggable="true" data-action="rollFavorite" {{/if}}>
+                {{#if this.name}}
+                <div class="fav-img">
+                    <img src="{{this.img}}" />
+                </div>
+                <div class="fav-name" title="{{this.name}}">{{this.name}}</div>
+                <div class="fav-controls">
+                    <a class="delete-fav" data-action="deleteFavorite"><i class="fas fa-trash"></i></a>
+                </div>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>

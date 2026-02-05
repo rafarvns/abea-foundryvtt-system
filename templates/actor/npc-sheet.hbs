@@ -1,0 +1,218 @@
+<div class="abea-npc-grid">
+    {{!-- HEADER REDESIGN --}}
+    <header class="npc-header">
+
+        {{!-- COL 1: AVATAR --}}
+        <div class="npc-avatar">
+            <img src="{{document.img}}" data-action="editImage" title="{{document.name}}" />
+        </div>
+
+        {{!-- COL 2: NAME & STATS --}}
+        <div class="npc-info-col">
+            <!-- Name -->
+            <input name="name" type="text" value="{{document.name}}" placeholder="{{localize 'ABEA.Actor.Name'}}"
+                class="npc-name-input" />
+
+            <!-- Stats Row -->
+            <div class="npc-stats-row">
+
+                <!-- DEFENSE -->
+                <div class="stat-compact">
+                    <label>DEFESA</label>
+                    <div class="stat-inputs">
+                        <input name="system.attributes.defense.passive" type="number"
+                            value="{{system.attributes.defense.passive}}" title="Passiva" />
+                        <span class="sep">/</span>
+                        <input name="system.attributes.defense.active" type="number"
+                            value="{{system.attributes.defense.active}}" title="Ativa" />
+                    </div>
+                </div>
+
+                <!-- ENERGY -->
+                <div class="stat-compact">
+                    <label>ENERGIA</label>
+                    <div class="stat-inputs">
+                        <input name="system.attributes.energy.value" type="number"
+                            value="{{system.attributes.energy.value}}" title="Atual"
+                            style="color: var(--abea-primary-color);" />
+                        <span class="sep">/</span>
+                        <input name="system.attributes.energy.max" type="number"
+                            value="{{system.attributes.energy.max}}" title="Máxima" />
+                    </div>
+                </div>
+
+                <!-- RESISTANCE -->
+                <div class="stat-compact">
+                    <label>RESISTÊNCIA</label>
+                    <div class="stat-inputs">
+                        <input name="system.attributes.condition.resistance" type="number"
+                            value="{{system.attributes.condition.resistance}}" title="Atual" />
+                        <span class="sep">/</span>
+                        <input name="system.attributes.condition.resistanceMaxBonus" type="number"
+                            value="{{system.attributes.condition.resistanceMaxBonus}}" title="Bônus" />
+                    </div>
+                </div>
+
+                <!-- CRITICAL -->
+                <div class="stat-compact">
+                    <label>CRÍTICO</label>
+                    <div class="stat-inputs">
+                        <input name="system.attributes.condition.critical" type="number"
+                            value="{{system.attributes.condition.critical}}" title="Crítico" style="width: 35px;" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {{!-- COL 3: NOTES --}}
+        <div class="npc-notes-col">
+            <textarea name="system.biography.history" class="npc-notes"
+                placeholder="{{localize 'ABEA.Biography.History'}}">{{system.biography.history}}</textarea>
+        </div>
+
+    </header>
+
+    {{!-- BODY (3 columns) --}}
+    <main class="npc-body">
+
+        {{!-- COLUMN 1: SKILLS --}}
+        <section class="npc-column skills-column">
+            <h3 class="npc-section-title">{{localize "ABEA.Tabs.Skills"}}</h3>
+
+            <!-- Skill Header -->
+            <div class="npc-skill-grid-layout npc-skill-header">
+                <div></div> <!-- Img -->
+                <div></div> <!-- Name -->
+                <div class="header-rank">Ini</div>
+                <div class="header-rank">Int</div>
+                <div class="header-rank">Ava</div>
+                <div class="header-rank">Len</div>
+                <div></div> <!-- Trash -->
+            </div>
+
+            <div class="npc-item-list">
+                {{#each skills}}
+                <div class="npc-skill-row npc-skill-grid-layout" data-index="{{@index}}">
+                    <!-- Hidden Inputs to preserve data on update -->
+                    <input type="hidden" name="system.skills.{{@index}}.name" value="{{name}}">
+                    <input type="hidden" name="system.skills.{{@index}}.img" value="{{img}}">
+
+                    <!-- Image -->
+                    <div class="npc-skill-img" data-action="rollSkill" data-skill-name="{{name}}">
+                        <img src="{{img}}" title="{{name}}" />
+                    </div>
+
+                    <!-- Name -->
+                    <div class="npc-skill-name" title="{{name}}" style="color: var(--border-color);">{{name}}</div>
+
+                    <!-- Ranks (1 to 4 only) -->
+                    <!-- Ini -->
+                    <div class="npc-skill-radio">
+                        <input type="radio" name="system.skills.{{@index}}.rank" value="1" id="npc-sk-{{@index}}-1"
+                            {{checked (eq rank 1)}}>
+                        <label for="npc-sk-{{@index}}-1"></label>
+                    </div>
+                    <!-- Int -->
+                    <div class="npc-skill-radio">
+                        <input type="radio" name="system.skills.{{@index}}.rank" value="2" id="npc-sk-{{@index}}-2"
+                            {{checked (eq rank 2)}}>
+                        <label for="npc-sk-{{@index}}-2"></label>
+                    </div>
+                    <!-- Ava -->
+                    <div class="npc-skill-radio">
+                        <input type="radio" name="system.skills.{{@index}}.rank" value="3" id="npc-sk-{{@index}}-3"
+                            {{checked (eq rank 3)}}>
+                        <label for="npc-sk-{{@index}}-3"></label>
+                    </div>
+                    <!-- Len (Legendary) -->
+                    <div class="npc-skill-radio">
+                        <input type="radio" name="system.skills.{{@index}}.rank" value="4" id="npc-sk-{{@index}}-4"
+                            {{checked (eq rank 4)}}>
+                        <label for="npc-sk-{{@index}}-4"></label>
+                    </div>
+
+                    <!-- Trash -->
+                    <div class="npc-item-control">
+                        <a data-action="deleteSkill" data-index="{{@index}}"><i class="fas fa-trash"></i></a>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </section>
+
+        {{!-- COLUMN 2: WEAPONS --}}
+        <section class="npc-column weapons-column">
+            <h3 class="npc-section-title">{{localize "ABEA.Tabs.Weapons"}}</h3>
+
+            <!-- Weapon Header -->
+            <div class="npc-weapon-grid-layout npc-skill-header">
+                <div></div> <!-- Img -->
+                <div>{{localize "ABEA.Item.Name"}}</div>
+                <div style="text-align: center;">{{localize "ABEA.Item.Damage"}}</div>
+                <div></div> <!-- Trash -->
+            </div>
+
+            <div class="npc-item-list">
+                {{#each weapons}}
+                <div class="npc-weapon-row npc-weapon-grid-layout item" data-item-id="{{id}}">
+                    <!-- Image -->
+                    <div class="npc-skill-img" data-action="rollWeapon">
+                        <img src="{{img}}" title="{{name}}" />
+                    </div>
+
+                    <!-- Name -->
+                    <div class="npc-skill-name" data-action="editItem">{{name}}</div>
+
+                    <!-- Damage -->
+                    <div class="npc-weapon-dmg">{{system.damage}}</div>
+
+                    <!-- Trash -->
+                    <div class="npc-item-control">
+                        <a data-action="deleteItem"><i class="fas fa-trash"></i></a>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </section>
+
+        {{!-- COLUMN 3: INVENTORY --}}
+        <section class="npc-column inventory-column">
+            <h3 class="npc-section-title">{{localize "ABEA.Tabs.Equipment"}}</h3>
+
+            <!-- Inventory Header -->
+            <div class="npc-inventory-grid-layout npc-skill-header">
+                <div></div> <!-- Img -->
+                <div>{{localize "ABEA.Item.Name"}}</div>
+                <div style="text-align: center;">Qtd</div>
+                <div></div> <!-- Trash -->
+            </div>
+
+            <div class="npc-item-list">
+                {{#each inventory}}
+                <div class="npc-inventory-row npc-inventory-grid-layout item" data-item-id="{{id}}">
+                    <!-- Image -->
+                    <div class="npc-skill-img">
+                        <img src="{{img}}" title="{{name}}" />
+                    </div>
+
+                    <!-- Name -->
+                    <div class="npc-skill-name" data-action="editItem">{{name}}</div>
+
+                    <!-- Quantity -->
+                    <div class="npc-inventory-qty">
+                        <input type="number" value="{{system.quantity}}" data-action="updateItemQuantity"
+                            data-item-id="{{id}}" min="0" />
+                    </div>
+
+                    <!-- Trash -->
+                    <div class="npc-item-control">
+                        <a data-action="deleteItem"><i class="fas fa-trash"></i></a>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </section>
+
+    </main>
+</div>

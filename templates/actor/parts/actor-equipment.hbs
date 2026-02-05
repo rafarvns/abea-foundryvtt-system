@@ -1,0 +1,70 @@
+<section class="inventory-section">
+    <div class="biography-panel currency-panel compact">
+        <div class="currency-grid">
+            <div class="currency-reis">
+                <span class="skill-header-label">{{localize "ABEA.Currency.Reis"}}:</span>
+                <span class="reis-value">{{formatNumber system.currency.value}}</span>
+            </div>
+            <div class="currency-coins">
+                <div class="coin-field">
+                    <label>{{localize "ABEA.Currency.Gold"}}</label>
+                    <input type="number" name="system.currency.gold" value="{{system.currency.gold}}" />
+                    <span class="coin-multiplier">x1000</span>
+                </div>
+                <div class="coin-field">
+                    <label>{{localize "ABEA.Currency.Silver"}}</label>
+                    <input type="number" name="system.currency.silver" value="{{system.currency.silver}}" />
+                    <span class="coin-multiplier">x100</span>
+                </div>
+                <div class="coin-field">
+                    <label>{{localize "ABEA.Currency.Bronze"}}</label>
+                    <input type="number" name="system.currency.bronze" value="{{system.currency.bronze}}" />
+                    <span class="coin-multiplier">x10</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="inventory-tab-content">
+        <!-- Headers Grid -->
+        <div class="inventory-header-row">
+            <div class="inventory-header-line-left"></div>
+            <div class="inventory-qty-header">{{localize "ABEA.Item.Quantity"}}</div>
+            <div class="inventory-header-line-right"></div>
+        </div>
+
+        <div class="inventory-list-grid">
+            {{#each inventory as |item|}}
+            <div class="inventory-row-grid item" data-item-id="{{item.id}}" draggable="true">
+                <!-- Image -->
+                <div class="inventory-image">
+                    <img src="{{item.img}}" title="{{item.name}}" data-action="rollItem" style="cursor: pointer;" />
+                </div>
+
+                <!-- Name Label -->
+                <div class="inventory-name-cell">
+                    <span class="inventory-name-label">{{item.name}}</span>
+                </div>
+
+                <!-- Quantity -->
+                <div class="inventory-qty-cell">
+                    <input type="number" data-item-id="{{item.id}}" name="system.quantity"
+                        value="{{item.system.quantity}}" placeholder="1" data-action="updateItemQuantity" />
+                </div>
+
+                <!-- Controls -->
+                <div class="skill-controls" style="justify-content: flex-end; display: flex; gap: 5px;">
+                    <button type="button" class="icon-button item-edit" data-action="editItem"
+                        title="{{localize 'ABEA.Item.Edit'}}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="icon-button item-delete" data-action="deleteItem"
+                        title="{{localize 'ABEA.Item.Delete'}}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</section>
