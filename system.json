@@ -2,7 +2,7 @@
   "id": "abea",
   "title": "ABEA - A Bandeira do Elefante e da Arara",
   "description": "A system for A Bandeira do Elefante e da Arara RPG in Foundry VTT.",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "compatibility": {
     "minimum": "13",
     "verified": "13.351"
