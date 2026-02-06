@@ -647,8 +647,8 @@
 
 .abea.sheet.actor .skills-header-row {
   display: grid;
-  grid-template-columns: 40px 1fr repeat(4, 90px) 15px;
-  gap: 10px;
+  grid-template-columns: 40px 1fr repeat(4, 90px) 40px;
+  gap: 8px;
   align-items: end;
   margin-bottom: 5px;
 }
@@ -732,7 +732,7 @@
 
 .abea.sheet.actor .skill-row-grid {
   display: grid;
-  grid-template-columns: 40px 1fr repeat(4, 90px) 30px;
+  grid-template-columns: 40px 1fr repeat(4, 90px) 22px;
   gap: 8px;
   align-items: center;
   background: rgba(255, 255, 255, 0.3);
