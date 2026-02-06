@@ -1564,6 +1564,34 @@
   padding: 0 !important;
 }
 
+/* Weapon Sheet Specifics */
+.abea.sheet.item .weapon-stats-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 5px;
+}
+
+.abea.sheet.item .damage-field {
+  flex: 0 0 64px;
+  /* Fixed width for damage */
+}
+
+.abea.sheet.item .skill-field {
+  flex: 1;
+  /* Skill takes remaining space */
+}
+
+.abea.sheet.item .form-group label {
+  font-family: var(--font-heading);
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: var(--abea-highlight);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  display: block;
+}
+
 .abea.sheet.item nav.sheet-tabs {
   border-bottom: 2px solid var(--abea-primary);
   margin-bottom: 15px;
@@ -1608,7 +1636,7 @@
   margin-bottom: 15px;
   display: flex;
   flex-direction: column;
-  margin-top: 19px;
+  margin-top: 10px;
 }
 
 .abea.sheet.item .form-group label {
@@ -1704,11 +1732,11 @@
 
 .abea.sheet.item.weapon .attached-skill {
   width: 100%;
-  height: 40px;
+  height: 32px;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0 10px;
+  padding: 10px 10px 10px 4px;
   background: var(--bg-trans-40);
   border: 2px solid var(--abea-border-color);
   border-radius: var(--radius);
