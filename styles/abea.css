@@ -363,7 +363,7 @@
   display: flex;
   flex-direction: column;
   padding: 10px;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .abea.sheet.actor .sheet-header {
@@ -641,6 +641,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
+  overflow: hidden;
 }
 
 /* Removed skills-points-row styles as requested */
@@ -726,8 +728,8 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  height: 100%;
-  overflow-y: scroll;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .abea.sheet.actor .skill-row-grid {
@@ -799,6 +801,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
+  overflow: hidden;
 }
 
 .abea.sheet.actor .weapons-header-row {
@@ -1358,7 +1362,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: 100%;
+  flex: 1;
   overflow-y: auto;
 }
 
@@ -1560,8 +1564,24 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  height: 100%;
+  flex: 1;
   overflow-y: auto;
+}
+
+.abea.sheet.actor .inventory-section {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+}
+
+.abea.sheet.actor .inventory-tab-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  gap: 10px;
 }
 
 .abea.sheet.actor .inventory-row-grid {
