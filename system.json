@@ -1,85 +1,85 @@
 {
-    "id": "abea",
-    "title": "ABEA - A Bandeira do Elefante e da Arara",
-    "description": "A system for A Bandeira do Elefante e da Arara RPG in Foundry VTT.",
-    "version": "1.0.0",
-    "compatibility": {
-        "minimum": "13",
-        "verified": "13.351"
+  "id": "abea",
+  "title": "ABEA - A Bandeira do Elefante e da Arara",
+  "description": "A system for A Bandeira do Elefante e da Arara RPG in Foundry VTT.",
+  "version": "1.0.1",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13.351"
+  },
+  "authors": [
+    {
+      "name": "ABEA Community",
+      "discord": ""
+    }
+  ],
+  "esmodules": [
+    "scripts/abea.mjs"
+  ],
+  "styles": [
+    "styles/abea.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
     },
-    "authors": [
-        {
-            "name": "ABEA Community",
-            "discord": ""
-        }
-    ],
-    "esmodules": [
-        "scripts/abea.mjs"
-    ],
-    "styles": [
-        "styles/abea.css"
-    ],
-    "languages": [
-        {
-            "lang": "en",
-            "name": "English",
-            "path": "lang/en.json"
-        },
-        {
-            "lang": "pt-BR",
-            "name": "Português (Brasil)",
-            "path": "lang/pt-br.json"
-        }
-    ],
-    "documentTypes": {
-        "Actor": {
-            "character": {
-                "html": "templates/actor/actor-sheet.hbs",
-                "label": "ABEA.Actor.Character"
-            },
-            "npc": {
-                "html": "templates/actor/npc-sheet.hbs",
-                "label": "ABEA.Actor.NPC"
-            }
-        },
-        "Item": {
-            "item": {
-                "html": "systems/abea/templates/item/item-generic-sheet.hbs",
-                "label": "ABEA.Item.Base"
-            },
-            "weapon": {
-                "html": "systems/abea/templates/item/item-weapon-sheet.hbs",
-                "label": "ABEA.Item.Weapon"
-            },
-            "skill": {
-                "html": "systems/abea/templates/item/item-skill-sheet.hbs",
-                "label": "ABEA.Item.Skill"
-            }
-        }
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-br.json"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "character": {
+        "html": "templates/actor/actor-sheet.hbs",
+        "label": "ABEA.Actor.Character"
+      },
+      "npc": {
+        "html": "templates/actor/npc-sheet.hbs",
+        "label": "ABEA.Actor.NPC"
+      }
     },
-    "packs": [
-        {
-            "name": "abea-weapons",
-            "label": "Armas",
-            "path": "packs/abea-weapons",
-            "type": "Item",
-            "system": "abea",
-            "ownership": {
-                "PLAYER": "OBSERVER",
-                "ASSISTANT": "OWNER"
-            }
-        }
-    ],
-    "packFolders": [
-        {
-            "name": "ABEA",
-            "sorting": "a",
-            "packs": [
-                "abea-weapons"
-            ]
-        }
-    ],
-    "url": "https://github.com/rafa-pc/abea",
-    "manifest": "https://raw.githubusercontent.com/rafa-pc/abea/main/system.json",
-    "download": "https://github.com/rafa-pc/abea/releases/latest/download/abea.zip"
+    "Item": {
+      "item": {
+        "html": "systems/abea/templates/item/item-generic-sheet.hbs",
+        "label": "ABEA.Item.Base"
+      },
+      "weapon": {
+        "html": "systems/abea/templates/item/item-weapon-sheet.hbs",
+        "label": "ABEA.Item.Weapon"
+      },
+      "skill": {
+        "html": "systems/abea/templates/item/item-skill-sheet.hbs",
+        "label": "ABEA.Item.Skill"
+      }
+    }
+  },
+  "packs": [
+    {
+      "name": "abea-weapons",
+      "label": "Armas",
+      "path": "packs/abea-weapons",
+      "type": "Item",
+      "system": "abea",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "ABEA",
+      "sorting": "a",
+      "packs": [
+        "abea-weapons"
+      ]
+    }
+  ],
+  "url": "https://github.com/rafa-pc/abea",
+  "manifest": "https://raw.githubusercontent.com/rafa-pc/abea/main/system.json",
+  "download": "https://github.com/rafa-pc/abea/releases/latest/download/abea.zip"
 }
