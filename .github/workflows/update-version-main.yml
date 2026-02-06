@@ -1,64 +1,50 @@
 name: Update Version (Main)
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - main
 
 jobs:
   update-version:
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-      - name: Checkout main
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Git Configuration
-        run: |
+      - run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Increment Minor Version
-        id: bump_version
+      - id: bump_version
         run: |
           CURRENT_VERSION=$(jq -r '.version' system.json)
-          
+
           IFS='.' read -r -a parts <<< "$CURRENT_VERSION"
           MAJOR=${parts[0]}
           MINOR=${parts[1]}
-          
-          NEW_MINOR=$((MINOR + 1))
-          NEW_VERSION="$MAJOR.$NEW_MINOR.0"
-          
-          echo "New Version: $NEW_VERSION"
-          
+
+          NEW_VERSION="$MAJOR.$((MINOR+1)).0"
+
           jq --arg new_ver "$NEW_VERSION" '.version = $new_ver' system.json > system.json.tmp && mv system.json.tmp system.json
-          
+
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Commit and Push to Main
-        id: push_main
+      - id: push_main
         run: |
           git add system.json
           git commit -m "Bump version to ${{ steps.bump_version.outputs.new_version }} [skip ci]"
-          git pull --rebase origin main # Safety pull before push
-          git push origin main
+          git push
           echo "commit_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Cherry pick to Dev
-        run: |
-          # Fetch dev branch
+      - run: |
           git fetch origin dev:dev
           git checkout dev
-          git pull origin dev # Ensure we are on latest dev
-          
-          # Cherry pick the commit from main
           git cherry-pick ${{ steps.push_main.outputs.commit_sha }}
-          
-          # Push to dev
           git push origin dev
