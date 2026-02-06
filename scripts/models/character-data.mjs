@@ -20,12 +20,12 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                     active: new fields.NumberField({ initial: 0, integer: true, min: 0 })
                 }),
                 energy: new fields.SchemaField({
-                    value: new fields.NumberField({ initial: 10, integer: true, min: 0 }),
-                    max: new fields.NumberField({ initial: 10, integer: true, min: 0 })
+                    value: new fields.NumberField({ initial: 0, integer: true, min: 0 }),
+                    max: new fields.NumberField({ initial: 0, integer: true, min: 0 })
                 }),
                 condition: new fields.SchemaField({
-                    resistance: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 15 }),
-                    resistanceMaxBonus: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 5 }), // 10 base + up to 5
+                    resistance: new fields.NumberField({ initial: 0, integer: true, min: 0 }),
+                    resistanceMaxBonus: new fields.NumberField({ initial: 0, integer: true, min: 0 }), // 10 base + up to 5
                     critical: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 5 }),
                     notes: new fields.StringField({ initial: "" })
                 }),
