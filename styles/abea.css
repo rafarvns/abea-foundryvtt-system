@@ -1031,7 +1031,7 @@
 
 .abea.sheet.actor .skill-row-grid {
   display: grid;
-  grid-template-columns: 28px 1fr repeat(4, 90px) 22px;
+  grid-template-columns: 28px 1fr repeat(4, 90px) 32px;
   gap: 8px;
   align-items: center;
   background: var(--bg-trans-30);
@@ -1280,7 +1280,7 @@
 
 .abea.sheet.actor .weapon-row-grid {
   display: grid;
-  grid-template-columns: 28px 1fr 100px 60px;
+  grid-template-columns: 28px 1fr 122px 60px;
   gap: 8px;
   align-items: center;
   background: var(--bg-trans-30);
@@ -1316,7 +1316,7 @@
   border: none;
 }
 
-.acea.sheet.actor .skill-name-cell {
+.acea.sheet.actor .weapon-name-cell {
   padding-top: 3px;
 }
 
@@ -1415,7 +1415,7 @@
 
 .abea.sheet.actor .inventory-row-grid {
   display: grid;
-  grid-template-columns: 28px 1fr 60px 60px;
+  grid-template-columns: 28px 1fr 64px 60px;
   gap: 8px;
   align-items: center;
   background: var(--bg-trans-30);
