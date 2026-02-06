@@ -6,13 +6,18 @@
             <div class="header-details charname">
                 <input name="name" type="text" value="{{document.name}}" placeholder="{{localize 'ABEA.Item.Name'}}" />
             </div>
-            <div class="form-group">
+            <div class="form-group type-margin">
                 <label>{{localize "ABEA.Item.Type"}}</label>
                 <div class="form-fields">
                     <input type="text" name="system.type" value="{{document.system.type}}" class="item-generic-type"
                         placeholder="{{localize 'ABEA.Item.TypePlaceholder'}}" />
                 </div>
             </div>
+        </div>
+    </header>
+
+    <div class="item-properties">
+        <div class="type-properties">
             <div class="form-group">
                 <label>{{localize "ABEA.Item.Action.Label"}}</label>
                 <div class="form-fields">
@@ -22,14 +27,6 @@
                 </div>
             </div>
 
-            {{#unless (eq system.action.type "none")}}
-            <div class="form-group">
-                <label>{{localize "ABEA.Item.Action.IsConsumable"}}</label>
-                <div class="form-fields">
-                    <input type="checkbox" name="system.action.isConsumable" {{checked system.action.isConsumable}} />
-                </div>
-            </div>
-            {{/unless}}
             {{#if isHeal}}
             <div class="form-group">
                 <label>{{localize "ABEA.Item.Action.Value"}}</label>
@@ -38,10 +35,16 @@
                 </div>
             </div>
             {{/if}}
-        </div>
-    </header>
 
-    <div class="item-properties">
+            {{#unless (eq system.action.type "none")}}
+            <div class="form-group">
+                <label>{{localize "ABEA.Item.Action.IsConsumable"}}</label>
+                <div class="form-fields">
+                    <input type="checkbox" name="system.action.isConsumable" {{checked system.action.isConsumable}} />
+                </div>
+            </div>
+            {{/unless}}
+        </div>
         <section class="sheet-body">
             <label class="description-label">{{localize "ABEA.Item.Description"}}</label>
             <div class="item-description-panel">

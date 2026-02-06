@@ -6,42 +6,45 @@
             <div class="header-details charname">
                 <input name="name" type="text" value="{{document.name}}" placeholder="{{localize 'ABEA.Item.Name'}}" />
             </div>
-            <div class="form-group">
-                <label>{{localize "ABEA.Item.Damage"}}</label>
-                <div class="form-fields">
-                    <input type="text" name="system.damage" value="{{document.system.damage}}"
-                        placeholder="e.g. 1d6 + 2" />
+            <div class="weapon-stats-row">
+                <div class="form-group damage-field">
+                    <label>{{localize "ABEA.Item.Damage"}}</label>
+                    <div class="form-fields">
+                        <input type="text" name="system.damage" value="{{document.system.damage}}"
+                            placeholder="e.g. 1d6 + 2" />
+                    </div>
+                </div>
+                <div class="form-group skill-field">
+                    <label>{{localize "ABEA.Item.SkillType"}}</label>
+                    <div class="form-fields">
+                        {{#if associatedSkill}}
+                        <div class="attached-skill" data-action="openSkill" title="{{localize 'ABEA.Item.OpenSkill'}}">
+                            <img src="{{associatedSkill.img}}" width="24" height="24" />
+                            <span class="skill-name">{{associatedSkill.name}}</span>
+                            {{#if isGM}}
+                            <a class="item-control skill-delete" data-action="removeSkill"
+                                title="{{localize 'ABEA.Item.RemoveSkill'}}">
+                                <i class="fas fa-times"></i>
+                            </a>
+                            {{/if}}
+                            <input type="hidden" name="system.skillType" value="{{system.skillType}}" />
+                        </div>
+                        {{else}}
+                        {{#if isGM}}
+                        <div class="skill-drop-zone">
+                            <i class="fas fa-bullseye"></i>
+                            <span>{{localize "ABEA.Item.DropSkillHere"}}</span>
+                        </div>
+                        {{/if}}
+                        {{/if}}
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
     <div class="item-properties">
-        <div class="form-group">
-            <label>{{localize "ABEA.Item.SkillType"}}</label>
-            <div class="form-fields">
-                {{#if associatedSkill}}
-                <div class="attached-skill" data-action="openSkill" title="{{localize 'ABEA.Item.OpenSkill'}}">
-                    <img src="{{associatedSkill.img}}" width="24" height="24" />
-                    <span class="skill-name">{{associatedSkill.name}}</span>
-                    {{#if isGM}}
-                    <a class="item-control skill-delete" data-action="removeSkill"
-                        title="{{localize 'ABEA.Item.RemoveSkill'}}">
-                        <i class="fas fa-times"></i>
-                    </a>
-                    {{/if}}
-                    <input type="hidden" name="system.skillType" value="{{system.skillType}}" />
-                </div>
-                {{else}}
-                {{#if isGM}}
-                <div class="skill-drop-zone">
-                    <i class="fas fa-bullseye"></i>
-                    <span>{{localize "ABEA.Item.DropSkillHere"}}</span>
-                </div>
-                {{/if}}
-                {{/if}}
-            </div>
-        </div>
+
         <div class="form-group">
             <label>{{localize "ABEA.Item.Hands"}}</label>
             <div class="form-fields">

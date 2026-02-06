@@ -30,6 +30,24 @@ Copie o link do manifesto abaixo e cole na aba de "Sistemas de Jogo" no Foundry 
 Link para o repositório:
 [https://github.com/rafarvns/abea-foundryvtt-system](https://github.com/rafarvns/abea-foundryvtt-system)
 
-Sinta-se à vontade para contribuir com código, reportar bugs ou sugerir melhorias.
+## Contribuição
 
---
+Este projeto é de código aberto e construído pela comunidade para a comunidade. Acreditamos que todos podem contribuir para tornar a experiência de jogo ainda melhor!
+
+Se você encontrou um bug, tem uma ideia para uma nova funcionalidade ou quer melhorar a documentação, adoraríamos receber sua ajuda. Não é necessário ser um especialista em programação para participar.
+
+### Como Participar?
+
+- **Reporte Bugs e Sugira Melhorias:** Utilize a aba [Issues](https://github.com/rafarvns/abea-foundryvtt-system/issues) para nos informar sobre problemas ou compartilhar suas ideias.
+- **Contribua com Código:** Se você desenvolve, confira as issues abertas ou proponha suas próprias correções.
+- **Tradução e Conteúdo:** Ajude a revisar textos e melhorar a qualidade do material.
+
+Todo tipo de colaboração é bem-vinda para manter a bandeira tremulando alto!
+
+
+## Git Flow
+
+- Crie um branch a partir da `dev`
+- Implemente nessa branch sua alteração
+- Faça um pull request dessa branch para `dev`, descrevendo a feature ou o bugfix
+- Aguarde a avaliação de algum admin do repositorio aprovar, se for aprovado, na proxima release de `dev` para `main`, o recurso estará disponivel para todos automaticamente.
