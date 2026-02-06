@@ -31,5 +31,3 @@ Link para o repositório:
 [https://github.com/rafarvns/abea-foundryvtt-system](https://github.com/rafarvns/abea-foundryvtt-system)
 
 Sinta-se à vontade para contribuir com código, reportar bugs ou sugerir melhorias.
-
---
