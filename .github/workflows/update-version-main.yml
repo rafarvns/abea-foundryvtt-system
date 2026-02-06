@@ -17,48 +17,84 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      # 🔥 GARANTE VERSION SOURCE DA DEV
-      - name: Use system.json from dev
+      - name: Ensure Main and Fetch Dev
         run: |
+          git checkout -B main origin/main
           git fetch origin dev
-          git checkout origin/dev -- system.json
 
-      - name: Bump Minor Version
-        id: bump
+      - name: Get Version from Dev and Normalize
+        id: normalize
         run: |
-          CURRENT_VERSION=$(jq -r '.version' system.json)
+          # 1. READ RAW VERSION FROM DEV (SSOT)
+          DEV_VERSION=$(git show origin/dev:system.json | jq -r '.version')
+          echo "Raw Dev Version: $DEV_VERSION"
 
-          echo "Dev version: $CURRENT_VERSION"
-
-          IFS='.' read -r -a parts <<< "$CURRENT_VERSION"
+          IFS='.' read -r -a parts <<< "$DEV_VERSION"
           MAJOR=${parts[0]}
           MINOR=${parts[1]}
+          PATCH=${parts[2]}
 
-          NEW_VERSION="$MAJOR.$((MINOR+1)).0"
+          # 2. APPLY NORMALIZATION LOGIC (Base 10 Cascade)
+          echo "Normalizing..."
+          
+          # Patch -> Minor
+          if [ "$PATCH" -ge 10 ]; then
+            CARRY_MINOR=$((PATCH / 10))
+            PATCH=$((PATCH % 10))
+            MINOR=$((MINOR + CARRY_MINOR))
+            echo "  Patch >= 10. Carry $CARRY_MINOR to Minor."
+          fi
 
-          echo "New version: $NEW_VERSION"
+          # Minor -> Major
+          if [ "$MINOR" -ge 10 ]; then
+            CARRY_MAJOR=$((MINOR / 10))
+            MINOR=$((MINOR % 10))
+            MAJOR=$((MAJOR + CARRY_MAJOR))
+            echo "  Minor >= 10. Carry $CARRY_MAJOR to Major."
+          fi
 
-          jq --arg v "$NEW_VERSION" '.version = $v' system.json > tmp.json && mv tmp.json system.json
+          NORMALIZED_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "Normalized Version: $NORMALIZED_VERSION"
 
-          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          # Update system.json for Main
+          jq --arg v "$NORMALIZED_VERSION" '.version = $v' system.json > tmp.json && mv tmp.json system.json
 
-      - name: Commit bump to main
-        id: commit
+          echo "version=$NORMALIZED_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit Release to Main
+        id: commit_main
         run: |
           git add system.json
-          git commit -m "Bump version to ${{ steps.bump.outputs.version }} [skip ci]"
-          git push
+          git commit -m "Release version ${{ steps.normalize.outputs.version }} [skip ci]"
+          git push origin main
           echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Sync back to dev
+      - name: Sync Normalized Version to Dev
         run: |
-          git fetch origin dev:dev
-          git checkout dev
-          git cherry-pick ${{ steps.commit.outputs.sha }}
-          git push origin dev
+          # Robust Sync Strategy:
+          # 1. Checkout Dev
+          # 2. Overwrite system.json with the file from NEW Main (Normalized)
+          # 3. Commit "Sync version from main"
+          # This preserves Dev's file history/changes but forces the version number to align.
+          
+          git fetch origin dev
+          git checkout -B dev origin/dev
+          
+          # Overwrite system.json with the one we just committed to main
+          git checkout ${{ steps.commit_main.outputs.sha }} -- system.json
+          
+          # Check if there are changes (if Dev was already normalized, this is a no-op)
+          if git diff --quiet system.json; then
+             echo "Dev version is already in sync."
+          else
+             git add system.json
+             git commit -m "Sync version from main ${{ steps.normalize.outputs.version }} [skip ci]"
+             git push origin dev
+          fi
