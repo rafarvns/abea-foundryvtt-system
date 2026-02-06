@@ -1,0 +1,52 @@
+name: Update Version (Dev)
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  update-version:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout dev
+        uses: actions/checkout@v4
+
+      - name: Setup Git Configuration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Increment Patch Version
+        id: bump_version
+        run: |
+          # Read current version
+          CURRENT_VERSION=$(jq -r '.version' system.json)
+          echo "Current Version: $CURRENT_VERSION"
+
+          # Split version into array
+          IFS='.' read -r -a parts <<< "$CURRENT_VERSION"
+          MAJOR=${parts[0]}
+          MINOR=${parts[1]}
+          PATCH=${parts[2]}
+
+          # Increment Patch
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
+          echo "New Version: $NEW_VERSION"
+
+          # Update system.json
+          jq --arg new_ver "$NEW_VERSION" '.version = $new_ver' system.json > system.json.tmp && mv system.json.tmp system.json
+
+          # Output for next steps
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit and Push to Dev
+        run: |
+          git add system.json
+          git commit -m "Bump version to ${{ steps.bump_version.outputs.new_version }} [skip ci]"
+          git push origin dev
