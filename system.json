@@ -88,6 +88,7 @@
     }
   ],
   "url": "https://github.com/rafarvns/abea-foundryvtt-system",
+  "license": "MIT",
   "manifest": "https://github.com/rafarvns/abea-foundryvtt-system/releases/latest/download/system.json",
   "download": "https://github.com/rafarvns/abea-foundryvtt-system/releases/latest/download/abea.zip"
 }
