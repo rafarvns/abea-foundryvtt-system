@@ -1,0 +1,42 @@
+<div class="physical-condition condition-panel-grid">
+    <div class="condition-tracks-column">
+        <div class="track resistance-track">
+            <label>{{localize "ABEA.Condition.Resistance"}}</label>
+            <div class="pips">
+                {{#each resistanceRange}}
+                <div class="pip {{#if (gte ../system.attributes.condition.resistance this)}}checked{{/if}}"
+                    data-action="toggleCondition" data-field="resistance" data-value="{{this}}"></div>
+                {{/each}}
+            </div>
+        </div>
+
+        <div class="track resistance-max-track">
+            <div class="pips">
+                <!-- 10 Static Pips -->
+                {{#each (range 1 10)}}
+                <div class="pip static checked"></div>
+                {{/each}}
+                <!-- 5 Toggleable Pips for Bonus -->
+                {{#each (range 1 5)}}
+                <div class="pip max-bonus {{#if (gte ../system.attributes.condition.resistanceMaxBonus this)}}checked{{/if}}"
+                    data-action="toggleCondition" data-field="resistanceMaxBonus" data-value="{{this}}"></div>
+                {{/each}}
+            </div>
+        </div>
+
+        <div class="track critical-track">
+            <label>{{localize "ABEA.Condition.Critical"}}</label>
+            <div class="pips">
+                {{#each (range 1 5)}}
+                <div class="pip critical {{#if (gte ../system.attributes.condition.critical this)}}checked{{/if}}"
+                    data-action="toggleCondition" data-field="critical" data-value="{{this}}"></div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+
+    <div class="condition-notes-column">
+        <textarea name="system.attributes.condition.notes"
+            placeholder="{{localize 'ABEA.Condition.Notes'}}">{{system.attributes.condition.notes}}</textarea>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="{{cssClass}}">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{document.img}}" data-action="editImage" title="{{document.name}}" height="100"
+            width="100" />
+        <div class="header-details-panel">
+            <div class="header-details charname">
+                <input name="name" type="text" value="{{document.name}}" placeholder="{{localize 'ABEA.Item.Name'}}" />
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>{{localize "ABEA.Skill.TypeLabel"}}</label>
+                    <div class="form-fields">
+                        <select name="system.type" {{#unless isGM}}disabled{{/unless}}>
+                            {{selectOptions config.skillTypes selected=system.type localize=true}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>{{localize "ABEA.Skill.CategoryLabel"}}</label>
+                    <div class="form-fields">
+                        <select name="system.category" {{#unless isGM}}disabled{{/unless}}>
+                            {{selectOptions categories selected=system.category localize=true}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="item-properties">
+        <section class="sheet-body">
+            <label class="description-label">{{localize "ABEA.Item.Description"}}</label>
+            <div class="item-description-panel">
+                <textarea placeholder="{{localize 'ABEA.Item.Description'}}" name="system.description"
+                    id="system.description" rows="1">{{document.system.description}}</textarea>
+            </div>
+        </section>
+    </div>
+</div>

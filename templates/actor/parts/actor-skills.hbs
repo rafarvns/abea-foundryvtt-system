@@ -1,0 +1,93 @@
+<div class="skills-tab-content">
+
+    <!-- Headers Grid -->
+    <div class="skills-header-row">
+        <div class="skill-header-label">
+            <span></span><!-- Placeholder for image column header -->
+            <span>{{localize "ABEA.Skill.Name"}}</span>
+            <div class="points-field">
+
+                <label>{{localize "ABEA.Skill.PointsToSpend"}}</label>
+                <input type="text" name="system.attributes.skillPoints" value="{{system.attributes.skillPoints}}"
+                    placeholder="0" data-dtype="Number" />
+            </div>
+        </div>
+
+        <!-- Headers with Metadata -->
+        <div class="skill-rank-header">
+            <span class="rank-title">{{localize "ABEA.Skill.Apprentice"}}</span>
+            <span>{{localize "ABEA.Skill.Cost"}} 1</span>
+            <span>{{localize "ABEA.Skill.Bonus"}} +3</span>
+        </div>
+        <div class="skill-rank-header">
+            <span class="rank-title">{{localize "ABEA.Skill.Practitioner"}}</span>
+            <span>{{localize "ABEA.Skill.Cost"}} 3</span>
+            <span>{{localize "ABEA.Skill.Bonus"}} +6</span>
+        </div>
+        <div class="skill-rank-header">
+            <span class="rank-title">{{localize "ABEA.Skill.Master"}}</span>
+            <span>{{localize "ABEA.Skill.Cost"}} 7</span>
+            <span>{{localize "ABEA.Skill.Bonus"}} +9</span>
+        </div>
+        <div class="skill-rank-header">
+            <span class="rank-title">{{localize "ABEA.Skill.Legendary"}}</span>
+            <span>{{localize "ABEA.Skill.Cost"}} 12</span>
+            <span>{{localize "ABEA.Skill.Bonus"}} +12</span>
+        </div>
+
+        <div class="skill-header-label" style="text-align: right;"></div>
+    </div>
+
+    <!-- Skills List Grid -->
+    <div class="skills-list-grid">
+        {{#each skills as |skill index|}}
+        <div class="skill-row-grid" data-index="{{index}}" draggable="true">
+            <input type="hidden" name="system.skills.{{index}}.name" value="{{skill.name}}">
+            <input type="hidden" name="system.skills.{{index}}.img" value="{{skill.img}}">
+
+            <!-- Image -->
+            <div class="skill-image rollable" data-action="rollSkill" data-skill-name="{{skill.name}}">
+                <img src="{{skill.img}}" title="{{skill.name}}" />
+            </div>
+
+            <!-- Name Label -->
+            <div class="skill-name-cell rollable" data-action="rollSkill" data-skill-name="{{skill.name}}">
+                <span class="skill-name-label">{{skill.name}}</span>
+            </div>
+
+            <!-- Radio Cells -->
+            <div class="skill-radio-cell">
+                <input type="radio" name="system.skills.{{index}}.rank" value="1" id="sk-{{index}}-1" {{#if (eq
+                    skill.rank 1)}}checked{{/if}}>
+                <label for="sk-{{index}}-1"></label>
+            </div>
+            <div class="skill-radio-cell">
+                <input type="radio" name="system.skills.{{index}}.rank" value="2" id="sk-{{index}}-2" {{#if (eq
+                    skill.rank 2)}}checked{{/if}}>
+                <label for="sk-{{index}}-2"></label>
+            </div>
+            <div class="skill-radio-cell">
+                <input type="radio" name="system.skills.{{index}}.rank" value="3" id="sk-{{index}}-3" {{#if (eq
+                    skill.rank 3)}}checked{{/if}}>
+                <label for="sk-{{index}}-3"></label>
+            </div>
+            <div class="skill-radio-cell">
+                <input type="radio" name="system.skills.{{index}}.rank" value="4" id="sk-{{index}}-4" {{#if (eq
+                    skill.rank 4)}}checked{{/if}}>
+                <label for="sk-{{index}}-4"></label>
+            </div>
+
+            <!-- Delete Button -->
+            <div class="skill-controls" style="justify-content: flex-end; display: flex;">
+                <button type="button" class="icon-button" data-action="deleteSkill" data-index="{{index}}"
+                    title="{{localize 'ABEA.Skill.Delete'}}">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+
+
+</div>

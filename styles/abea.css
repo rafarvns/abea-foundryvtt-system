@@ -1,0 +1,2272 @@
+/* Fonts */
+@font-face {
+  font-family: "Village";
+  src: url("../fonts/Village.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Bruntsfield";
+  src: url("../fonts/BruntsfieldCFBlack-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Favorites Panel Styles Merged */
+.abea.sheet.actor .favorites-panel {
+  margin-top: 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.abea.sheet.actor .favorites-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 5px 0;
+  position: relative;
+  min-height: 50px;
+  /* Drop zone area */
+}
+
+/* Dashed Vertical Separator */
+.abea.sheet.actor .favorites-grid::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 50%;
+  border-left: 1px dashed rgba(92, 64, 51, 0.3);
+  transform: translateX(-50%);
+}
+
+.abea.sheet.actor .favorite-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 28px;
+  /* Very small height as requested */
+  min-width: 0;
+  /* REQUIRED for Grid item to shrink and force internal ellipsis */
+  overflow: hidden;
+  /* Ensures valid overflow context */
+}
+
+.abea.sheet.actor .favorite-item.empty {
+  background: rgba(0, 0, 0, 0.05);
+  /* Slight background to be visible */
+  border: 1px dashed rgba(92, 64, 51, 0.4);
+  cursor: default;
+}
+
+.abea.sheet.actor .favorite-item.drag-over {
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid var(--highlight);
+  box-shadow: 0 0 5px var(--highlight);
+}
+
+.abea.sheet.actor .favorite-item:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: var(--highlight);
+}
+
+.abea.sheet.actor .fav-img {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.abea.sheet.actor .fav-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+
+.abea.sheet.actor .fav-name {
+  flex: 1;
+  min-width: 0;
+  /* Crucial for text-overflow: ellipsis in flex containers */
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--abea-primary-color);
+}
+
+.abea.sheet.actor .fav-controls {
+  opacity: 0;
+  font-size: 0.7rem;
+  color: #c0392b;
+}
+
+.abea.sheet.actor .favorite-item:hover .fav-controls {
+  opacity: 1;
+}
+
+.abea.sheet.actor .favorites-empty {
+  font-size: 0.7rem;
+  text-align: center;
+  grid-column: 1 / -1;
+  color: var(--highlight);
+  font-family: var(--font-heading);
+  padding: 10px;
+  border: 2px dashed rgba(92, 64, 51, 0.2);
+  border-radius: 5px;
+}
+
+/* ABEA System - Colonial Brazil / Nature Theme */
+
+:root {
+  --abea-primary-color: #5c4033;
+  --abea-accent-color: #3c6e38;
+  --abea-background-color: #e8dfc5;
+  --abea-border-color: #5c4033;
+
+  --radius: 10px;
+  --font-heading: "Bruntsfield", serif;
+  --font-body: "Village", sans-serif;
+}
+
+.abea.sheet.actor {
+  background: var(--bg-color, #e8dfc5);
+  color: var(--text-color, #2b1d0e);
+  font-family: var(--font-body);
+  border-radius: var(--radius);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+
+  /* Variables used throughout */
+  --bg-color: #e8dfc5;
+  --panel-bg: #d6cdae;
+  --border-color: #5c4033;
+  --text-color: #2b1d0e;
+  --accent-color: #3c6e38;
+  --highlight: #8a7f6b;
+}
+
+.abea.sheet.actor .window-content {
+  background: var(--bg-color);
+  padding: 0;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+}
+
+.abea.sheet.actor .abea-sheet-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  flex: 1;
+  border: 3px solid var(--border-color);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* -------------------------------------------- */
+/*  Sidebar                                     */
+/* -------------------------------------------- */
+
+.abea.sheet.actor .sidebar-container {
+  background: var(--panel-bg);
+  border-right: 3px solid var(--border-color);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: inset -2px 0 10px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+}
+
+.abea.sheet.actor .avatar-wrapper {
+  width: 210px;
+  height: 210px;
+  border: 4px solid var(--border-color);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  background: #ab9e88;
+  margin: 0 auto 8px auto;
+}
+
+.abea.sheet.actor .avatar-wrapper img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  filter: sepia(0.2);
+  border: none;
+}
+
+/* Defense Panel Refinements */
+.abea.sheet.actor .defense-panel {
+  margin-top: 10px;
+  /* Spacing from avatar */
+}
+
+.abea.sheet.actor h3 {
+  border-bottom: 2px solid var(--border-color);
+  text-transform: uppercase;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--border-color);
+  margin-bottom: 10px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+}
+
+.abea.sheet.actor .defense-diamonds {
+  display: flex;
+  justify-content: space-around;
+  padding: 5px 0 15px 0;
+}
+
+.abea.sheet.actor .defense-diamond {
+  position: relative;
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.abea.sheet.actor .diamond {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  transform: rotate(45deg);
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  margin-bottom: 15px;
+  /* Space for labels below */
+}
+
+/* Passive vs Active Diamond Colors */
+.abea.sheet.actor .defense-diamond.passive .diamond {
+  background: #fdfaf0;
+  /* Light */
+}
+
+.abea.sheet.actor .defense-diamond.active .diamond {
+  background: var(--border-color);
+  /* Dark */
+}
+
+.abea.sheet.actor .diamond-label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--border-color);
+  margin-top: 5px;
+}
+
+.abea.sheet.actor .defense-diamond input {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 50px;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  border: none;
+  background: transparent;
+  font-family: var(--font-heading);
+  z-index: 2;
+}
+
+.abea.sheet.actor .defense-diamond.passive input {
+  color: var(--border-color);
+}
+
+.abea.sheet.actor .defense-diamond.active input {
+  color: var(--bg-color);
+}
+
+/* Energy Dual Circles */
+.abea.sheet.actor .energy-circles {
+  display: flex;
+  justify-content: space-around;
+  padding: 5px 0;
+}
+
+.abea.sheet.actor .energy-circle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.abea.sheet.actor .energy-circle {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fffdf5;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific styling for Max Energy Circle (2nd one) */
+.abea.sheet.actor .energy-circle-container:last-child .energy-circle {
+  background: var(--border-color);
+  border: none;
+}
+
+.abea.sheet.actor .energy-circle input {
+  width: 50px;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  border: none;
+  background: transparent;
+  font-family: var(--font-heading);
+  margin-top: 4px;
+}
+
+/* Current Energy Text Color */
+.abea.sheet.actor .energy-circle-container:first-child .energy-circle input {
+  color: var(--abea-primary-color);
+}
+
+/* Max Energy Text Color */
+.abea.sheet.actor .energy-circle-container:last-child .energy-circle input {
+  color: var(--bg-color);
+}
+
+.abea.sheet.actor .energy-circle-container .energy-label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: var(--border-color);
+  margin-top: 5px;
+}
+
+/* -------------------------------------------- */
+/*  Content Area                                */
+/* -------------------------------------------- */
+
+.abea.sheet.actor .content-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.abea.sheet.actor .sheet-header {
+  margin-bottom: 15px;
+  border: none;
+}
+
+/* Header Layout */
+.abea.sheet.actor .header-fields {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.abea.sheet.actor .field {
+  display: flex;
+  flex-direction: column;
+}
+
+.abea.sheet.actor .name-field {
+  flex: 1;
+}
+
+.abea.sheet.actor .name-field input {
+  width: 100%;
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  color: var(--border-color);
+  border: none;
+  border-bottom: 2px solid var(--border-color);
+  background: transparent;
+  padding: 2px;
+  font-weight: bold;
+}
+
+/* Age Field Fix */
+.abea.sheet.actor .age-field {
+  width: 45px;
+  flex: 0 0 45px;
+}
+
+.abea.sheet.actor .age-field input {
+  width: 100%;
+  height: 32px;
+  text-align: center;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  padding: 5px;
+  font-size: 1.3rem;
+  background: rgba(255, 255, 255, 0.3);
+  font-family: var(--font-heading);
+  color: var(--abea-primary-color);
+}
+
+/* Global Focus Fix */
+.abea.sheet.actor input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.abea.sheet.actor .header-fields label {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--highlight);
+  margin-bottom: 2px;
+}
+
+/* Condition Panel */
+/* Condition Panel */
+.abea.sheet.actor .condition-panel {
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 10px;
+  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Grid Layout for Condition Panel */
+.abea.sheet.actor .condition-panel-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.abea.sheet.actor .condition-tracks-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.abea.sheet.actor .condition-notes-column {
+  height: 100%;
+}
+
+.abea.sheet.actor .track {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+  /* FORCE Left Align */
+}
+
+.abea.sheet.actor .track label {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: var(--border-color);
+  font-family: var(--font-heading);
+  margin-left: 2px;
+}
+
+.abea.sheet.actor .pips {
+  display: flex;
+  gap: 6px;
+}
+
+.abea.sheet.actor .pip {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.abea.sheet.actor .pip:hover {
+  background: rgba(92, 64, 51, 0.1);
+}
+
+/* Base Checked State */
+.abea.sheet.actor .pip.checked {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 5px var(--accent-color);
+}
+
+/* Static Max Pips (First 10 - Dark Gray) */
+.abea.sheet.actor .pip.static {
+  background: #444;
+  border-color: #333;
+  cursor: default;
+  opacity: 1;
+  box-shadow: none;
+}
+
+/* Interactive Max Bonus Pips (Last 5 - Black when active) */
+.abea.sheet.actor .pip.max-bonus {
+  border-color: #333;
+}
+
+.abea.sheet.actor .pip.max-bonus.checked {
+  background: #000;
+  border-color: #000;
+  box-shadow: none;
+}
+
+/* Critical Pips (Red when active) */
+.abea.sheet.actor .pip.critical {
+  border-color: var(--border-color);
+}
+
+.abea.sheet.actor .pip.critical.checked {
+  background: #c0392b;
+  border-color: #922b21;
+  box-shadow: 0 0 5px #c0392b;
+}
+
+/* Notes Textarea styling */
+.abea.sheet.actor .condition-notes-column textarea {
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  border: 1px dashed var(--border-color);
+  background: rgba(255, 255, 255, 0.3);
+  padding: 10px;
+  font-family: var(--font-body);
+  resize: none;
+  color: var(--border-color);
+  border-radius: 5px;
+}
+
+.abea.sheet.actor .condition-notes-column textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.5);
+  border-style: solid;
+}
+
+/* ... Tabs ... */
+.abea.sheet.actor nav.sheet-tabs {
+  display: flex;
+  border: none;
+  border-bottom: 2px solid var(--border-color);
+  margin-bottom: 10px;
+  gap: 5px;
+}
+
+.abea.sheet.actor nav.sheet-tabs .item {
+  padding: 6px 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: var(--font-heading);
+  letter-spacing: 0.5px;
+  color: var(--highlight);
+  border-radius: 10px 10px 0 0;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.abea.sheet.actor nav.sheet-tabs .item.active {
+  color: var(--bg-color);
+  background: var(--border-color);
+}
+
+/* -------------------------------------------- */
+/*  Common List Ledger Style (Standardized)      */
+/* -------------------------------------------- */
+
+.abea.sheet.actor .list-ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.abea.sheet.actor .ledger-header {
+  display: flex;
+  font-weight: bold;
+  font-family: var(--font-heading);
+  border-bottom: 2px solid var(--border-color);
+  padding: 0 10px 8px 10px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  color: var(--border-color);
+}
+
+.abea.sheet.actor .ledger-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px dashed rgba(92, 64, 51, 0.2);
+  transition: background 0.2s;
+}
+
+.abea.sheet.actor .ledger-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.abea.sheet.actor .ledger-name {
+  flex: 1;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+}
+
+.abea.sheet.actor .ledger-damage {
+  width: 80px;
+  text-align: center;
+  font-family: var(--font-heading);
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.abea.sheet.actor .ledger-controls {
+  width: 60px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Specific overrides to reuse ledger look for skills */
+/* Skills Grid Redesign */
+.abea.sheet.actor .skills-tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Removed skills-points-row styles as requested */
+
+.abea.sheet.actor .skills-header-row {
+  display: grid;
+  grid-template-columns: 40px 1fr repeat(4, 90px) 15px;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 5px;
+}
+
+.abea.sheet.actor .skills-header-row .skill-header-label:first-child {
+  grid-column: 1 / 3;
+}
+
+.abea.sheet.actor .skill-header-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-weight: bold;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  color: var(--border-color);
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 5px;
+}
+
+.abea.sheet.actor .points-field {
+  display: flex;
+  align-items: flex-end;
+  gap: 15px;
+}
+
+*/ .abea.sheet.actor .points-field label {
+  font-family: var(--font-heading);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--border-color);
+  font-size: 1rem;
+  /* Matches implicit header size */
+}
+
+.abea.sheet.actor .points-field input {
+  width: 50px;
+  border: none;
+  border-bottom: 2px solid var(--border-color);
+  /* Matches header underline thickness */
+  background: transparent;
+  font-family: var(--font-heading);
+  text-align: center;
+  font-weight: bold;
+  color: var(--accent-color);
+  font-size: 1.1rem;
+}
+
+.abea.sheet.actor .skill-rank-header {
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 0.65rem;
+  line-height: 1.2;
+  color: var(--border-color);
+}
+
+.abea.sheet.actor .skill-rank-header span {
+  display: block;
+}
+
+.abea.sheet.actor .rank-title {
+  font-weight: bold;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.abea.sheet.actor .skills-list-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.abea.sheet.actor .skill-row-grid {
+  display: grid;
+  grid-template-columns: 40px 1fr repeat(4, 90px) 30px;
+  gap: 8px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 5px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.abea.sheet.actor .skill-row-grid:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: var(--highlight);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.abea.sheet.actor .skill-image {
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  overflow: hidden;
+  background: #ab9e88;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.abea.sheet.actor .skill-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+
+.abea.sheet.actor .skill-name-label {
+  font-family: var(--font-heading);
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--abea-primary-color);
+  text-transform: uppercase;
+}
+
+.abea.sheet.actor .skill-row-grid input[type="text"] {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--border-color);
+}
+
+.abea.sheet.actor .skill-radio-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.abea.sheet.actor .skill-radio-cell input[type="radio"] {
+  display: none;
+}
+
+/* Weapons Grid Redesign - Matching Skills but with Damage column */
+.abea.sheet.actor .weapons-tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.abea.sheet.actor .weapons-header-row {
+  display: grid;
+  grid-template-columns: 1fr 90px 40px;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 5px;
+}
+
+.abea.sheet.actor .weapon-header-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-weight: bold;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  color: var(--border-color);
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 5px;
+}
+
+.abea.sheet.actor .weapon-damage-header {
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 0.65rem;
+  line-height: 1.2;
+  color: var(--border-color);
+  justify-content: center;
+  font-weight: bold;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  height: 100%;
+}
+
+.abea.sheet.actor .weapon-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 90px 40px;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(92, 64, 51, 0.2);
+}
+
+.abea.sheet.actor .weapon-row-grid:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.abea.sheet.actor .weapon-name-cell input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  font-family: var(--font-heading);
+  color: var(--border-color);
+}
+
+.abea.sheet.actor .weapon-damage-cell {
+  text-align: center;
+  font-family: var(--font-heading);
+  color: var(--accent-color);
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.abea.sheet.actor .skill-radio-cell label {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  cursor: pointer;
+  display: block;
+  transition: all 0.2s;
+}
+
+.abea.sheet.actor .skill-radio-cell label:hover {
+  background: rgba(92, 64, 51, 0.1);
+}
+
+.abea.sheet.actor .skill-radio-cell input[type="radio"]:checked+label {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 5px var(--accent-color);
+}
+
+.abea.sheet.actor .skill-name input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  font-family: var(--font-heading);
+  color: var(--border-color);
+}
+
+.abea.sheet.actor .rank-radios {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.abea.sheet.actor .rank-radios input[type="radio"] {
+  display: none;
+}
+
+.abea.sheet.actor .rank-radios label {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  cursor: pointer;
+  display: block;
+}
+
+.abea.sheet.actor .rank-radios input[type="radio"]:checked+label {
+  background: var(--accent-color);
+}
+
+/* Buttons */
+.abea.sheet.actor .add-skill-button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: var(--font-heading);
+  color: var(--border-color);
+}
+
+.abea.sheet.actor .add-skill-button:hover {
+  background: var(--border-color);
+  color: var(--bg-color);
+}
+
+/* Currency Panel Specifics */
+/* Currency Panel Specifics - High Specificity to override biography-panel */
+.abea.sheet.actor .inventory-section .currency-panel.compact {
+  margin-bottom: 15px;
+  padding: 8px 15px;
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.abea.sheet.actor .currency-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.abea.sheet.actor .currency-reis {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.abea.sheet.actor .currency-reis .skill-header-label {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.abea.sheet.actor .reis-value {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--accent-color);
+  padding: 0 5px;
+  border-bottom: 2px solid var(--border-color);
+  min-width: 60px;
+  text-align: center;
+}
+
+.abea.sheet.actor .currency-coins {
+  display: flex;
+  gap: 20px;
+}
+
+.abea.sheet.actor .coin-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.abea.sheet.actor .coin-field label {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--border-color);
+}
+
+.abea.sheet.actor .coin-field input {
+  width: 50px;
+  height: 30px;
+  text-align: center;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  color: var(--abea-primary-color);
+  padding: 2px;
+}
+
+.abea.sheet.actor .coin-multiplier {
+  font-size: 0.7rem;
+  color: var(--highlight);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* ProseMirror consistency */
+.abea.sheet.actor prose-mirror {
+  border: 1px solid rgba(92, 64, 51, 0.3);
+  border-radius: var(--radius);
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  font-family: var(--font-body);
+}
+
+.abea.sheet.actor .icon-button,
+.abea.sheet.actor .item-control {
+  color: var(--highlight);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.abea.sheet.actor .icon-button:hover,
+.abea.sheet.actor .item-control:hover {
+  color: #c0392b;
+  /* Red hover */
+}
+
+/* Specific red trash icon for skills */
+.abea.sheet.actor .skill-controls .icon-button {
+  color: #c0392b;
+  background: transparent;
+  border: none;
+}
+
+@keyframes abeaFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tab Content Full Height Fix */
+.abea.sheet.actor .tab-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
+.abea.sheet.actor .tab-content .tab {
+  height: 100%;
+  flex-direction: column;
+}
+
+.abea.sheet.actor .tab-content .tab.active {
+  display: flex !important;
+  flex: 1;
+}
+
+/* Biography Panel Styles */
+.abea.sheet.actor .biography-tab {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.abea.sheet.actor .biography-panel {
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: inset 0 0 15px rgba(92, 64, 51, 0.05);
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.abea.sheet.actor .biography-grid {
+  display: flex;
+  gap: 20px;
+  height: 100%;
+  flex: 1;
+}
+
+.abea.sheet.actor .bio-col-33 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+
+.abea.sheet.actor .bio-col-66 {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+
+.abea.sheet.actor .biography-panel textarea {
+  width: 100%;
+  flex: 1;
+  height: 100%;
+  border: 1px dashed var(--border-color);
+  background: rgba(255, 255, 255, 0.3);
+  padding: 10px;
+  font-family: var(--font-body);
+  resize: none;
+  color: var(--border-color);
+  border-radius: 5px;
+  font-size: 0.95rem;
+  overflow-y: auto;
+}
+
+.abea.sheet.actor .biography-panel textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.5);
+  border-style: solid;
+}
+
+/* -------------------------------------------- */
+/*  Item Sheet                                  */
+/* -------------------------------------------- */
+
+.abea.sheet.item {
+  background: var(--abea-background-color, #e8dfc5);
+  font-family: var(--font-body);
+}
+
+.abea.sheet.item .window-content {
+  background: #e8dfc5;
+  padding: 15px;
+}
+
+.abea.sheet.item .sheet-header {
+  display: flex;
+  gap: 15px;
+  border-bottom: 2px solid #5c4033;
+}
+
+.abea.sheet.item .header-details-panel {
+  gap: 10px;
+  width: 100%;
+}
+
+.abea.sheet.item .profile-img {
+  border: 3px solid #5c4033;
+  border-radius: 8px;
+  background: #ab9e88;
+}
+
+.abea.sheet.item .item-description-panel {
+  border: 2px solid var(--abea-border-color);
+  border-radius: var(--radius);
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: inset 0 0 15px rgba(92, 64, 51, 0.05);
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.abea.sheet.item .item-description-panel textarea {
+  width: 100%;
+  flex: 1;
+  height: 100%;
+  border: 1px dashed var(--abea-border-color);
+  background: rgba(255, 255, 255, 0.3);
+  padding: 10px;
+  font-family: var(--font-body);
+  resize: none;
+  color: var(--abea-primary-color);
+  border-radius: 5px;
+  font-size: 0.95rem;
+  overflow-y: auto;
+}
+
+.abea.sheet.item .item-description-panel textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--abea-border-color);
+}
+
+.abea.sheet.item .charname {
+  flex: 1;
+  margin: 0;
+}
+
+.abea.sheet.item .charname input {
+  width: 100%;
+  font-family: "Bruntsfield", serif;
+  font-size: 1.8rem;
+  color: #5c4033;
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  padding: 0 !important;
+}
+
+.abea.sheet.item nav.sheet-tabs {
+  border-bottom: 2px solid #5c4033;
+  margin-bottom: 15px;
+  display: flex;
+  gap: 5px;
+}
+
+.abea.sheet.item nav.sheet-tabs .item {
+  padding: 8px 15px;
+  font-family: "Bruntsfield", serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #8a7f6b;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.abea.sheet.item nav.sheet-tabs .item.active {
+  background: #5c4033;
+  color: #e8dfc5;
+}
+
+.abea.sheet.item .sheet-body {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 150px;
+}
+
+.abea.sheet.item .description-label {
+  font-family: "Bruntsfield", serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #5c4033;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.abea.sheet.item .form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 19px;
+}
+
+.abea.sheet.item .form-group label {
+  font-family: "Bruntsfield", serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--abea-primary-color);
+  font-size: 0.85rem;
+}
+
+.abea.sheet.item .form-fields input {
+  width: 60px;
+  padding: 8px;
+  border: 2px solid var(--abea-primary-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.4);
+  font-family: "Village", sans-serif;
+  font-size: 1rem;
+  color: var(--abea-primary-color);
+}
+
+.abea.sheet.item .form-fields .item-generic-type {
+  width: 100%;
+}
+
+.abea.sheet.item .form-fields input:focus {
+  outline: none;
+  background: white;
+  border-color: var(--abea-accent-color);
+}
+
+.abea.sheet.item .item-properties {
+  padding: 0 0px;
+}
+
+.abea.sheet.item .form-fields input.long-text {
+  width: 100%;
+}
+
+/* -------------------------------------------- */
+/*  Weapon List                                 */
+/* -------------------------------------------- */
+
+.abea.sheet.actor .weapons-header-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 70px 76px;
+  gap: 8px;
+  padding: 0 5px 5px 5px;
+  margin-bottom: 2px;
+  align-items: center;
+}
+
+.abea.sheet.actor .weapon-header-line-left {
+  grid-column: 1 / 3;
+  width: 100%;
+  height: 0;
+  border-bottom: 2px solid var(--border-color);
+  align-self: flex-end;
+}
+
+.abea.sheet.actor .weapon-header-line-right {
+  grid-column: 4 / 5;
+  width: 100%;
+  height: 0;
+  border-bottom: 2px solid var(--border-color);
+  align-self: flex-end;
+}
+
+.abea.sheet.actor .weapon-damage-header {
+  text-align: center;
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  padding: 2px 5px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.abea.sheet.actor .weapons-list-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.abea.sheet.actor .weapon-row-grid {
+  display: grid;
+  grid-template-columns: 40px 1fr 100px 60px;
+  gap: 8px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.abea.sheet.actor .weapon-row-grid:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: var(--highlight);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.abea.sheet.actor .weapon-image {
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  /* Medallion Style */
+  overflow: hidden;
+  background: #ab9e88;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.abea.sheet.actor .weapon-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+
+.abea.sheet.actor .weapon-name-label {
+  font-family: var(--font-heading);
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--abea-primary-color);
+  text-transform: uppercase;
+}
+
+.abea.sheet.actor .weapon-damage-cell {
+  text-align: center;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.abea.sheet.actor .weapon-damage-header {
+  font-family: var(--font-heading);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--abea-primary-color);
+  font-size: 0.65rem;
+}
+
+
+/* Skill Sheet Specifics */
+.abea.sheet.item .form-row {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+}
+
+.abea.sheet.item .form-row .form-group {
+  flex: 1;
+}
+
+.abea.sheet.item .form-fields select {
+  width: 100%;
+  padding: 2px;
+  border: 2px solid var(--abea-primary-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.4);
+  font-family: "Village", sans-serif;
+  font-size: 0.76rem;
+  color: var(--abea-primary-color);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.abea.sheet.item .form-fields select:focus {
+  outline: none;
+  background: white;
+  border-color: var(--abea-accent-color)
+}
+
+
+/* Weapon Sheet - Skill Drop */
+.abea.sheet.item.weapon .skill-drop-zone {
+  width: 100%;
+  height: 40px;
+  border: 2px dashed var(--abea-border-color);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--highlight);
+  font-family: var(--font-heading);
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.abea.sheet.item.weapon .skill-drop-zone:hover {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: var(--abea-accent-color);
+  color: var(--abea-accent-color);
+}
+
+.abea.sheet.item.weapon .attached-skill {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  background: rgba(255, 255, 255, 0.4);
+  border: 2px solid var(--abea-border-color);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.abea.sheet.item.weapon .attached-skill:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.abea.sheet.item.weapon .attached-skill img {
+  border: none;
+  border-radius: 4px;
+}
+
+.abea.sheet.item.weapon .attached-skill .skill-name {
+  flex: 1;
+  font-family: var(--font-heading);
+  font-weight: bold;
+  color: var(--abea-primary-color);
+}
+
+.abea.sheet.item.weapon .attached-skill .skill-delete {
+  font-size: 1rem;
+  color: #c0392b;
+  cursor: pointer;
+}
+
+/* -------------------------------------------- */
+/*  Inventory List (Matching Weapons)           */
+/* -------------------------------------------- */
+
+.abea.sheet.actor .inventory-header-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 60px 60px;
+  gap: 8px;
+  padding: 0 5px 5px 5px;
+  margin-bottom: 2px;
+  align-items: center;
+}
+
+.abea.sheet.actor .inventory-qty-header {
+  text-align: center;
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  padding: 2px 5px;
+  background: rgba(255, 255, 255, 0.4);
+  font-family: var(--font-heading);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--abea-primary-color);
+  font-size: 0.65rem;
+}
+
+.abea.sheet.actor .inventory-header-line-left {
+  grid-column: 1 / 3;
+  width: 100%;
+  height: 0;
+  border-bottom: 2px solid var(--border-color);
+  align-self: flex-end;
+}
+
+.abea.sheet.actor .inventory-header-line-right {
+  grid-column: 4 / 5;
+  width: 100%;
+  height: 0;
+  border-bottom: 2px solid var(--border-color);
+  align-self: flex-end;
+}
+
+.abea.sheet.actor .inventory-list-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.abea.sheet.actor .inventory-row-grid {
+  display: grid;
+  grid-template-columns: 40px 1fr 60px 60px;
+  gap: 8px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.abea.sheet.actor .inventory-qty-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.abea.sheet.actor .inventory-qty-cell input {
+  width: 100%;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  font-family: var(--font-heading);
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.abea.sheet.actor .inventory-row-grid:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: var(--highlight);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.abea.sheet.actor .inventory-image {
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  overflow: hidden;
+  background: #ab9e88;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.abea.sheet.actor .inventory-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+
+.abea.sheet.actor .inventory-name-label {
+  font-family: var(--font-heading);
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--abea-primary-color);
+  text-transform: uppercase;
+}
+
+/* Rollable Elements */
+.abea.sheet.actor .rollable {
+  cursor: pointer;
+}
+
+/* ========================================= */
+/*  NPC Sheet Styling                        */
+/* ========================================= */
+.abea.sheet.npc {
+  min-width: 800px;
+  --npc-bg: rgba(255, 255, 255, 0.2);
+}
+
+.abea.sheet.npc .window-content {
+  background: var(--bg-color);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.abea-npc-grid {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 15px;
+  overflow: hidden;
+}
+
+/* Header */
+.npc-header {
+  display: flex;
+  gap: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border-color);
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.npc-identity {
+  display: flex;
+  align-items: flex-end;
+  gap: 15px;
+  flex: 1;
+}
+
+.npc-avatar {
+  width: 60px;
+  height: 60px;
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  overflow: hidden;
+  background: #ab9e88;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.npc-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+
+.npc-name-block {
+  flex: 1;
+}
+
+.npc-name-input {
+  width: 100%;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  border: none;
+  border-bottom: 2px solid var(--border-color);
+  background: transparent;
+  color: var(--border-color);
+  font-weight: bold;
+}
+
+.npc-stats-cluster {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.npc-stat-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.npc-stat-group label {
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: var(--highlight);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.npc-input-pair {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 2px 5px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.npc-stat-group input {
+  width: 35px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-family: var(--font-heading);
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--abea-primary-color);
+}
+
+.npc-stat-group input:focus {
+  outline: none;
+}
+
+.npc-stat-group .sep {
+  color: var(--highlight);
+  font-weight: bold;
+}
+
+.npc-stat-group.single input {
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 2px;
+  width: 45px;
+}
+
+/* Body Columns */
+.npc-body {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 10px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.npc-column {
+  display: flex;
+  flex-direction: column;
+  background: var(--npc-bg);
+  border: 1px solid rgba(92, 64, 51, 0.2);
+  border-radius: 5px;
+  padding: 5px;
+  overflow: hidden;
+}
+
+.npc-section-title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  border-bottom: 2px solid var(--border-color);
+  margin: 0 0 5px 0;
+  padding-bottom: 2px;
+  color: var(--border-color);
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+}
+
+.npc-item-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.npc-item-row,
+.npc-skill-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  border-bottom: 1px dashed rgba(92, 64, 51, 0.1);
+}
+
+.npc-item-row:hover,
+.npc-skill-row:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.npc-roll-btn {
+  cursor: pointer;
+  color: var(--border-color);
+  opacity: 0.7;
+  width: 20px;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.npc-roll-btn:hover {
+  opacity: 1;
+  color: var(--accent-color);
+  transform: scale(1.1);
+}
+
+.npc-skill-name,
+.npc-item-name {
+  flex: 1;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-heading);
+  color: var(--abea-primary-color);
+}
+
+.npc-skill-rank .skill-radio-cell {
+  gap: 1px;
+  display: flex;
+  align-items: center;
+}
+
+.npc-skill-rank input.hidden-radio {
+  display: none;
+}
+
+.npc-skill-rank label.mini-pip {
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  cursor: pointer;
+  display: block;
+}
+
+.npc-skill-rank input:checked+label.mini-pip,
+.npc-skill-rank label.mini-pip.active {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.npc-item-qty input {
+  width: 30px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  font-family: var(--font-heading);
+  color: var(--highlight);
+}
+
+.npc-item-damage {
+  font-family: var(--font-heading);
+  color: var(--accent-color);
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.npc-item-controls a {
+  color: var(--highlight);
+  opacity: 0.5;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.npc-item-controls a:hover {
+  color: #c0392b;
+  opacity: 1;
+}
+
+/* ========================================= */
+/* NPC Sheet Compact Specific Styles         */
+/* ========================================= */
+
+/* NPC Grid Layout */
+.abea-npc-grid {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 10px;
+  padding: 10px;
+  background: var(--bg-color);
+}
+
+/* ========================================= */
+/* NPC HEADER REDESIGN                       */
+/* ========================================= */
+
+.npc-header {
+  display: grid;
+  grid-template-columns: 84px 1fr 312px;
+  gap: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border-color);
+  align-items: start;
+}
+
+/* COL 1: Avatar */
+.npc-avatar {
+  width: 84px;
+  height: 84px;
+  border: 3px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ab9e88;
+}
+
+.npc-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+
+/* COL 2: Name & Stats */
+.npc-info-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.npc-name-input {
+  width: 100%;
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--border-color);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(92, 64, 51, 0.3);
+  padding: 0 5px;
+  margin-top: -5px;
+  /* Visual tweaks */
+}
+
+/* Stats Row */
+.npc-stats-row {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.stat-compact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-compact label {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: var(--highlight);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.stat-inputs {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 2px 4px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+/* Input Fields inside stats */
+.stat-inputs input {
+  width: 30px;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--abea-primary-color);
+  border: none;
+  background: transparent;
+  padding: 0;
+  height: 20px;
+}
+
+.stat-inputs span.sep {
+  font-weight: bold;
+  color: var(--highlight);
+  align-self: center;
+}
+
+/* Micro-labels */
+.stat-compact .micro-label {
+  font-size: 0.6rem;
+  color: var(--highlight);
+  margin-top: 1px;
+  text-transform: uppercase;
+}
+
+/* COL 3: Notes */
+.npc-notes-col {
+  height: 100%;
+}
+
+.npc-notes {
+  width: 100%;
+  height: 84px;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px dashed var(--border-color);
+  border-radius: 5px;
+  padding: 5px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  resize: none;
+  color: var(--text-color);
+}
+
+.npc-notes:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* 3-Column Body Layout */
+.npc-body {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 10px;
+  flex: 1;
+  overflow: hidden;
+  /* Prevent body scroll, let columns scroll */
+}
+
+.npc-column {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px;
+  border-radius: 8px;
+  border: 1px dashed rgba(92, 64, 51, 0.2);
+  height: 100%;
+  overflow: hidden;
+}
+
+.npc-section-title {
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  color: var(--border-color);
+  border-bottom: 2px solid var(--border-color);
+  margin: 0 0 5px 0;
+  padding-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.npc-item-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ================== */
+/* COMPACT SKILL GRID */
+/* ================== */
+
+/* Grid Definition: Img(25px) Name(1fr) Ranks(4x25px) Trash(20px) */
+/* Total width required approx: 25 + 100(name) + 100 + 20 + gaps ~ 250px-300px. 
+   Should fit in 33% of 1000px (333px). */
+.npc-skill-grid-layout {
+  display: grid;
+  grid-template-columns: 25px 1fr repeat(4, 25px) 20px;
+  gap: 5px;
+  align-items: center;
+}
+
+/* Header Specifics */
+.npc-skill-header {
+  font-weight: bold;
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  color: var(--highlight);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.npc-skill-header .header-rank {
+  text-align: center;
+}
+
+/* Row Specifics */
+.npc-skill-row {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 2px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.npc-skill-row:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border-color);
+}
+
+.npc-skill-img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.npc-skill-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+
+.npc-skill-name {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: var(--border-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Compact Radio Styling */
+.npc-skill-radio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.npc-skill-radio input[type="radio"] {
+  display: none;
+}
+
+.npc-skill-radio label {
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  cursor: pointer;
+  display: block;
+  transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.npc-skill-radio input[type="radio"]:checked+label {
+  background: var(--accent-color);
+  box-shadow: 0 0 4px var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+/* =================== */
+/* COMPACT WEAPON GRID */
+/* =================== */
+
+/* Grid: Img(25px) Name(1fr) Dmg(50px) Trash(20px) */
+.npc-weapon-grid-layout {
+  display: grid;
+  grid-template-columns: 25px 1fr 50px 20px;
+  gap: 5px;
+  align-items: center;
+}
+
+.npc-weapon-row {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 2px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.npc-weapon-row:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border-color);
+}
+
+.npc-weapon-dmg {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--abea-primary-color);
+  text-align: center;
+}
+
+/* ====================== */
+/* COMPACT INVENTORY GRID */
+/* ====================== */
+
+/* Grid: Img(25px) Name(1fr) Qty(40px) Trash(20px) */
+.npc-inventory-grid-layout {
+  display: grid;
+  grid-template-columns: 25px 1fr 40px 20px;
+  gap: 5px;
+  align-items: center;
+}
+
+.npc-inventory-row {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 2px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.npc-inventory-row:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border-color);
+}
+
+.npc-inventory-qty input {
+  width: 100%;
+  height: 25px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 2px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.3);
+  font-family: var(--font-heading);
+  color: var(--abea-primary-color);
+  font-weight: bold;
+}
+
+/* Controls (Trash) */
+.npc-item-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--highlight);
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: color 0.2s;
+}
+
+.npc-item-control:hover {
+  color: #c0392b;
+}

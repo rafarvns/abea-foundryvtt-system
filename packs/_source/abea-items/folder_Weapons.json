@@ -1,0 +1,19 @@
+{
+    "name": "Weapons",
+    "sorting": "a",
+    "folder": null,
+    "type": "Item",
+    "_id": "n5ez79e85so9z58d",
+    "description": "Lista de Armas básicas",
+    "sort": 0,
+    "color": null,
+    "flags": {},
+    "_stats": {
+        "systemId": "abea",
+        "systemVersion": "1.0.0",
+        "coreVersion": "13.351",
+        "createdTime": 1709251200000,
+        "modifiedTime": 1709251200000,
+        "lastModifiedBy": "awd213456789abcd"
+    }
+}

@@ -1,0 +1,7 @@
+2026/02/05-14:01:51.821 3ec8 Recovering log #57
+2026/02/05-14:01:51.828 3ec8 Delete type=0 #57
+2026/02/05-14:01:51.828 3ec8 Delete type=3 #55
+2026/02/05-15:56:27.778 4bfc Level-0 table #62: started
+2026/02/05-15:56:27.778 4bfc Level-0 table #62: 0 bytes OK
+2026/02/05-15:56:27.781 4bfc Delete type=0 #60
+2026/02/05-15:56:27.793 4bfc Manual compaction at level-0 from '!items!VLaxz7AUIGWDiWPc' @ 72057594037927935 : 1 .. '!items!VLaxz7AUIGWDiWPc' @ 0 : 0; will stop at (end)

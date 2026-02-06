@@ -1,0 +1,80 @@
+name: Update Version on Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: write
+
+jobs:
+  update-version:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update Version Logic
+        id: version
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = 'system.json';
+            
+            try {
+              const content = fs.readFileSync(path, 'utf8');
+              const json = JSON.parse(content);
+              
+              if (!json.version) {
+                console.log("No version field found");
+                return;
+              }
+
+              let versionParts = json.version.split('.').map(Number);
+              if (versionParts.length !== 3) {
+                // Handle non-standard length if necessary, or force 3 parts
+                // Assuming standard major.minor.patch
+                console.log("Version format not x.y.z, attempting to parse first 3");
+                while(versionParts.length < 3) versionParts.push(0);
+              }
+
+              let [major, minor, patch] = versionParts;
+
+              // Increment patch
+              patch += 1;
+
+              // Ripple logic (Base 10)
+              if (patch >= 10) {
+                patch = 0;
+                minor += 1;
+              }
+
+              if (minor >= 10) {
+                minor = 0;
+                major += 1;
+              }
+
+              const newVersion = `${major}.${minor}.${patch}`;
+              json.version = newVersion;
+              
+              // Detect indentation (simple guess or default to 2 spaces)
+              fs.writeFileSync(path, JSON.stringify(json, null, 2) + '\n');
+              
+              console.log(`Updated version from ${content} to ${newVersion}`);
+              core.setOutput('new_version', newVersion);
+              
+            } catch (error) {
+              core.setFailed(error.message);
+            }
+
+      - name: Commit and Push
+        if: steps.version.outputs.new_version
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add system.json
+          git commit -m "Auto-update version to ${{ steps.version.outputs.new_version }} [skip ci]"
+          git push
