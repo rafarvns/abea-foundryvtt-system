@@ -1508,6 +1508,10 @@
   width: 100%;
 }
 
+.abea.sheet.item .type-margin {
+  margin-top: 16px !important;
+}
+
 .abea.sheet.item .profile-img {
   border: 3px solid var(--abea-primary);
   border-radius: var(--radius-md);
@@ -1569,7 +1573,7 @@
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  margin-top: 5px;
+  margin-top: 6px;
 }
 
 .abea.sheet.item .damage-field {
@@ -1616,7 +1620,7 @@
 }
 
 .abea.sheet.item .sheet-body {
-  padding-top: 10px;
+  padding-top: 5px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -1633,7 +1637,7 @@
 }
 
 .abea.sheet.item .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   display: flex;
   flex-direction: column;
   margin-top: 10px;
@@ -1658,6 +1662,16 @@
   color: var(--abea-primary-color);
 }
 
+.abea.sheet.item .form-fields input[type="checkbox"] {
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 3px;
+  padding-bottom: 2px;
+  margin-top: 0;
+  width: 32px;
+  --checkbox-background-color: var(--bg-panel);
+}
+
 .abea.sheet.item .form-fields .item-generic-type {
   width: 100%;
 }
@@ -1672,6 +1686,13 @@
   padding: 0 0px;
 }
 
+.abea.sheet.item .type-properties {
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
 .abea.sheet.item .form-fields input.long-text {
   width: 100%;
 }
@@ -1681,6 +1702,7 @@
   display: flex;
   gap: 15px;
   width: 100%;
+  margin-top: 6px;
 }
 
 .abea.sheet.item .form-row .form-group {
