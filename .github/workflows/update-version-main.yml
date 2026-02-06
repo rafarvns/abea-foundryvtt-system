@@ -16,12 +16,16 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Need full history for cherry-pick if necessary, though fetching specific branches later is key
+          fetch-depth: 0
+          ref: main # Checkout the branch, NOT the commit SHA, to avoid detached HEAD
 
       - name: Setup Git Configuration
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+      - name: Pull latest main
+        run: git pull origin main
 
       - name: Increment Minor Version
         id: bump_version
@@ -42,8 +46,6 @@ jobs:
           echo "New Version: $NEW_VERSION"
 
           # Update system.json
-          # Use a temp file to ensure atomic write and formatting preservation if possible, 
-          # but jq usually pretty-prints. 
           jq --arg new_ver "$NEW_VERSION" '.version = $new_ver' system.json > system.json.tmp && mv system.json.tmp system.json
 
           # Output for next steps
@@ -54,6 +56,7 @@ jobs:
         run: |
           git add system.json
           git commit -m "Bump version to ${{ steps.bump_version.outputs.new_version }} [skip ci]"
+          git pull --rebase origin main # Safety pull before push
           git push origin main
           echo "commit_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
@@ -62,6 +65,7 @@ jobs:
           # Fetch dev branch
           git fetch origin dev:dev
           git checkout dev
+          git pull origin dev # Ensure we are on latest dev
           
           # Cherry pick the commit from main
           git cherry-pick ${{ steps.push_main.outputs.commit_sha }}
