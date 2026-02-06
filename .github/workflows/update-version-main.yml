@@ -1,0 +1,70 @@
+name: Update Version (Main)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-version:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Need full history for cherry-pick if necessary, though fetching specific branches later is key
+
+      - name: Setup Git Configuration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Increment Minor Version
+        id: bump_version
+        run: |
+          # Read current version
+          CURRENT_VERSION=$(jq -r '.version' system.json)
+          echo "Current Version: $CURRENT_VERSION"
+
+          # Split version into array
+          IFS='.' read -r -a parts <<< "$CURRENT_VERSION"
+          MAJOR=${parts[0]}
+          MINOR=${parts[1]}
+          PATCH=${parts[2]}
+
+          # Increment Minor, Reset Patch
+          NEW_MINOR=$((MINOR + 1))
+          NEW_VERSION="$MAJOR.$NEW_MINOR.0"
+          echo "New Version: $NEW_VERSION"
+
+          # Update system.json
+          # Use a temp file to ensure atomic write and formatting preservation if possible, 
+          # but jq usually pretty-prints. 
+          jq --arg new_ver "$NEW_VERSION" '.version = $new_ver' system.json > system.json.tmp && mv system.json.tmp system.json
+
+          # Output for next steps
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit and Push to Main
+        id: push_main
+        run: |
+          git add system.json
+          git commit -m "Bump version to ${{ steps.bump_version.outputs.new_version }} [skip ci]"
+          git push origin main
+          echo "commit_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Cherry pick to Dev
+        run: |
+          # Fetch dev branch
+          git fetch origin dev:dev
+          git checkout dev
+          
+          # Cherry pick the commit from main
+          git cherry-pick ${{ steps.push_main.outputs.commit_sha }}
+          
+          # Push to dev
+          git push origin dev
