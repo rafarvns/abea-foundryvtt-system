@@ -18,13 +18,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - run: |
+      - name: Setup Git
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - id: bump_version
+      # 🔥 GARANTE VERSION SOURCE DA DEV
+      - name: Use system.json from dev
+        run: |
+          git fetch origin dev
+          git checkout origin/dev -- system.json
+
+      - name: Bump Minor Version
+        id: bump
         run: |
           CURRENT_VERSION=$(jq -r '.version' system.json)
+
+          echo "Dev version: $CURRENT_VERSION"
 
           IFS='.' read -r -a parts <<< "$CURRENT_VERSION"
           MAJOR=${parts[0]}
@@ -32,19 +42,23 @@ jobs:
 
           NEW_VERSION="$MAJOR.$((MINOR+1)).0"
 
-          jq --arg new_ver "$NEW_VERSION" '.version = $new_ver' system.json > system.json.tmp && mv system.json.tmp system.json
+          echo "New version: $NEW_VERSION"
 
-          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          jq --arg v "$NEW_VERSION" '.version = $v' system.json > tmp.json && mv tmp.json system.json
 
-      - id: push_main
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit bump to main
+        id: commit
         run: |
           git add system.json
-          git commit -m "Bump version to ${{ steps.bump_version.outputs.new_version }} [skip ci]"
+          git commit -m "Bump version to ${{ steps.bump.outputs.version }} [skip ci]"
           git push
-          echo "commit_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
-      - run: |
+      - name: Sync back to dev
+        run: |
           git fetch origin dev:dev
           git checkout dev
-          git cherry-pick ${{ steps.push_main.outputs.commit_sha }}
+          git cherry-pick ${{ steps.commit.outputs.sha }}
           git push origin dev
