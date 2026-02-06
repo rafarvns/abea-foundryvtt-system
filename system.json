@@ -79,7 +79,7 @@
       ]
     }
   ],
-  "url": "https://github.com/rafa-pc/abea",
-  "manifest": "https://raw.githubusercontent.com/rafa-pc/abea/main/system.json",
-  "download": "https://github.com/rafa-pc/abea/releases/latest/download/abea.zip"
+  "url": "https://github.com/rafarvns/abea-foundryvtt-system",
+  "manifest": "https://github.com/rafarvns/abea-foundryvtt-system/releases/latest/download/system.json",
+  "download": "https://github.com/rafarvns/abea-foundryvtt-system/releases/latest/download/abea.zip"
 }

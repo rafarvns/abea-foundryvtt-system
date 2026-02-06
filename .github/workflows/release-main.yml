@@ -1,0 +1,61 @@
+name: Release Main
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract Version
+        id: get_version
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const system = JSON.parse(fs.readFileSync('system.json', 'utf8'));
+            core.setOutput('version', system.version);
+            console.log(`Version detected: ${system.version}`);
+
+      - name: Build Release Package
+        run: |
+          mkdir dist
+          # Copy core files
+          cp system.json dist/
+          cp template.json dist/
+          cp README.md dist/
+          # Copy directories (if they exist)
+          [ -d assets ] && cp -r assets dist/
+          [ -d fonts ] && cp -r fonts dist/
+          [ -d lang ] && cp -r lang dist/
+          [ -d packs ] && cp -r packs dist/
+          [ -d scripts ] && cp -r scripts dist/
+          [ -d styles ] && cp -r styles dist/
+          [ -d templates ] && cp -r templates dist/
+          
+          # Create zip from dist folder content
+          cd dist
+          zip -r ../abea.zip .
+          cd ..
+          
+          echo "Zip created: abea.zip"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: Release v${{ steps.get_version.outputs.version }}
+          draft: false
+          prerelease: false
+          files: |
+            abea.zip
+            system.json
+          make_latest: true
