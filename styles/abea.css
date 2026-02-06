@@ -15,7 +15,7 @@
 
 /* Favorites Panel Styles Merged */
 .abea.sheet.actor .favorites-panel {
-  margin-top: 10px;
+  margin-top: 16px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -110,6 +110,11 @@
 .abea.sheet.actor .fav-controls {
   opacity: 0;
   font-size: 0.7rem;
+  color: var(--abea-primary-color);
+}
+
+.abea.sheet.actor .fav-controls:hover {
+  opacity: 1;
   color: #c0392b;
 }
 
@@ -273,11 +278,11 @@
 
 .abea.sheet.actor .defense-diamond input {
   position: absolute;
-  top: 10px;
+  top: 6px;
   left: 0;
   width: 50px;
   text-align: center;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: bold;
   border: none;
   background: transparent;
@@ -328,12 +333,12 @@
 .abea.sheet.actor .energy-circle input {
   width: 50px;
   text-align: center;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: bold;
   border: none;
   background: transparent;
   font-family: var(--font-heading);
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 /* Current Energy Text Color */
@@ -805,13 +810,6 @@
   overflow: hidden;
 }
 
-.abea.sheet.actor .weapons-header-row {
-  display: grid;
-  grid-template-columns: 1fr 90px 40px;
-  gap: 10px;
-  align-items: end;
-  margin-bottom: 5px;
-}
 
 .abea.sheet.actor .weapon-header-label {
   display: flex;
@@ -864,17 +862,6 @@
   font-size: 1.1rem;
   font-family: var(--font-heading);
   color: var(--border-color);
-}
-
-.abea.sheet.actor .weapon-damage-cell {
-  text-align: center;
-  font-family: var(--font-heading);
-  color: var(--accent-color);
-  font-weight: bold;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 
@@ -1055,9 +1042,13 @@
 
 /* Specific red trash icon for skills */
 .abea.sheet.actor .skill-controls .icon-button {
-  color: #c0392b;
+  color: var(--abea-primary-color);
   background: transparent;
   border: none;
+}
+
+.abea.sheet.actor .skill-controls .icon-button:hover {
+  color: #c0392b;
 }
 
 @keyframes abeaFadeIn {
@@ -1327,7 +1318,7 @@
 
 .abea.sheet.actor .weapons-header-row {
   display: grid;
-  grid-template-columns: 40px 1fr 70px 76px;
+  grid-template-columns: 40px 1fr 68px 86px;
   gap: 8px;
   padding: 0 5px 5px 5px;
   margin-bottom: 2px;
@@ -1415,7 +1406,12 @@
 .abea.sheet.actor .weapon-damage-cell {
   text-align: center;
   font-weight: bold;
-  color: var(--accent-color);
+  color: var(--abea-primary-color);
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .abea.sheet.actor .weapon-damage-header {
@@ -1609,7 +1605,7 @@
   background: transparent;
   font-size: 1.1rem;
   font-family: var(--font-heading);
-  color: var(--accent-color);
+  color: var(--abea-primary-color);
   font-weight: bold;
 }
 
