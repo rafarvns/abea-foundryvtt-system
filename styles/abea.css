@@ -568,7 +568,7 @@
 }
 
 .abea.sheet.actor nav.sheet-tabs .item {
-  padding: 6px 12px;
+  padding: 0px 12px;
   text-transform: uppercase;
   font-weight: bold;
   font-family: var(--font-heading);
@@ -645,7 +645,7 @@
 .abea.sheet.actor .skills-tab-content {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   flex: 1;
   overflow: hidden;
 }
@@ -805,7 +805,7 @@
 .abea.sheet.actor .weapons-tab-content {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   flex: 1;
   overflow: hidden;
 }
@@ -940,8 +940,8 @@
 /* Currency Panel Specifics */
 /* Currency Panel Specifics - High Specificity to override biography-panel */
 .abea.sheet.actor .inventory-section .currency-panel.compact {
-  margin-bottom: 15px;
-  padding: 8px 15px;
+  margin-bottom: 10px;
+  padding: 4px 10px;
   flex: 0 0 auto !important;
   height: auto !important;
   min-height: 0 !important;
@@ -1577,7 +1577,7 @@
   flex-direction: column;
   flex: 1;
   overflow: hidden;
-  gap: 10px;
+  gap: 5px;
 }
 
 .abea.sheet.actor .inventory-row-grid {
@@ -1662,23 +1662,10 @@
   flex-direction: column;
 }
 
-.abea-npc-grid {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 15px;
-  overflow: hidden;
-}
+
 
 /* Header */
-.npc-header {
-  display: flex;
-  gap: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--border-color);
-  align-items: flex-end;
-  flex-shrink: 0;
-}
+
 
 .npc-identity {
   display: flex;
@@ -1687,38 +1674,15 @@
   flex: 1;
 }
 
-.npc-avatar {
-  width: 60px;
-  height: 60px;
-  border: 2px solid var(--border-color);
-  border-radius: 5px;
-  overflow: hidden;
-  background: #ab9e88;
-  flex-shrink: 0;
-  cursor: pointer;
-}
 
-.npc-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border: none;
-}
+
+
 
 .npc-name-block {
   flex: 1;
 }
 
-.npc-name-input {
-  width: 100%;
-  font-family: var(--font-heading);
-  font-size: 2rem;
-  border: none;
-  border-bottom: 2px solid var(--border-color);
-  background: transparent;
-  color: var(--border-color);
-  font-weight: bold;
-}
+
 
 .npc-stats-cluster {
   display: flex;
@@ -1925,6 +1889,7 @@
   gap: 10px;
   padding: 10px;
   background: var(--bg-color);
+  overflow: hidden;
 }
 
 /* ========================================= */
@@ -1938,6 +1903,7 @@
   padding-bottom: 10px;
   border-bottom: 2px solid var(--border-color);
   align-items: start;
+  flex-shrink: 0;
 }
 
 /* COL 1: Avatar */
@@ -1948,6 +1914,8 @@
   border-radius: 10px;
   overflow: hidden;
   background: #ab9e88;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
 .npc-avatar img {
