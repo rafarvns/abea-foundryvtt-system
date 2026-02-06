@@ -15,11 +15,16 @@ jobs:
     steps:
       - name: Checkout dev
         uses: actions/checkout@v4
+        with:
+          ref: dev # Checkout the branch, NOT the commit SHA
 
       - name: Setup Git Configuration
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+      - name: Pull latest dev
+        run: git pull origin dev
 
       - name: Increment Patch Version
         id: bump_version
@@ -49,4 +54,5 @@ jobs:
         run: |
           git add system.json
           git commit -m "Bump version to ${{ steps.bump_version.outputs.new_version }} [skip ci]"
+          git pull --rebase origin dev
           git push origin dev
