@@ -76,6 +76,28 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    },
+    {
+      "name": "abea-skills",
+      "label": "Habilidades",
+      "path": "packs/abea-skills",
+      "type": "Item",
+      "system": "abea",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "abea-items",
+      "label": "Itens",
+      "path": "packs/abea-items",
+      "type": "Item",
+      "system": "abea",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "packFolders": [
@@ -83,7 +105,9 @@
       "name": "ABEA",
       "sorting": "a",
       "packs": [
-        "abea-weapons"
+        "abea-weapons",
+        "abea-skills",
+        "abea-items"
       ]
     }
   ],
