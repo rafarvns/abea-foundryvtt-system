@@ -2398,102 +2398,214 @@
 .npc-item-control:hover {
   color: var(--color-danger);
 }
+
 /* ========================================= */
-/* FACANHA SYSTEM (Chat Cards)               */
+/* CHAT CARDS */
 /* ========================================= */
 
 .abea.chat-card.facanha-card {
-    background: var(--bg-main);
-    border: 2px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: 10px;
-    font-family: var(--font-body);
+  background: var(--bg-main);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 10px;
+  font-family: var(--font-body);
+  color: var(--text-main);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.facanha-card .card-header .item-name {
-    margin: 0;
-    font-size: 1.2rem;
-    font-family: var(--font-heading);
-    color: var(--abea-primary);
-    text-transform: uppercase;
-    border: none;
+.abea.chat-card .card-header {
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  align-items: center;
+  gap: 10px;
 }
 
-.facanha-card .card-header {
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-    display: flex; /* Ensure flex behavior */
-    align-items: center;
-    gap: 10px;
+.abea.chat-card .card-header img {
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--abea-item-bg);
+  padding: 2px;
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+}
+
+.abea.chat-card .card-header h3 {
+  border: none;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--abea-primary);
+  text-transform: uppercase;
+}
+
+.abea.chat-card .facanha-details {
+  background: var(--bg-trans-40);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.abea.chat-card .facanha-details p {
+  margin: 2px 0;
+}
+
+.abea.chat-card .facanha-details strong {
+  font-family: var(--font-heading);
+  color: var(--abea-primary);
+}
+
+.abea.chat-card hr {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 5px 0 10px;
+  opacity: 0.5;
+}
+
+.abea.chat-card .player-row {
+  background: var(--bg-trans-30);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid transparent;
+}
+
+.abea.chat-card .player-row.aguardando {
+  border-left: 3px solid var(--highlight);
+}
+
+.abea.chat-card .player-row.passou {
+  border-left: 3px solid var(--abea-accent);
+  background: rgba(60, 110, 56, 0.1);
+}
+
+.abea.chat-card .player-row.falhou {
+  border-left: 3px solid var(--color-danger);
+  background: rgba(192, 57, 43, 0.1);
+}
+
+.abea.chat-card .player-name {
+  font-family: var(--font-heading);
+  font-weight: bold;
+  color: var(--abea-primary);
+}
+
+.abea.chat-card .player-status {
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.abea.chat-card .player-status .success {
+  color: var(--abea-accent);
+}
+
+.abea.chat-card .player-status .failure {
+  color: var(--color-danger);
 }
 
 
-
-.facanha-details p {
-    margin: 5px 0;
-    font-size: 0.95rem;
+.abea.chat-card .facanha-rolar-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  background: var(--bg-trans-30);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius);
+  font-family: var(--font-heading);
+  color: var(--border-color);
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.facanha-players {
-    margin: 10px 0;
-    padding: 0;
-    list-style: none;
-    background: var(--bg-trans-30);
-    border-radius: var(--radius-md);
-    padding: 5px;
+.abea.chat-card .facanha-rolar-btn:hover {
+  background: var(--border-color);
+  color: var(--bg-main);
 }
 
-.facanha-players .player-row {
-    display: flex; /* Flex required for layout */
-    padding: 5px 8px;
-    border-bottom: 1px dashed var(--shadow-20);
-    align-items: center;
-    justify-content: space-between;
+/* ========================================= */
+/* FACANHA DIALOG */
+/* ========================================= */
+
+.dialog.abea.facanha-dialog {
+  background: var(--bg-main);
+  /* Ensure dialog background matches system */
+  color: var(--text-main);
+  border: 2px solid var(--border-color);
+  font-family: var(--font-body);
 }
 
-.facanha-players .player-row:last-child {
-    border-bottom: none;
+.facanha-dialog .dialog-content {
+  background: transparent;
+  /* Let window bg show through */
 }
 
-.facanha-players .player-name {
-    font-weight: bold;
-    color: var(--text-main);
+.facanha-dialog form .form-group label {
+  font-family: var(--font-heading);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--abea-primary);
+  font-size: 0.9rem;
+  flex: 0 0 120px;
+  /* Consistent label width */
 }
 
-.facanha-players .player-status {
-    font-family: var(--font-heading);
-    font-size: 0.9rem;
+.facanha-dialog form .form-fields select,
+.facanha-dialog form .form-fields input {
+  background: var(--bg-trans-30);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-main);
+  width: 100%;
 }
 
-.facanha-players .player-status i {
-    margin-right: 5px;
+.facanha-dialog form .form-fields select:focus,
+.facanha-dialog form .form-fields input:focus {
+  outline: none;
+  border-color: var(--abea-accent);
+  background: var(--bg-trans-50);
 }
 
-.facanha-players .player-status i.success {
-    color: var(--abea-accent);
+.facanha-dialog .notes {
+  font-size: 0.8rem;
+  color: var(--highlight);
+  margin-top: 4px;
+  font-family: var(--font-body);
+  font-style: italic;
 }
 
-.facanha-players .player-status i.failure {
-    color: var(--color-danger);
+/* Specific fix for multi-select height */
+.facanha-dialog select[multiple] {
+  height: auto;
+  min-height: 80px;
+  background: var(--bg-trans-20);
 }
 
-.facanha-rolar-btn {
-    width: 100%;
-    background: var(--abea-primary);
-    color: var(--text-contrast);
-    border: 1px solid var(--color-black);
-    padding: 8px;
-    font-family: var(--font-heading);
-    font-size: 1rem;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: var(--radius-md);
-    transition: all 0.2s;
+/* Dialog Buttons */
+.dialog.abea .dialog-buttons button {
+  background: var(--bg-trans-30);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  font-weight: bold;
+  color: var(--abea-primary);
+  transition: all 0.2s;
 }
 
-.facanha-rolar-btn:hover {
-    background: var(--color-black);
-    box-shadow: 0 0 10px var(--shadow-40);
+.dialog.abea .dialog-buttons button:hover {
+  background: var(--abea-primary);
+  color: var(--bg-main);
 }
-
