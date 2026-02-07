@@ -22,3 +22,7 @@ dist/
 *.zip
 *.tar.gz
 
+node_modules/
+package.json
+package-lock.json
+process-images.js
