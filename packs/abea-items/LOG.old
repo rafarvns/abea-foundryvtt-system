@@ -1,3 +1,4 @@
-2026/02/06-18:09:59.973 5cd4 Recovering log #7
-2026/02/06-18:09:59.986 5cd4 Delete type=0 #7
-2026/02/06-18:09:59.986 5cd4 Delete type=3 #6
+2026/02/07-10:24:51.414 5398 Log #11: 0 ops saved to Table #12 OK
+2026/02/07-10:24:51.417 5398 Archiving C:\Users\RAFA-PC\AppData\Local\FoundryVTT\Data\systems\abea\packs\abea-items/000011.log: OK
+2026/02/07-10:24:51.422 5398 Archiving C:\Users\RAFA-PC\AppData\Local\FoundryVTT\Data\systems\abea\packs\abea-items/MANIFEST-000010: OK
+2026/02/07-10:24:51.428 5398 **** Repaired leveldb C:\Users\RAFA-PC\AppData\Local\FoundryVTT\Data\systems\abea\packs\abea-items; recovered 0 files; 0 bytes. Some data may have been lost. ****

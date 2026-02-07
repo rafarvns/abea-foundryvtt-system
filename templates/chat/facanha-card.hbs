@@ -1,0 +1,42 @@
+<div class="abea chat-card facanha-card">
+    <header class="card-header flexrow">
+        <img src="systems/abea/assets/icons/d20.svg" title="{{localize 'ABEA.Facanha.Card.Label'}}" width="36"
+            height="36" />
+        <h3 class="item-name">{{localize 'ABEA.Facanha.Card.Title'}}</h3>
+    </header>
+
+    <div class="card-content">
+        <div class="facanha-details">
+            <p><strong>{{localize 'ABEA.Facanha.Card.Label'}}:</strong> {{facanhaNome}}</p>
+            <p><strong>{{localize 'ABEA.Facanha.Card.Difficulty'}}:</strong> {{dificuldadeLabel}} (CD {{dificuldadeCD}})
+            </p>
+        </div>
+
+        <hr>
+
+        <ul class="facanha-players unlist">
+            {{#each jogadores}}
+            <li class="player-row flexrow {{status}}">
+                <span class="player-name">{{nome}}</span>
+                <span class="player-status">
+                    {{#if (eq status "aguardando")}}
+                    <i class="fas fa-hourglass-half"></i> {{localize 'ABEA.Facanha.Card.Waiting'}}
+                    {{else if (eq status "passou")}}
+                    <i class="fas fa-check-circle success"></i> {{localize 'ABEA.Facanha.Card.Success'}} ({{resultado}})
+                    {{else}}
+                    <i class="fas fa-times-circle failure"></i> {{localize 'ABEA.Facanha.Card.Failure'}} ({{resultado}})
+                    {{/if}}
+                </span>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+
+    {{#unless allResolved}}
+    <div class="card-buttons">
+        <button class="facanha-rolar-btn" data-action="roll-facanha">
+            <i class="fas fa-dice"></i> {{localize 'ABEA.Facanha.Card.Roll'}}
+        </button>
+    </div>
+    {{/unless}}
+</div>

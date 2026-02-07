@@ -2398,3 +2398,102 @@
 .npc-item-control:hover {
   color: var(--color-danger);
 }
+/* ========================================= */
+/* FACANHA SYSTEM (Chat Cards)               */
+/* ========================================= */
+
+.abea.chat-card.facanha-card {
+    background: var(--bg-main);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 10px;
+    font-family: var(--font-body);
+}
+
+.facanha-card .card-header .item-name {
+    margin: 0;
+    font-size: 1.2rem;
+    font-family: var(--font-heading);
+    color: var(--abea-primary);
+    text-transform: uppercase;
+    border: none;
+}
+
+.facanha-card .card-header {
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    display: flex; /* Ensure flex behavior */
+    align-items: center;
+    gap: 10px;
+}
+
+
+
+.facanha-details p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+}
+
+.facanha-players {
+    margin: 10px 0;
+    padding: 0;
+    list-style: none;
+    background: var(--bg-trans-30);
+    border-radius: var(--radius-md);
+    padding: 5px;
+}
+
+.facanha-players .player-row {
+    display: flex; /* Flex required for layout */
+    padding: 5px 8px;
+    border-bottom: 1px dashed var(--shadow-20);
+    align-items: center;
+    justify-content: space-between;
+}
+
+.facanha-players .player-row:last-child {
+    border-bottom: none;
+}
+
+.facanha-players .player-name {
+    font-weight: bold;
+    color: var(--text-main);
+}
+
+.facanha-players .player-status {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+}
+
+.facanha-players .player-status i {
+    margin-right: 5px;
+}
+
+.facanha-players .player-status i.success {
+    color: var(--abea-accent);
+}
+
+.facanha-players .player-status i.failure {
+    color: var(--color-danger);
+}
+
+.facanha-rolar-btn {
+    width: 100%;
+    background: var(--abea-primary);
+    color: var(--text-contrast);
+    border: 1px solid var(--color-black);
+    padding: 8px;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+}
+
+.facanha-rolar-btn:hover {
+    background: var(--color-black);
+    box-shadow: 0 0 10px var(--shadow-40);
+}
+
