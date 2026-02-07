@@ -1,46 +1,76 @@
-<form class="facanha-dialog">
-    <div class="form-group">
-        <label>{{localize "ABEA.Facanha.Dialog.Category"}}:</label>
+<header class="sheet-header">
+    <img class="profile-img" src="icons/sundries/gaming/dice-pair-white-green.webp"
+        title="{{localize 'ABEA.Facanha.Dialog.Title'}}" height="64" width="64"
+        style="border: none; background: transparent;" />
+    <div class="header-details-panel">
+        <h1 class="dialog-title"
+            style="font-family: var(--font-heading); font-size: 1.5rem; color: var(--abea-primary); margin: 0; border: none;">
+            {{localize "ABEA.Facanha.Dialog.Title"}}</h1>
+    </div>
+</header>
+
+<section class="sheet-body" style="padding-top: 5px; gap: 5px;">
+    <!-- Row 1: Category and Selection (Side by Side) -->
+    <div class="form-row">
+        <div class="form-group" style="margin-bottom: 5px;">
+            <label>{{localize "ABEA.Facanha.Dialog.Category"}}</label>
+            <div class="form-fields">
+                <select name="facanha-categoria" id="facanha-categoria">
+                    {{selectOptions categories selected="custom" localize=true}}
+                </select>
+            </div>
+        </div>
+
+        <!-- Conditional Groups for Selection -->
+        <div class="form-group" id="facanha-select-group" style="display: none; margin-bottom: 5px;">
+            <label>{{localize "ABEA.Facanha.Dialog.SelectFeat"}}</label>
+            <div class="form-fields">
+                <select name="facanha-selecionada" id="facanha-selecionada">
+                    <!-- Populated by JS -->
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" id="facanha-custom-group" style="margin-bottom: 5px;">
+            <label>{{localize "ABEA.Item.Name"}}</label>
+            <div class="form-fields">
+                <input type="text" name="facanha-nome" placeholder="Ex: Saltar..." list="skill-list"
+                    style="height: 26px;">
+                <datalist id="skill-list">
+                    {{#each skillList}}
+                    <option value="{{this}}"></option>
+                    {{/each}}
+                </datalist>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note for Custom Name/Feat -->
+    <p class="notes" style="margin: -2px 0 5px 0; text-align: right;">O nome deve corresponder a uma pericia na ficha.
+    </p>
+
+    <!-- Row 2: Players -->
+    <div class="form-group" style="margin-bottom: 5px;">
+        <label>
+            Selecione os Jogadores
+            <a class="select-all-players" title="Selecionar Todos"><i class="fas fa-users"></i></a>
+        </label>
         <div class="form-fields">
-            <select name="facanha-categoria" id="facanha-categoria">
-                {{selectOptions categories selected="custom" localize=true}}
+            <select name="jogadores" multiple style="height: 80px;">
+                {{selectOptions players valueAttr="id" labelAttr="name"}}
+            </select>
+        </div>
+        <p class="notes" style="margin: 2px 0 0 0;">Segure Ctrl para selecionar vários.</p>
+    </div>
+
+    <!-- Row 3: Difficulty -->
+    <div class="form-group" style="margin-bottom: 5px;">
+        <label>{{localize "ABEA.Facanha.Card.Difficulty"}}</label>
+        <div class="form-fields">
+            <select name="dificuldade">
+                {{selectOptions difficulties selected=15}}
             </select>
         </div>
     </div>
-
-    <div class="form-group" id="facanha-select-group" style="display: none;">
-        <label>{{localize "ABEA.Facanha.Dialog.SelectFeat"}}:</label>
-        <div class="form-fields">
-            <select name="facanha-selecionada" id="facanha-selecionada">
-                <!-- Populated by JS -->
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group" id="facanha-custom-group">
-        <label>{{localize "ABEA.Item.Name"}}:</label>
-        <div class="form-fields">
-            <input type="text" name="facanha-nome" placeholder="Ex: Saltar, Carpintaria..." list="skill-list">
-            <datalist id="skill-list">
-                {{#each skillList}}
-                <option value="{{this}}"></option>
-                {{/each}}
-            </datalist>
-        </div>
-        <p class="notes">O nome deve corresponder a uma pericia na ficha do personagem para aplicar bônus.</p>
-    </div>
-
-    <div class="form-group">
-        <label>Selecione os Jogadores:</label>
-        <select name="jogadores" multiple>
-            {{selectOptions players valueAttr="id" labelAttr="name"}}
-        </select>
-        <p class="notes">Segure Ctrl para selecionar vários.</p>
-    </div>
-    <div class="form-group">
-        <label>{{localize "ABEA.Facanha.Card.Difficulty"}}:</label>
-        <select name="dificuldade">
-            {{selectOptions difficulties selected=15}}
-        </select>
-    </div>
+</section>
 </form>

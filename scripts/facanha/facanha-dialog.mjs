@@ -104,6 +104,16 @@ export class FacanhaSolicitorDialog {
                     const featSelectGroup = html[0].querySelector("#facanha-select-group");
                     const featSelect = html[0].querySelector("#facanha-selecionada");
                     const customGroup = html[0].querySelector("#facanha-custom-group");
+                    const selectAllBtn = html[0].querySelector(".select-all-players");
+                    const playersSelect = html[0].querySelector('[name="jogadores"]');
+
+                    if (selectAllBtn && playersSelect) {
+                        selectAllBtn.addEventListener("click", () => {
+                            for (let i = 0; i < playersSelect.options.length; i++) {
+                                playersSelect.options[i].selected = true;
+                            }
+                        });
+                    }
 
                     categoriaSelect.addEventListener("change", (event) => {
                         const selectedCategory = event.target.value;
@@ -128,8 +138,8 @@ export class FacanhaSolicitorDialog {
                     });
                 }
             }, {
-                classes: ["abea", "dialog", "facanha-dialog"],
-                width: 400
+                classes: ["abea", "dialog", "facanha-dialog", "sheet", "item"],
+                width: 450
             });
             dialog.render(true);
         });

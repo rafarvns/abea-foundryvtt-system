@@ -114,7 +114,7 @@
     "ABEA.Currency.Reis": "Réis",
     "ABEA.Settings.Language.Name": "Idioma do Sistema",
     "ABEA.Settings.Language.Hint": "Selecione o idioma padrão para o sistema. Requer recarregar o mundo.",
-    "ABEA.Facanha.Card.Title": "Solicitação de Façanha",
+    "ABEA.Facanha.Card.Title": "Solicitar Façanha",
     "ABEA.Facanha.Card.Label": "Façanha",
     "ABEA.Facanha.Card.Difficulty": "Dificuldade",
     "ABEA.Facanha.Card.Roll": "Rolar Façanha",
@@ -123,5 +123,6 @@
     "ABEA.Facanha.Card.Failure": "Falha",
     "ABEA.Facanha.Dialog.Custom": "Customizado / Outro",
     "ABEA.Facanha.Dialog.Category": "Categoria",
-    "ABEA.Facanha.Dialog.SelectFeat": "Selecionar Habilidade"
+    "ABEA.Facanha.Dialog.SelectFeat": "Selecionar Façanha",
+    "ABEA.Facanha.Dialog.Title": "Solicitar Façanha"
 }
