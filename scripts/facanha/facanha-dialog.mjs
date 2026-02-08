@@ -59,13 +59,15 @@ export class FacanhaSolicitorDialog {
                         icon: '<i class="fas fa-dice"></i>',
                         callback: (html) => {
                             const formElement = html[0].querySelector("form");
-                            const categoria = formElement.querySelector('[name="facanha-categoria"]').value;
+                            const categoriaInput = formElement.querySelector('[name="facanha-categoria"]');
+                            const categoria = categoriaInput.value;
                             let nome = "";
 
                             if (categoria === "custom") {
                                 nome = formElement.querySelector('[name="facanha-nome"]').value;
                             } else {
-                                nome = formElement.querySelector('[name="facanha-selecionada"]').value;
+                                const featInput = formElement.querySelector('[name="facanha-selecionada"]');
+                                nome = featInput.value;
                             }
 
                             const selectElement = formElement.querySelector('[name="jogadores"]');
@@ -100,13 +102,17 @@ export class FacanhaSolicitorDialog {
                 },
                 default: "request",
                 render: (html) => {
-                    const categoriaSelect = html[0].querySelector("#facanha-categoria");
-                    const featSelectGroup = html[0].querySelector("#facanha-select-group");
-                    const featSelect = html[0].querySelector("#facanha-selecionada");
-                    const customGroup = html[0].querySelector("#facanha-custom-group");
-                    const selectAllBtn = html[0].querySelector(".select-all-players");
-                    const playersSelect = html[0].querySelector('[name="jogadores"]');
+                    const form = html[0];
+                    const categoryBtns = form.querySelectorAll(".category-btn");
+                    const categoryInput = form.querySelector('[name="facanha-categoria"]');
+                    const featGroup = form.querySelector("#facanha-select-group");
+                    const customGroup = form.querySelector("#facanha-custom-group");
+                    const featListContainer = form.querySelector("#feat-list-container");
+                    const featInput = form.querySelector('[name="facanha-selecionada"]');
+                    const selectAllBtn = form.querySelector(".select-all-players");
+                    const playersSelect = form.querySelector('[name="jogadores"]');
 
+                    // --- Player Selection Logic ---
                     if (selectAllBtn && playersSelect) {
                         selectAllBtn.addEventListener("click", () => {
                             for (let i = 0; i < playersSelect.options.length; i++) {
@@ -115,31 +121,77 @@ export class FacanhaSolicitorDialog {
                         });
                     }
 
-                    categoriaSelect.addEventListener("change", (event) => {
-                        const selectedCategory = event.target.value;
-                        if (selectedCategory === "custom") {
-                            featSelectGroup.style.display = "none";
-                            customGroup.style.display = "block";
-                            featSelect.innerHTML = "";
-                        } else {
-                            featSelectGroup.style.display = "block";
-                            customGroup.style.display = "none";
+                    // --- Category Selection Logic ---
+                    categoryBtns.forEach(btn => {
+                        btn.addEventListener("click", (e) => {
+                            // 1. Update UI Active State
+                            categoryBtns.forEach(b => b.classList.remove("active"));
+                            const clickedBtn = e.currentTarget;
+                            clickedBtn.classList.add("active");
 
-                            // Populate Feats
-                            const feats = FACANHAS[selectedCategory] || [];
-                            let featOptions = "";
-                            feats.forEach(feat => {
-                                featOptions += `<option value="${feat}">${feat}</option>`;
-                            });
-                            featSelect.innerHTML = featOptions;
-                        }
-                        // Resize dialog to fit new content if needed
-                        dialog.setPosition({ height: "auto" });
+                            // 2. Update Input Value
+                            const selectedCategory = clickedBtn.dataset.category;
+                            categoryInput.value = selectedCategory;
+
+                            // 3. Handle Content Switching
+                            if (selectedCategory === "custom") {
+                                featGroup.style.display = "none";
+                                customGroup.style.display = "block";
+                                featListContainer.innerHTML = "";
+                                featInput.value = "";
+                            } else {
+                                featGroup.style.display = "block";
+                                customGroup.style.display = "none";
+
+                                // Reset feat selection
+                                featInput.value = "";
+
+                                // Populate Feat Buttons
+                                const feats = FACANHAS[selectedCategory] || [];
+                                featListContainer.innerHTML = "";
+
+                                feats.forEach(feat => {
+                                    const featBtn = document.createElement("button");
+                                    featBtn.type = "button";
+                                    featBtn.className = "feat-btn";
+                                    featBtn.dataset.feat = feat;
+                                    // Modified Structure with Image Placeholder
+                                    featBtn.innerHTML = `
+                                        <div class="feat-content">
+                                            <div class="feat-img-placeholder"><i class="fas fa-bolt"></i></div>
+                                            <span class="feat-name">${feat}</span>
+                                        </div>
+                                        <i class="fas fa-check check-icon" style="opacity: 0;"></i>
+                                    `;
+
+                                    featBtn.addEventListener("click", (ev) => {
+                                        // Feat Selection Logic
+                                        const allFeatBtns = featListContainer.querySelectorAll(".feat-btn");
+                                        allFeatBtns.forEach(fb => {
+                                            fb.classList.remove("checked");
+                                            fb.querySelector(".check-icon").style.opacity = "0";
+                                        });
+
+                                        const targetFeatBtn = ev.currentTarget;
+                                        targetFeatBtn.classList.add("checked");
+                                        targetFeatBtn.querySelector(".check-icon").style.opacity = "1";
+
+                                        featInput.value = targetFeatBtn.dataset.feat;
+                                    });
+
+                                    featListContainer.appendChild(featBtn);
+                                });
+                            }
+                            // Adjust height
+                            dialog.setPosition({ height: "auto" });
+                        });
                     });
                 }
             }, {
                 classes: ["abea", "dialog", "facanha-dialog", "sheet", "item"],
-                width: 450
+                width: 1000,
+                height: 680,
+                resizable: false
             });
             dialog.render(true);
         });

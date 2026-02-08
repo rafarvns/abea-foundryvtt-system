@@ -2568,7 +2568,7 @@
   flex: 1;
   /* Allow label to take available space */
   margin-right: 10px;
-  margin-bottom: 2px;
+  margin-bottom: 6px;
   /* Tighter label spacing */
 }
 
@@ -2649,4 +2649,260 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   background: var(--bg-trans-20);
+}
+
+/* ========================================= */
+/* FACANHA DIALOG - MODERN UI */
+/* ========================================= */
+.facanha-dialog .window-content {
+  background: var(--bg-main) !important;
+  padding: 10px !important;
+  overflow-y: auto;
+}
+
+.facanha-dialog .abea-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.facanha-dialog .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: var(--abea-primary);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.facanha-dialog .facanha-dialog-header {
+  padding-bottom: 10px;
+}
+
+.facanha-dialog .facanha-dialog-mt-normalizer {
+  margin-top: 5px !important;
+}
+
+.facanha-dialog .custom-feat-input {
+  height: 30px;
+  font-family: var(--font-heading);
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  padding: 0 5px;
+  width: 100% !important;
+}
+
+.facanha-dialog .bottom-panel {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: 50% 50%;
+}
+
+.facanha-dialog .dificult-panel {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Category Tabs */
+.facanha-dialog .category-tabs {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  /* 7 columns */
+  gap: 8px;
+}
+
+.facanha-dialog .category-btn {
+  width: 100%;
+  /* Fill grid cell */
+  height: 44px;
+  /* Compact height */
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  /* Tighter gap */
+  padding: 2px 8px;
+  /* Compact padding */
+  background: var(--bg-panel);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-main);
+}
+
+.facanha-dialog .category-btn:hover {
+  background: var(--bg-trans-50);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.facanha-dialog .category-btn.active {
+  background: var(--abea-primary);
+  color: var(--text-contrast);
+  border-color: var(--abea-primary);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.facanha-dialog .category-btn .category-icon {
+  font-size: 1.1rem;
+  /* Smaller icon */
+  margin-bottom: 0;
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+
+.facanha-dialog .category-btn.active .category-icon {
+  color: var(--text-contrast);
+}
+
+.facanha-dialog .category-label {
+  font-size: 0.7rem;
+  /* Smaller font */
+  font-weight: bold;
+  text-align: left;
+  line-height: 1;
+  white-space: normal;
+  flex: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Feat Selection Area */
+.facanha-dialog .feat-selection-wrapper {
+  background: var(--bg-trans-20);
+  padding: 15px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--shadow-30);
+  animation: abeaFadeIn 0.3s ease;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 222px;
+  /* FIXED HEIGHT */
+  overflow: hidden;
+}
+
+.facanha-dialog .feat-list-container {
+  display: grid;
+  /* Wider columns for image + text */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+  overflow-y: auto;
+  padding-right: 5px;
+  flex: 1;
+  /* Ensure content is scrollable */
+  max-height: 100%;
+}
+
+/* Scrollbar for feat list */
+.facanha-dialog .feat-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.facanha-dialog .feat-list-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.facanha-dialog .feat-list-container::-webkit-scrollbar-thumb {
+  background: var(--abea-primary);
+  border-radius: 4px;
+}
+
+.facanha-dialog .feat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  background: var(--bg-circle-light);
+  border: 1px solid var(--shadow-30);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  transition: all 0.1s ease;
+  text-align: left;
+  color: var(--text-main);
+  height: 50px;
+  /* Fixed height for consistency */
+}
+
+.facanha-dialog .feat-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.facanha-dialog .feat-img-placeholder {
+  width: 32px;
+  height: 32px;
+  background: var(--bg-trans-20);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--highlight);
+  font-size: 0.8rem;
+}
+
+.facanha-dialog .feat-name {
+  font-weight: bold;
+  color: var(--abea-primary);
+}
+
+.facanha-dialog .feat-btn:hover {
+  background: var(--bg-panel);
+  border-color: var(--abea-accent);
+}
+
+.facanha-dialog .feat-btn.checked {
+  background: rgba(60, 110, 56, 0.15);
+  border: 2px solid var(--abea-accent);
+}
+
+.facanha-dialog .feat-btn .check-icon {
+  font-size: 1.2rem;
+  color: var(--abea-accent);
+  transition: opacity 0.2s;
+  margin-right: 5px;
+}
+
+/* Custom Feat & Player Selection */
+.facanha-dialog .custom-feat-wrapper {
+  animation: abeaFadeIn 0.3s ease;
+}
+
+.facanha-dialog .notes {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--color-static-dark);
+  opacity: 0.8;
+}
+
+/* Player Select Modernization */
+.facanha-dialog select[multiple] {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-trans-10);
+  font-family: var(--font-body);
+  padding: 5px;
+}
+
+.facanha-dialog select[name="dificuldade"] {
+  width: 100%;
+  padding: 5px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-trans-10);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-heading);
+  color: var(--abea-primary);
 }
