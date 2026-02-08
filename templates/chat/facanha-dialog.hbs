@@ -1,15 +1,13 @@
 <header class="sheet-header facanha-dialog-header">
     <img class="profile-img" src="icons/sundries/gaming/dice-pair-white-green.webp"
-        title="{{localize 'ABEA.Facanha.Dialog.Title'}}" height="64" width="64"
-        style="border: none; background: transparent;" />
+        title="{{localize 'ABEA.Facanha.Dialog.Title'}}" height="64" width="64" />
     <div class="header-details-panel">
-        <h1 class="dialog-title"
-            style="font-family: var(--font-heading); font-size: 1.5rem; color: var(--abea-primary); margin: 0; border: none;">
+        <h1 class="dialog-title">
             {{localize "ABEA.Facanha.Dialog.Title"}}</h1>
     </div>
 </header>
 
-<section class="sheet-body" style="padding-top: 5px; gap: 5px;">
+<section class="sheet-body">
     <!-- Category Selection (Tabs) -->
     <div class="form-group category-selection facanha-dialog-mt-normalizer">
         <label>{{localize "ABEA.Facanha.Dialog.Category"}}</label>
@@ -32,8 +30,7 @@
     </div>
 
     <!-- Feat Selection (Buttons) -->
-    <div class="form-group feat-selection-wrapper facanha-dialog-mt-normalizer" id="facanha-select-group"
-        style="display: none;">
+    <div class="form-group feat-selection-wrapper facanha-dialog-mt-normalizer" id="facanha-select-group">
         <label>{{localize "ABEA.Facanha.Dialog.SelectFeat"}}</label>
         <div class="feat-list-container" id="feat-list-container">
             <!-- Populated by JS -->
@@ -56,29 +53,32 @@
     </div>
 
     <div class="bottom-panel">
-        <!-- Row 2: Players -->
-        <div class="form-group facanha-dialog-mt-normalizer" style="margin-bottom: 5px;">
+        <!-- Players Selection -->
+        <div class="form-group player-selection-panel">
             <label>
                 Selecione os Jogadores
                 <a class="select-all-players" title="Selecionar Todos"><i class="fas fa-users"></i></a>
             </label>
             <div class="form-fields">
-                <select name="jogadores" multiple style="height: 120px;">
+                <select name="jogadores" multiple>
                     {{selectOptions players valueAttr="id" labelAttr="name"}}
                 </select>
             </div>
-            <p class="notes" style="margin: 2px 0 0 0;">Segure Ctrl para selecionar vários.</p>
         </div>
 
-        <!-- Row 3: Difficulty -->
-        <div class="form-group facanha-dialog-mt-normalizer dificult-panel" style="margin-bottom: 5px;">
+        <!-- Difficulty Selection -->
+        <div class="form-group dificult-panel">
             <label>{{localize "ABEA.Facanha.Card.Difficulty"}}</label>
-            <div class="form-fields">
-                <select name="dificuldade">
-                    {{selectOptions difficulties selected=15}}
-                </select>
+            <div class="difficulty-buttons">
+                {{#each difficulties as |label key|}}
+                <button type="button" class="difficulty-btn {{#if (eq key '15')}}active{{/if}}"
+                    data-difficulty="{{key}}">
+                    <span class="diff-label">{{label}}</span>
+                </button>
+                {{/each}}
             </div>
+            <input type="hidden" name="dificuldade" value="15">
         </div>
     </div>
+    <p class="notes">Segure Ctrl para selecionar vários.</p>
 </section>
-</form>

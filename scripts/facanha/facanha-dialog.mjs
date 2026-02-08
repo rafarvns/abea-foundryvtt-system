@@ -58,7 +58,7 @@ export class FacanhaSolicitorDialog {
                         label: "Solicitar",
                         icon: '<i class="fas fa-dice"></i>',
                         callback: (html) => {
-                            const formElement = html[0].querySelector("form");
+                            const formElement = html[0].tagName === "FORM" ? html[0] : (html[0].querySelector("form") || html[0]);
                             const categoriaInput = formElement.querySelector('[name="facanha-categoria"]');
                             const categoria = categoriaInput.value;
                             let nome = "";
@@ -73,7 +73,10 @@ export class FacanhaSolicitorDialog {
                             const selectElement = formElement.querySelector('[name="jogadores"]');
                             const playerIds = Array.from(selectElement.selectedOptions).map(opt => opt.value);
                             const cd = parseInt(formElement.querySelector('[name="dificuldade"]').value);
-                            const dificuldadeLabel = formElement.querySelector('[name="dificuldade"] option:checked').text.split(' (')[0];
+
+                            // Find difficulty label from the active button
+                            const activeDiffBtn = formElement.querySelector(".difficulty-btn.active");
+                            const dificuldadeLabel = activeDiffBtn ? activeDiffBtn.innerText.trim() : "Intermediária";
 
                             if (!nome || playerIds.length === 0) {
                                 ui.notifications.warn("Preencha o nome/selecione a façanha e selecione ao menos um jogador.");
@@ -102,7 +105,7 @@ export class FacanhaSolicitorDialog {
                 },
                 default: "request",
                 render: (html) => {
-                    const form = html[0];
+                    const form = html[0].tagName === "FORM" ? html[0] : html[0].querySelector("form") || html[0];
                     const categoryBtns = form.querySelectorAll(".category-btn");
                     const categoryInput = form.querySelector('[name="facanha-categoria"]');
                     const featGroup = form.querySelector("#facanha-select-group");
@@ -111,6 +114,8 @@ export class FacanhaSolicitorDialog {
                     const featInput = form.querySelector('[name="facanha-selecionada"]');
                     const selectAllBtn = form.querySelector(".select-all-players");
                     const playersSelect = form.querySelector('[name="jogadores"]');
+                    const difficultyBtns = form.querySelectorAll(".difficulty-btn");
+                    const difficultyInput = form.querySelector('[name="dificuldade"]');
 
                     // --- Player Selection Logic ---
                     if (selectAllBtn && playersSelect) {
@@ -120,6 +125,16 @@ export class FacanhaSolicitorDialog {
                             }
                         });
                     }
+
+                    // --- Difficulty Selection Logic ---
+                    difficultyBtns.forEach(btn => {
+                        btn.addEventListener("click", (e) => {
+                            difficultyBtns.forEach(b => b.classList.remove("active"));
+                            const clickedBtn = e.currentTarget;
+                            clickedBtn.classList.add("active");
+                            difficultyInput.value = clickedBtn.dataset.difficulty;
+                        });
+                    });
 
                     // --- Category Selection Logic ---
                     categoryBtns.forEach(btn => {
@@ -182,8 +197,6 @@ export class FacanhaSolicitorDialog {
                                     featListContainer.appendChild(featBtn);
                                 });
                             }
-                            // Adjust height
-                            dialog.setPosition({ height: "auto" });
                         });
                     });
                 }
