@@ -2398,3 +2398,596 @@
 .npc-item-control:hover {
   color: var(--color-danger);
 }
+
+/* ========================================= */
+/* CHAT CARDS */
+/* ========================================= */
+
+.abea.chat-card.facanha-card {
+  background: var(--bg-main);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 10px;
+  font-family: var(--font-body);
+  color: var(--text-main);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.abea.chat-card .card-header {
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  align-items: center;
+  gap: 10px;
+}
+
+.abea.chat-card .card-header img {
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--abea-item-bg);
+  padding: 2px;
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+}
+
+.abea.chat-card .card-header h3 {
+  border: none;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--abea-primary);
+  text-transform: uppercase;
+}
+
+.abea.chat-card .facanha-details {
+  background: var(--bg-trans-40);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.abea.chat-card .facanha-details p {
+  margin: 2px 0;
+}
+
+.abea.chat-card .facanha-details strong {
+  font-family: var(--font-heading);
+  color: var(--abea-primary);
+}
+
+.abea.chat-card hr {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 5px 0 10px;
+  opacity: 0.5;
+}
+
+.abea.chat-card .player-row {
+  background: var(--bg-trans-30);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid transparent;
+}
+
+.abea.chat-card .player-row.aguardando {
+  border-left: 3px solid var(--highlight);
+}
+
+.abea.chat-card .player-row.passou {
+  border-left: 3px solid var(--abea-accent);
+  background: rgba(60, 110, 56, 0.1);
+}
+
+.abea.chat-card .player-row.falhou {
+  border-left: 3px solid var(--color-danger);
+  background: rgba(192, 57, 43, 0.1);
+}
+
+.abea.chat-card .player-name {
+  font-family: var(--font-heading);
+  font-weight: bold;
+  color: var(--abea-primary);
+}
+
+.abea.chat-card .player-status {
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.abea.chat-card .player-status .success {
+  color: var(--abea-accent);
+}
+
+.abea.chat-card .player-status .failure {
+  color: var(--color-danger);
+}
+
+
+.abea.chat-card .facanha-rolar-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  background: var(--bg-trans-30);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius);
+  font-family: var(--font-heading);
+  color: var(--border-color);
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.abea.chat-card .facanha-rolar-btn:hover {
+  background: var(--border-color);
+  color: var(--bg-main);
+}
+
+.facanha-dialog .facanha-dialog-header .profile-img {
+  border: none;
+  background: transparent;
+}
+
+.facanha-dialog .dialog-title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--abea-primary);
+  margin: 0;
+  border: none;
+}
+
+.facanha-dialog #facanha-select-group {
+  display: none;
+}
+
+/* ========================================= */
+/* FACANHA DIALOG */
+/* ========================================= */
+
+/* Tweaks for Facanha Dialog when inheriting from .abea.sheet.item */
+.dialog.abea.facanha-dialog .window-content {
+  background: var(--bg-color);
+
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+
+  background: var(--bg-color);
+  padding: 10px;
+  overflow: visible;
+  /* Allow dropdowns to overflow if needed */
+  height: auto !important;
+  /* Override any fixed height from sheet styles */
+  color: var(--text-main);
+  /* Ensure text color is explicitly set */
+}
+
+/* Reset sheet-body layout for dialogs */
+.dialog.abea.facanha-dialog .sheet-body {
+  height: auto !important;
+  flex: none !important;
+  overflow: visible !important;
+  gap: 5px;
+  padding-top: 5px;
+  /* Tighter spacing */
+}
+
+/* Ensure form labels align nicely in dialog context */
+.dialog.abea.facanha-dialog .form-group label {
+  flex: 0;
+  /* Allow label to take available space */
+  margin-right: 10px;
+  margin-bottom: 6px;
+  /* Tighter label spacing */
+}
+
+/* Fix for multi-select height which might be overridden by generic input styles */
+.dialog.abea.facanha-dialog select[multiple] {
+  height: auto !important;
+  min-height: 80px;
+  background: var(--bg-trans-20);
+}
+
+.dialog.abea.facanha-dialog .select-all-players {
+  float: right;
+  cursor: pointer;
+  color: var(--highlight);
+  transition: color 0.2s;
+}
+
+.dialog.abea.facanha-dialog .select-all-players:hover {
+  color: var(--abea-primary);
+  text-shadow: 0 0 5px var(--abea-accent);
+}
+
+.facanha-dialog .notes {
+  font-size: 0.75rem;
+  /* Smaller notes */
+  color: var(--highlight);
+  font-family: var(--font-body);
+  font-style: italic;
+  margin: 2px 0 0 0;
+  /* Reset indentation */
+}
+
+/* Button Styling Specific to Facanha Dialog */
+.dialog.abea.facanha-dialog .dialog-buttons {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  /* Context specific: Confirm on right */
+  gap: 10px;
+  margin-top: 10px;
+  flex: 0 !important;
+}
+
+/* "Solicitar" Button - Fill Style */
+.dialog.abea.facanha-dialog .dialog-buttons button.default,
+.dialog.abea.facanha-dialog button[data-button="request"] {
+  background: var(--abea-primary);
+  color: var(--bg-main);
+  border: 2px solid var(--abea-primary);
+}
+
+.dialog.abea.facanha-dialog .dialog-buttons button.default:hover,
+.dialog.abea.facanha-dialog button[data-button="request"]:hover {
+  background: var(--abea-accent);
+  border-color: var(--abea-accent);
+}
+
+/* "Cancelar" Button - Outline Style */
+.dialog.abea.facanha-dialog button.cancel,
+.dialog.abea.facanha-dialog button[data-button="cancel"] {
+  background: transparent;
+  color: var(--abea-primary);
+  border: 2px solid var(--abea-primary);
+}
+
+.dialog.abea.facanha-dialog button.cancel:hover,
+.dialog.abea.facanha-dialog button[data-button="cancel"]:hover {
+  background: var(--bg-trans-20);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+/* Dropdown consistency */
+.dialog.abea.facanha-dialog select {
+  height: 26px;
+  /* Standard item sheet height */
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-trans-20);
+}
+
+/* ========================================= */
+/* FACANHA DIALOG - MODERN UI */
+/* ========================================= */
+.facanha-dialog .window-content {
+  background: var(--bg-main) !important;
+  padding: 10px !important;
+  overflow-y: auto;
+}
+
+.facanha-dialog .abea-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.facanha-dialog .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: var(--abea-primary);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.facanha-dialog .facanha-dialog-header {
+  padding-bottom: 10px;
+}
+
+.facanha-dialog .facanha-dialog-mt-normalizer {
+  margin-top: 5px !important;
+}
+
+.facanha-dialog .custom-feat-input {
+  height: 30px;
+  font-family: var(--font-heading);
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  padding: 0 5px;
+  width: 100% !important;
+}
+
+.facanha-dialog .bottom-panel {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  height: 124px;
+}
+
+.facanha-dialog .player-selection-panel,
+.facanha-dialog .dificult-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.facanha-dialog .player-selection-panel label,
+.facanha-dialog .dificult-panel label {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  text-align: center !important;
+  margin-right: 0 !important;
+}
+
+.facanha-dialog .player-selection-panel .form-fields {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+
+.facanha-dialog .player-selection-panel select[multiple] {
+  flex: 1;
+  width: 100% !important;
+  /* Force full width */
+  height: 120px !important;
+}
+
+.facanha-dialog .difficulty-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+  flex: 1 !important;
+  width: 100%;
+}
+
+.facanha-dialog .difficulty-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: var(--bg-panel);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  color: var(--text-main);
+  transition: all 0.2s ease;
+  text-align: center;
+  height: 100%;
+  /* Fill cell height */
+}
+
+.facanha-dialog .difficulty-btn:hover {
+  background: var(--bg-trans-50);
+  border-color: var(--abea-accent);
+}
+
+.facanha-dialog .difficulty-btn.active {
+  background: var(--abea-primary);
+  color: var(--text-contrast);
+  border-color: var(--abea-primary);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Category Tabs */
+.facanha-dialog .category-tabs {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  /* 7 columns */
+  gap: 8px;
+}
+
+.facanha-dialog .category-btn {
+  width: 100%;
+  /* Fill grid cell */
+  height: 44px;
+  /* Compact height */
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  /* Tighter gap */
+  padding: 2px 8px;
+  /* Compact padding */
+  background: var(--bg-panel);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-main);
+}
+
+.facanha-dialog .category-btn:hover {
+  background: var(--bg-trans-50);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.facanha-dialog .category-btn.active {
+  background: var(--abea-primary);
+  color: var(--text-contrast);
+  border-color: var(--abea-primary);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.facanha-dialog .category-btn .category-icon {
+  font-size: 1.1rem;
+  /* Smaller icon */
+  margin-bottom: 0;
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+
+.facanha-dialog .category-btn.active .category-icon {
+  color: var(--text-contrast);
+}
+
+.facanha-dialog .category-label {
+  font-size: 0.7rem;
+  /* Smaller font */
+  font-weight: bold;
+  text-align: left;
+  line-height: 1;
+  white-space: normal;
+  flex: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Feat Selection Area */
+.facanha-dialog .feat-selection-wrapper {
+  background: var(--bg-trans-20);
+  padding: 15px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--shadow-30);
+  animation: abeaFadeIn 0.3s ease;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 222px;
+  /* FIXED HEIGHT */
+  overflow: hidden;
+}
+
+.facanha-dialog .feat-list-container {
+  display: grid;
+  /* Wider columns for image + text */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+  overflow-y: auto;
+  padding-right: 5px;
+  flex: 1;
+  /* Ensure content is scrollable */
+  max-height: 100%;
+}
+
+/* Scrollbar for feat list */
+.facanha-dialog .feat-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.facanha-dialog .feat-list-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.facanha-dialog .feat-list-container::-webkit-scrollbar-thumb {
+  background: var(--abea-primary);
+  border-radius: 4px;
+}
+
+.facanha-dialog .feat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  background: var(--bg-circle-light);
+  border: 1px solid var(--shadow-30);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  transition: all 0.1s ease;
+  text-align: left;
+  color: var(--text-main);
+  height: 50px;
+  /* Fixed height for consistency */
+}
+
+.facanha-dialog .feat-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.facanha-dialog .feat-img-placeholder {
+  width: 32px;
+  height: 32px;
+  background: var(--bg-trans-20);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--highlight);
+  font-size: 0.8rem;
+}
+
+.facanha-dialog .feat-name {
+  font-weight: bold;
+  color: var(--abea-primary);
+}
+
+.facanha-dialog .feat-btn:hover {
+  background: var(--bg-panel);
+  border-color: var(--abea-accent);
+}
+
+.facanha-dialog .feat-btn.checked {
+  background: rgba(60, 110, 56, 0.15);
+  border: 2px solid var(--abea-accent);
+}
+
+.facanha-dialog .feat-btn .check-icon {
+  font-size: 1.2rem;
+  color: var(--abea-accent);
+  transition: opacity 0.2s;
+  margin-right: 5px;
+}
+
+/* Custom Feat & Player Selection */
+.facanha-dialog .custom-feat-wrapper {
+  animation: abeaFadeIn 0.3s ease;
+}
+
+.facanha-dialog .notes {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--color-static-dark);
+  opacity: 0.8;
+}
+
+/* Player Select Modernization */
+.facanha-dialog select[multiple] {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-trans-10);
+  font-family: var(--font-body);
+  padding: 5px;
+}
+
+.facanha-dialog select[name="dificuldade"] {
+  width: 100%;
+  padding: 5px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-trans-10);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-heading);
+  color: var(--abea-primary);
+}

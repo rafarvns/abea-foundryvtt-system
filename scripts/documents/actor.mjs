@@ -34,22 +34,48 @@ export class AbeaActor extends Actor {
      * Fumble: 3x1
      * @param {string} skillName 
      */
-    async rollSkill(skillName) {
+    async rollSkill(skillName, options = { chatMessage: true }) {
         const skillIndex = this.system.skills.findIndex(s => s.name === skillName);
-        if (skillIndex === -1) return ui.notifications.warn(`ABEA: Façanha "${skillName}" não encontrada.`);
 
-        const skill = this.system.skills[skillIndex];
-        const rank = Number(skill.rank) || 0;
-        const bonus = rank * 3;
+        let roll;
+        let skill = null;
+        let rank = 0;
+        let bonus = 0;
+
+        if (skillIndex !== -1) {
+            skill = this.system.skills[skillIndex];
+            rank = Number(skill.rank) || 0;
+            bonus = rank * 3;
+        } else {
+            // Allow rolling without the skill (Level Zero or generic)
+            // Default to just 3d6 if skill not found? 
+            // Logic: Check if it's a known skill but not on actor vs completely unknown.
+            // For now, if not found, we roll flat 3d6 (Level 0 equivalent if allowed, or just attribute check)
+            // But warning is good.
+            // ui.notifications.warn(`ABEA: Façanha "${skillName}" não encontrada. Rolando 3d6 puro.`);
+        }
 
         // Create the roll
-        const roll = new Roll("3d6 + @bonus", { bonus });
+        roll = new Roll("3d6 + @bonus", { bonus });
         await roll.evaluate();
 
         // Analyze dice for Criticals/Fumbles
         const dice = roll.terms[0].results.map(r => r.result);
         const isCritical = dice.every(d => d === 6);
         const isFumble = dice.every(d => d === 1);
+
+        if (!options.chatMessage) {
+            return {
+                roll,
+                total: roll.total,
+                isCritical,
+                isFumble,
+                skill,
+                bonus
+            };
+        }
+
+        if (skillIndex === -1) return ui.notifications.warn(`ABEA: Façanha "${skillName}" não encontrada.`);
 
         let flavor = `<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
                         <img src="${skill.img}" width="36" height="36" style="border: none; margin-bottom: 6px;" />
