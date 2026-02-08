@@ -1,0 +1,84 @@
+<header class="sheet-header facanha-dialog-header">
+    <img class="profile-img" src="icons/sundries/gaming/dice-pair-white-green.webp"
+        title="{{localize 'ABEA.Facanha.Dialog.Title'}}" height="64" width="64" />
+    <div class="header-details-panel">
+        <h1 class="dialog-title">
+            {{localize "ABEA.Facanha.Dialog.Title"}}</h1>
+    </div>
+</header>
+
+<section class="sheet-body">
+    <!-- Category Selection (Tabs) -->
+    <div class="form-group category-selection facanha-dialog-mt-normalizer">
+        <label>{{localize "ABEA.Facanha.Dialog.Category"}}</label>
+        <div class="category-tabs">
+            {{#each categories as |label key|}}
+            <button type="button" class="category-btn {{#if (eq key 'custom')}}active{{/if}}" data-category="{{key}}">
+                <div class="category-icon">
+                    {{#if (eq key 'custom')}}
+                    <i class="fas fa-edit"></i>
+                    {{else}}
+                    <!-- Placeholder for category images, using generic icon for now -->
+                    <i class="fas fa-scroll"></i>
+                    {{/if}}
+                </div>
+                <span class="category-label">{{label}}</span>
+            </button>
+            {{/each}}
+        </div>
+        <input type="hidden" name="facanha-categoria" value="custom">
+    </div>
+
+    <!-- Feat Selection (Buttons) -->
+    <div class="form-group feat-selection-wrapper facanha-dialog-mt-normalizer" id="facanha-select-group">
+        <label>{{localize "ABEA.Facanha.Dialog.SelectFeat"}}</label>
+        <div class="feat-list-container" id="feat-list-container">
+            <!-- Populated by JS -->
+        </div>
+        <input type="hidden" name="facanha-selecionada">
+    </div>
+
+    <!-- Custom Feat Input -->
+    <div class="form-group custom-feat-wrapper facanha-dialog-mt-normalizer" id="facanha-custom-group">
+        <label>{{localize "ABEA.Item.Name"}}</label>
+        <div class="form-fields">
+            <input class="custom-feat-input" type="text" name="facanha-nome" placeholder="Ex: Saltar..."
+                list="skill-list">
+            <datalist id="skill-list">
+                {{#each skillList}}
+                <option value="{{this}}"></option>
+                {{/each}}
+            </datalist>
+        </div>
+    </div>
+
+    <div class="bottom-panel">
+        <!-- Players Selection -->
+        <div class="form-group player-selection-panel">
+            <label>
+                Selecione os Jogadores
+                <a class="select-all-players" title="Selecionar Todos"><i class="fas fa-users"></i></a>
+            </label>
+            <div class="form-fields">
+                <select name="jogadores" multiple>
+                    {{selectOptions players valueAttr="id" labelAttr="name"}}
+                </select>
+            </div>
+        </div>
+
+        <!-- Difficulty Selection -->
+        <div class="form-group dificult-panel">
+            <label>{{localize "ABEA.Facanha.Card.Difficulty"}}</label>
+            <div class="difficulty-buttons">
+                {{#each difficulties as |label key|}}
+                <button type="button" class="difficulty-btn {{#if (eq key '15')}}active{{/if}}"
+                    data-difficulty="{{key}}">
+                    <span class="diff-label">{{label}}</span>
+                </button>
+                {{/each}}
+            </div>
+            <input type="hidden" name="dificuldade" value="15">
+        </div>
+    </div>
+    <p class="notes">Segure Ctrl para selecionar vários.</p>
+</section>

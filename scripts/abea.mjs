@@ -18,6 +18,8 @@ import { CharacterData } from "./models/character-data.mjs";
 import { AbeaItemData, AbeaWeaponData, AbeaSkillData } from "./models/item-data.mjs";
 import { createItemMacro, rollItemMacro, rollSkillMacro } from "./helpers/macros.mjs";
 import { checkFacanha } from "./helpers/utils.mjs";
+import { FacanhaSolicitorDialog } from "./facanha/facanha-dialog.mjs";
+import { FacanhaLogic } from "./facanha/facanha-logic.mjs";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -124,7 +126,8 @@ Hooks.once("init", async function () {
         "systems/abea/templates/actor/parts/actor-biography.hbs",
         "systems/abea/templates/item/item-generic-sheet.hbs",
         "systems/abea/templates/item/item-weapon-sheet.hbs",
-        "systems/abea/templates/item/item-skill-sheet.hbs"
+        "systems/abea/templates/item/item-skill-sheet.hbs",
+        "systems/abea/templates/chat/facanha-card.hbs"
     ]);
 });
 
@@ -137,4 +140,49 @@ Hooks.once("ready", async function () {
 
     // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
     Hooks.on("hotbarDrop", (bar, data, slot) => createItemMacro(data, slot));
+
+    // Initialize Facanha Logic (Sockets)
+    FacanhaLogic.init();
+});
+
+/* -------------------------------------------- */
+/*  Facanha Hooks                               */
+/* -------------------------------------------- */
+
+Hooks.on("getSceneControlButtons", (controls) => {
+    if (!game.user.isGM) return;
+
+    const abeaControl = {
+        name: "abea",
+        title: "ABEA",
+        icon: "fas fa-shield-alt",
+        layer: "notes",
+        visible: true,
+        tools: {
+            facanhas: {
+                name: "facanhas",
+                title: "Solicitar Façanha",
+                icon: "fas fa-dice",
+                button: true,
+                onClick: () => {
+                    console.log("ABEA | Botão Solicitar Façanha clicado!");
+                    if (FacanhaSolicitorDialog?.show) {
+                        FacanhaSolicitorDialog.show()
+                            .then(data => data && FacanhaLogic.createFacanhaMessage(data));
+                    }
+                }
+            }
+        }
+    };
+
+    // Add to controls list (supports Array or Object/Map)
+    if (Array.isArray(controls)) {
+        controls.push(abeaControl);
+    } else if (typeof controls === "object" && controls !== null) {
+        controls.abea = abeaControl;
+    }
+});
+
+Hooks.on("renderChatMessage", (message, html, data) => {
+    FacanhaLogic.activateChatListeners(html, message);
 });
