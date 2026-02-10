@@ -203,7 +203,7 @@ export class FacanhaSolicitorDialog {
             }, {
                 classes: ["abea", "dialog", "facanha-dialog", "sheet", "item"],
                 width: 1000,
-                height: 680,
+                height: 400,
                 resizable: false
             });
             dialog.render(true);
