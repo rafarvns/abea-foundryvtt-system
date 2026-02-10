@@ -17,8 +17,48 @@ Este módulo foi desenvolvido para facilitar a gestão de jogos de ABEA no Found
 
 Funcionalidades principais (planejadas/implementadas):
 - Fichas de Personagem e NPC automatizadas.
-- Rolagens de perícias e combate integradas.
+- Rolagens de façanhas e combate integradas.
 - Gestão de Inventário e Equipamentos.
+- Sistema dinâmico de Façanhas (Testes de Atributo/Façanha).
+
+## Visual do Sistema
+
+Abaixo você pode conferir as principais funcionalidades já implementadas no sistema:
+
+### 1. Ficha de Personagem
+A ficha de personagem centraliza todas as informações necessárias para o jogador. Ela permite a gestão de atributos, façanhas com níveis (ranks), equipamentos, armas e condições de saúde. Possui um sistema de "Favoritos" para acesso rápido às rolagens mais comuns.
+
+![Ficha de Personagem](assets/prints/ficha-de-personagem.jpg)
+
+### 2. Ficha de NPC
+Uma ficha resumida da ficha de personagem, projetada para preenchimento rápido e consulta ágil pelo Mestre. Ideal para gerenciar múltiplos figurantes e antagonistas com facilidade, permitindo acesso a todas as estatísticas sem troca de abas.
+
+![Ficha de NPC](assets/prints/ficha-de-npc.jpg)
+
+### 3. Itens e Façanhas
+O sistema possui fichas customizadas para diferentes tipos de itens. As **Façanhas** permitem definir o nível de treinamento, enquanto as **Armas** e **Equipamentos** gerenciam propriedades específicas, peso e bônus.
+
+| Façanha | Item/Equipamento |
+| :---: | :---: |
+| ![Ficha de Façanha](assets/prints/ficha-habilidade.jpg) | ![Ficha de Item](assets/prints/ficha-item.jpg) |
+
+### 4. Sistema de Façanhas
+Uma ferramenta exclusiva para o Mestre solicitar testes (Façanhas) para um ou mais jogadores simultaneamente. 
+
+- **Solicitação**: O Mestre escolhe a façanha, a dificuldade (CD) e quais jogadores devem realizar o teste.
+- **Interação**: Jogadores recebem um card no chat e podem realizar a rolagem com um clique.
+- **Resultado em Tempo Real**: O card no chat é atualizado dinamicamente conforme os jogadores rolam, permitindo ao Mestre acompanhar quem passou ou falhou instantaneamente.
+
+| Ferramenta do Mestre | Card de Façanha no Chat |
+| :---: | :---: |
+| ![Solicitar Façanha](assets/prints/solicitar-facanha.jpg) | ![Card de Façanha](assets/prints/solicitar-facanha-feed.jpg) |
+
+### 5. Rolagens e Combate
+Todas as rolagens são integradas ao chat do Foundry, exibindo os dados, bônus aplicados e o resultado final de forma clara e temática.
+
+| Rolagem de Ataque | Rolagem de Façanha |
+| :---: | :---: |
+| ![Rolagem de Ataque](assets/prints/rolagem-ataque-feed.jpg) | ![Rolagem de Façanha](assets/prints/rolagem-facanha-feed.jpg) |
 
 ## Instalação
 

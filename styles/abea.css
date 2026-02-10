@@ -2615,7 +2615,7 @@
   color: var(--highlight);
   font-family: var(--font-body);
   font-style: italic;
-  margin: 2px 0 0 0;
+  margin: 10px 0 0 0;
   /* Reset indentation */
 }
 
