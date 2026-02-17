@@ -104,3 +104,21 @@ Você não precisa esperar o Mestre solicitar. Na aba **Habilidades**, basta cli
 
 - **Favoritos**: Na ficha do personagem, você pode "favoritar" rolagens que usa com frequência para que fiquem no topo da lista.
 - **Compêndios**: O módulo já vem com compêndios de Armas e Façanhas pré-configurados. Use-os para economizar tempo na criação de personagens!
+
+---
+
+## 6. Automação de Imagens (Para GMs e Devs)
+
+Para manter o sistema leve, incluímos um script Python em `tools/scripts/optimize_images.py` que converte imagens para o formato `.webp` e remove todos os metadados.
+
+### Como usar:
+1. Certifique-se de ter o Python e a biblioteca Pillow instalados:
+   ```bash
+   pip install Pillow
+   ```
+2. Execute o script passando a pasta de origem e a pasta de destino dentro do módulo:
+   ```bash
+   python tools/scripts/optimize_images.py --source "C:/MinhasImagens" --dest "C:/Users/.../Data/systems/abea/assets/item/weapons"
+   ```
+   *O script converterá todas as imagens para .webp, garantindo melhor performance no Foundry VTT.*
+

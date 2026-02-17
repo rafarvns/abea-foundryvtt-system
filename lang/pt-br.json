@@ -124,5 +124,7 @@
     "ABEA.Facanha.Dialog.Custom": "Customizado / Outro",
     "ABEA.Facanha.Dialog.Category": "Categoria",
     "ABEA.Facanha.Dialog.SelectFeat": "Selecionar Façanha",
-    "ABEA.Facanha.Dialog.Title": "Solicitar Façanha"
+    "ABEA.Facanha.Dialog.Title": "Solicitar Façanha",
+    "ABEA.Status.Unconscious": "Inconsciente",
+    "ABEA.Status.Dead": "Morto"
 }

@@ -20,12 +20,72 @@ export class AbeaActor extends Actor {
         const system = this.system;
 
         // Calculate Réis (total currency value)
-        // 1x Gold = 1000 Réis
-        // 1x Silver = 100 Réis
-        // 1x Bronze = 10 Réis
         system.currency.value = (system.currency.gold * 1000) +
             (system.currency.silver * 100) +
             (system.currency.bronze * 10);
+
+        // Calculate Max Resistance (Base 10 + Bonus)
+        system.attributes.condition.resistanceMax = 10 + (system.attributes.condition.resistanceMaxBonus || 0);
+    }
+
+    /**
+     * Apply damage to the actor following ABEA rules.
+     * @param {number} damage 
+     */
+    async applyDamage(damage) {
+        const system = this.system;
+        const type = this.type; // "character" or "npc"
+        const currentRes = system.attributes.condition.resistance || 0;
+        const maxRes = system.attributes.condition.resistanceMax;
+
+        let newRes = currentRes + damage;
+        let updates = {};
+        let statusEffects = [];
+
+        if (type === "npc") {
+            updates["system.attributes.condition.resistance"] = newRes;
+            if (newRes >= maxRes) {
+                statusEffects.push("dead");
+            }
+        } else {
+            // Character Rules
+            if (newRes >= maxRes) {
+                const overflow = newRes - maxRes;
+                updates["system.attributes.condition.resistance"] = maxRes;
+
+                // Accumulate Critical points from overflow
+                if (overflow > 0) {
+                    const currentCrit = system.attributes.condition.critical || 0;
+                    const newCrit = Math.min(5, currentCrit + overflow);
+                    updates["system.attributes.condition.critical"] = newCrit;
+
+                    if (newCrit >= 5) {
+                        statusEffects.push("dead");
+                    } else {
+                        statusEffects.push("unconscious");
+                    }
+                } else {
+                    statusEffects.push("unconscious");
+                }
+            } else {
+                updates["system.attributes.condition.resistance"] = newRes;
+            }
+        }
+
+        console.log("ABEA | ApplyDamage Debug:", { damage, currentRes, maxRes, newRes, updates, statusEffects });
+
+        // Apply Updates
+        await this.update(updates);
+
+        // Apply Status Effects
+        for (let effectId of statusEffects) {
+            const hasEffect = this.effects.some(e => e.getFlag("core", "statusId") === effectId);
+            if (!hasEffect) {
+                await this.toggleStatusEffect(effectId, { active: true, overlay: effectId === "dead" });
+            }
+        }
+
+        return { updates, statusEffects };
     }
     /**
      * Roll a Skill (Feat/Façanha)
@@ -177,14 +237,19 @@ export class AbeaActor extends Actor {
 
         // 5. Apply Damage (Automation)
         if (isHit && targetActor && damage > 0) {
-            // Check ownership/permissions
             if (targetActor.isOwner) {
-                const currentEnergy = targetActor.system.attributes.energy.value;
-                const newEnergy = Math.max(0, currentEnergy - damage);
-                await targetActor.update({ "system.attributes.energy.value": newEnergy });
-                flavor += `<div style="margin-top:5px; font-style:italic; font-size:0.8rem; text-align:center;">Dano aplicado automaticamente.</div>`;
+                await targetActor.applyDamage(damage);
+                flavor += `<div style="margin-top:5px; font-style:italic; font-size:0.8rem; text-align:center;">Dano aplicado conforme as regras.</div>`;
             } else {
-                flavor += `<div style="margin-top:5px; font-style:italic; font-size:0.8rem; text-align:center; color: orange;">Você não tem permissão para aplicar dano neste alvo.</div>`;
+                // Emit socket event for GM to apply damage
+                game.socket.emit("system.abea", {
+                    type: "applyDamage",
+                    data: {
+                        uuid: targetActor.uuid,
+                        damage: damage
+                    }
+                });
+                flavor += `<div style="margin-top:5px; font-style:italic; font-size:0.8rem; text-align:center;">Solicitação de dano enviada ao Mestre.</div>`;
             }
         }
 

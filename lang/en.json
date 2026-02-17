@@ -101,5 +101,7 @@
     "ABEA.Currency.Gold": "Gold",
     "ABEA.Currency.Reis": "Réis",
     "ABEA.Settings.Language.Name": "System Language",
-    "ABEA.Settings.Language.Hint": "Select the default language for the system. Requires a world reload."
+    "ABEA.Settings.Language.Hint": "Select the default language for the system. Requires a world reload.",
+    "ABEA.Status.Unconscious": "Unconscious",
+    "ABEA.Status.Dead": "Dead"
 }

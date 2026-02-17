@@ -49,6 +49,9 @@ Hooks.once("init", async function () {
     // Assign custom config
     CONFIG.ABEA = ABEA;
 
+    // Register Status Effects
+    CONFIG.statusEffects = ABEA.statusEffects;
+
     // Define custom Document classes
     CONFIG.Actor.documentClass = AbeaActor;
     CONFIG.Actor.dataModels = {
@@ -143,6 +146,18 @@ Hooks.once("ready", async function () {
 
     // Initialize Facanha Logic (Sockets)
     FacanhaLogic.init();
+
+    // Damage Application Socket (for non-owned tokens)
+    game.socket.on("system.abea", async (packet) => {
+        if (packet.type === "applyDamage" && game.user.isGM) {
+            const { uuid, damage } = packet.data;
+            const actor = await fromUuid(uuid);
+            if (actor) {
+                await actor.applyDamage(damage);
+                console.log(`ABEA | Dano de ${damage} aplicado via socket em ${actor.name} seguindo as regras avançadas.`);
+            }
+        }
+    });
 });
 
 /* -------------------------------------------- */

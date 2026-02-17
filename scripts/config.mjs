@@ -38,3 +38,16 @@ ABEA.difficulties = {
     hard: { label: "ABEA.Difficulty.Hard", value: 18 },
     legendary: { label: "ABEA.Difficulty.Legendary", value: 21 }
 };
+
+ABEA.statusEffects = [
+    {
+        id: "unconscious",
+        label: "ABEA.Status.Unconscious",
+        icon: "icons/svg/unconscious.svg"
+    },
+    {
+        id: "dead",
+        label: "ABEA.Status.Dead",
+        icon: "icons/svg/skull.svg"
+    }
+];
