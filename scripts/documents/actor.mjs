@@ -24,8 +24,47 @@ export class AbeaActor extends Actor {
             (system.currency.silver * 100) +
             (system.currency.bronze * 10);
 
-        // Calculate Max Resistance (Base 10 + Bonus)
-        system.attributes.condition.resistanceMax = 10 + (system.attributes.condition.resistanceMaxBonus || 0);
+        // Calculate Max Resistance
+        if (this.type === "character") {
+            // Characters: Base 10 + Bonus
+            system.attributes.condition.resistanceMax = 10 + (system.attributes.condition.resistanceMaxBonus || 0);
+        } else {
+            // NPCs: Direct Value (stored in bonus field for now to avoid data migration)
+            system.attributes.condition.resistanceMax = (system.attributes.condition.resistanceMaxBonus || 0);
+        }
+    }
+
+    /** @override */
+    async _onUpdate(changed, options, userId) {
+        await super._onUpdate(changed, options, userId);
+        if (game.user.id !== userId) return;
+
+        // Check if resistance was updated for NPCs
+        if (this.type === "npc" && hasProperty(changed, "system.attributes.condition.resistance")) {
+            console.log("ABEA | Detecada alteração de resistência em NPC via _onUpdate");
+            await this._checkNpcDeathCondition();
+        }
+    }
+
+    /**
+     * Checks if the NPC should be dead based on resistance.
+     */
+    async _checkNpcDeathCondition() {
+        const resistance = Number(this.system.attributes.condition.resistance) || 0;
+        const maxResistance = Number(this.system.attributes.condition.resistanceMax) || 0;
+
+        // Modern check for status effects in V11+ (statuses Set) with fallback to flag
+        const isDead = this.effects.some(e => e.statuses?.has("dead") || e.getFlag("core", "statusId") === "dead");
+
+        console.log(`ABEA | Checando Morte NPC: Res ${resistance}/${maxResistance} | Morto? ${isDead}`);
+
+        if (resistance >= maxResistance && !isDead) {
+            console.log("ABEA | Aplicando condição Morto");
+            await this.toggleStatusEffect("dead", { active: true, overlay: true });
+        } else if (resistance < maxResistance && isDead) {
+            console.log("ABEA | Removendo condição Morto");
+            await this.toggleStatusEffect("dead", { active: false });
+        }
     }
 
     /**
