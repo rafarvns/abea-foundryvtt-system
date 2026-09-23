@@ -1,0 +1,158 @@
+---
+title: "Tiles"
+url: "https://foundryvtt.com/article/tiles/"
+category: "Tiles"
+---
+
+Your web browser has JavaScript disabled which is required in order to properly use the foundryvtt.com website. Certain website features will be disabled or will not work as expected unless JavaScript is enabled.
+
+This website collects anonymous data about how users interact with our website. This data provides us with
+valuable insights that help us to improve our products. Some of these analytics features are non-essential
+and use browser cookies.
+
+What data we collect and information on how it is used is described in our
+[Privacy Policy](/article/privacy-policy/ "Privacy Policy").
+
+# Tiles
+
+## 
+
+##### Updated September 22, 2026 (Version 14.368)
+
+## Table of Contents
+
+* [Key Concepts](#key-concepts)
+* [Scene Controls](#scene-controls)
+* [Tile HUD](hud)
+* [Placeables Sidebar](#sidebar)
+* [Tile Config](#sheet)
+
++ [Position Tab](#position)
++ [Appearance Tab](#appearance)
++ [Overhead Tab](#overhead)
+
+* [API References](#api)
+
+## Key Concepts
+
+Tiles render images and videos on the canvas. If you want to include multiple images in a Scene without resorting to image editing software, Tiles are an easy way to do that. Furthermore, Tiles fully integrate with elevation, allowing you to create multi-layered spectacles.
+
+From the player perspective, Tiles are indistinguishable from being part of the Scene background; they are fully affected by lighting and vision. Players do not have access to the Tiles layer, so they cannot place new Tiles or otherwise interact with them.
+
+## Scene Controls
+
+The Scene Controls are on the left side of the UI, where you can click on  Tile Controls to switch to the Tiles Layer.
+
+Modules and game systems may add other controls of their own. For any controls not listed here, please consult the documentation of your system and any modules that you are using.
+
+![TilesV2-Scene-Controls-14.368-20260922-2](https://r2.foundryvtt.com/website-uploads-public/screen/user_681/tilesv2-scene-controls-14368-20260922-2-2026-09-22.webp)
+
+The Tiles Layer in the Scene Controls menu.
+
+![Tiles-Palette-14.368-20260922](https://r2.foundryvtt.com/website-uploads-public/screen/user_681/tiles-palette-14368-20260922-2026-09-22.webp)
+
+The Tile Palette for editing individual or multiple controlled Tiles.
+
+Select Tile
+:   You can click and box-drag to select multiple Tiles at once. Double clicking a Tile in this mode will open the Tile Config to adjust the individual Tile properties, while right clicking will activate the Tile HUD.
+:   Dragging a selected Tile from inside its boundaries will move the Tile. Clicking and dragging from the triangle control will instead rotate the Tile. Clicking and dragging from the square control will resize the Tile.
+
+Place Tile
+:   While this tool is active, dragging a box will create a new Tile you can configure via the Tile Config. If you cancel out of the config then the Tile will not be created, while using the "Create Tile" button in the bottom center will save it. A Tile created this way will not be visible on other layers until an image is set. This predefines the Tile dimensions and any image for the Tile will be stretched to fit.
+
+Tile Browser
+:   This button will open up the Texture Browser, which is used to browse available media files and has a field to specify the "Asset Grid Size". Dragging an image out of this browser onto the canvas will create a Tile with the asset that's been appropriately resized according to that grid size. The Asset Grid Size input is especially helpful when using assets from a variety of map makers who may use different default grid sizes like 100px vs 140px that differ from your current Scene.
+:   As an example, the core Foundry icons are generally 256px squares; on a Scene with a 100px grid size, dragging them out will create a 2.56 x 2.56 Tile; setting the Asset Grid Size to 128 will create a 2x2 Tile, while 256 will create a 1x1 Tile.
+
+Force Snap to Grid Vertices
+:   While this toggle is active the top-left point of drawing a new Tile with the Place Tile tool will prefer to anchor from a grid vertex.
+
+Tiles Palette
+:   The Tiles Palette is an additional application that helps working with multiple Tiles at once or consecutively. The functionality of the Tile Palette depends on whether you have the select tool active or are creating Tiles with Place Tile or the Tile Browser. If you are creating Tiles, the palette controls the initial values of each new Tile you place. If you are selecting existing Tiles, the palette functions as a mass-edit tool, allowing you to adjust many selected Tiles at once. While you have one or more selected Tiles you can change the palette's fields then click Apply to make those changes to all selected Tiles. The Clone tool will commit all of the currently selected Tile(s) properties into the palette, which can then be used with creating new Tiles. Reset will remove any current changes you have to the palette to the current properties of your selected Tiles.
+
+## Tile HUD
+
+While on the Tiles layer, you can right-click an unlocked Tile to pull up the Tile HUD. There are only a few options; the number in the top left controls the elevation of the Tile within the overall context of the canvas, while the sort button either pulls the Tile to the front or, if it's already in the front, sends it to the back. Sorting is only relevant for two Tiles at the same elevation; a Tile with higher elevation always displays above a Tile with lower elevation.
+
+The visibility option hides the Tile from players, while the lock tool prevents further interaction. You can unlock a locked Tile from the Placeables Sidebar as described below.
+
+![TilesV2-HUD-14.368-20260922](https://r2.foundryvtt.com/website-uploads-public/screen/user_681/tilesv2-hud-14368-20260922-2026-09-22.webp)
+
+The Tiles HUD.
+
+## Placeables Sidebar
+
+The Placeables sidebar tab has tabs for each Placeable Object type, including Tiles, which is synched to the choice of layer in the Scene controls. Here, you can see all Tiles in the Scene and filter by name, viewed, level, or even advanced filters like elevation and occlusion modes.
+
+You can click on Tiles to select them, or hold shift to select multiple Tiles at a time. This works well in combination with the  Palette tool which will allow you to perform edits to all selected Tiles.
+
+**Locked Tile:** You can lock and unlock a Tile from this sidebar tab by right clicking a Tile for the context menu; a locked Tile cannot be interacted with from the canvas and will ignore all attempts to select it. This is especially helpful when Tiles are overlapping.
+
+![TilesV2-Placeables-Tab-14.368-20260922](https://r2.foundryvtt.com/website-uploads-public/screen/user_681/tilesv2-placeables-tab-14368-20260922-2026-09-22.webp)
+
+The Placeables Sidebar for Tiles.
+
+## Tile Config
+
+While on the Tiles layer, you can double-click any visible Tile on the canvas or its entry in the Placeables Sidebar to open its sheet. Updates are only saved when you click the Update Tile button in the footer, however the Tile will preview adjustments as you edit the fields.
+
+### Position Tab
+
+The position tab manages where the Tile exists on the canvas. Typically, you should set the dimensions, rotation, and coordinates by manipulating the tile on the canvas, but for more precise values you can set them here. Similarly, the elevation and sort are available via the Tile HUD. If you want to set the Name (for the sidebar) or levels of the tile those are set here. A Tile will attempt to infer a default name from the file name, but you may still prefer to customize the label, especially if you are reusing the same asset multiple times.
+
+![TilesV2-Tile-Config-14.368-20260922-2](https://r2.foundryvtt.com/website-uploads-public/screen/user_681/tilesv2-tile-config-14368-20260922-2-2026-09-22.webp)
+
+The Position Tab of the Tile Config.
+
+### Appearance Tab
+
+This default tab adjusts the primary purpose of a Tile: The actual image (or video) that it shows. The anchor property adjusts where the "origin" of the Tile is, with 0,0 being the top left and 1,1 being the bottom right. This value does not have to stay within 0–1 but it is generally recommended to just stick to the center point of 0.5,0.5 unless you have a specific purpose with adjusting this property. The origin controls the axis of rotation.
+
+![TilesV2-Tile-Config-Appearance-14.368-20260922](https://r2.foundryvtt.com/website-uploads-public/screen/user_681/tilesv2-tile-config-appearance-14368-20260922-2026-09-22.webp)
+
+The Appearance Tab of the Tile Config.
+
+### Overhead Tab
+
+This tab controls the interactive behavior of the Tile with the rest of the canvas and deserves extra attention.
+
+**Occlusion:** Tile occlusion controls how and when a tile is hidden to show Tokens beneath it. The modes control the conditions, while the occlusion alpha determines how hidden the Tile becomes. You can apply multiple different occlusion modes depending on the desired effect.
+
+Fade
+:   Causes the whole Tile to fade when an Token moves under it.
+
+Surface
+:   Causes the Tile to be partially revealed based on the occluded surfaces.
+
+Radial
+:   Causes the Tile to reveal the background in a circle around the Token. The radius is determined by the Token's size.
+
+Vision
+:   Causes the Tile to be partially revealed based on the vision of the Token, which does not need to be under the Tile to see what's beneath it. This is useful for roofs on buildings where players could see through a window or door, viewing only a portion of what is obscured by the roof itself.
+
+**Restricts Light and Weather:** These properties help further craft the visual representation of the Scene. Unlike a Surface Region Behavior, they do not impact line of sight calculations or other mechanically relevant effects, only the aesthetics. See the figures below for an example.
+
+![TilesV2-Tile-Config-Overhead-14.368-20260922](https://r2.foundryvtt.com/website-uploads-public/screen/user_681/tilesv2-tile-config-overhead-14368-20260922-2026-09-22.webp)
+
+The Overhead Tab of the Tile Config.
+
+![TilesV2-Oclusion-Off-14.368-20260922](https://r2.foundryvtt.com/website-uploads-public/screen/user_681/tilesv2-oclusion-off-14368-20260922-2026-09-22.webp)
+
+At first when peering ahead, the adventurer can only see a cottage in the stormy night.
+
+When a Tile is visible, the weather coming from above it is visible but lights below the Tile are blocked.
+
+![TilesV2-Oclusion-On-14.368-20260922](https://r2.foundryvtt.com/website-uploads-public/screen/user_681/tilesv2-oclusion-on-14368-20260922-2026-09-22.webp)
+
+With the cottage's roof Tile occluded, they can now peek into a seemingly cozy room...
+
+When the Tile is occluded, the weather coming from above is blocked and lights below the Tile are visible.
+
+## API Reference
+
+To interact with Tiles programmatically, consider using the following API concepts:
+
+* The  [Tile Document](/api/classes/foundry.documents.Tile.html " Tile Document")
+* The  [Tile Config Application](/api/classes/foundry.applications.sheets.TileConfig.html " Tile Config Application")
+* The  [Tiles Canvas Layer](/api/classes/foundry.canvas.layers.TilesLayer.html " Tiles Canvas Layer")
+* The  [Tile Placeable Object](/api/classes/foundry.canvas.placeables.Tile.html " Tile Placeable Object")

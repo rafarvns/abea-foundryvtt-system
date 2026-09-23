@@ -10,9 +10,12 @@ import logging
 from pathlib import Path
 
 # Configuration
+# The KB is not versioned: it always reflects the current Foundry release.
+# Set DOCS_VERSION to the version the KB currently documents.
 KB_BASE_URL = "https://foundryvtt.com/kb/"
-OUTPUT_DIR = Path(__file__).parent / "fvtt_kb_docs"
-MAX_WORKERS = 20
+DOCS_VERSION = "v14"
+OUTPUT_DIR = Path(__file__).resolve().parents[2] / "docs" / DOCS_VERSION / "fvtt_kb_docs"
+MAX_WORKERS = 8
 MAX_RETRIES = 3
 RETRY_DELAY = 1
 
