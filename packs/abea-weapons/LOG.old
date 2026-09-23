@@ -1,7 +1,5 @@
-2026/02/18-00:23:43.604 5de4 Recovering log #117
-2026/02/18-00:23:43.615 5de4 Delete type=0 #117
-2026/02/18-00:23:43.616 5de4 Delete type=3 #116
-2026/02/18-00:48:43.962 2888 Level-0 table #121: started
-2026/02/18-00:48:43.963 2888 Level-0 table #121: 0 bytes OK
-2026/02/18-00:48:43.964 2888 Delete type=0 #119
-2026/02/18-00:48:43.972 2888 Manual compaction at level-0 from '!folders!4YoFeaoc3CZNuyk0' @ 72057594037927935 : 1 .. '!items!y5mCHpLTiCFxbIN5' @ 0 : 0; will stop at (end)
+2026/09/23-18:32:47.009 4c2c Log #123: 0 ops saved to Table #124 OK
+2026/09/23-18:32:47.013 4c2c Archiving C:\Users\RAFA-PC\AppData\Local\FoundryVTT\Data\systems\abea\packs\abea-weapons/000123.log: OK
+2026/09/23-18:32:47.014 4c2c Table #115: 38 entries OK
+2026/09/23-18:32:47.020 4c2c Archiving C:\Users\RAFA-PC\AppData\Local\FoundryVTT\Data\systems\abea\packs\abea-weapons/MANIFEST-000122: OK
+2026/09/23-18:32:47.028 4c2c **** Repaired leveldb C:\Users\RAFA-PC\AppData\Local\FoundryVTT\Data\systems\abea\packs\abea-weapons; recovered 1 files; 11963 bytes. Some data may have been lost. ****
