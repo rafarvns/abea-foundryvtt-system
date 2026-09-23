@@ -1,0 +1,37 @@
+<div class="abea chat-card roll-card">
+    <header class="card-header flexrow">
+        <img src="{{img}}" title="{{name}}" />
+        <h3 class="item-name">{{name}}</h3>
+    </header>
+
+    <div class="card-content">
+        <div class="card-details">
+            {{#if hasSkill}}
+            <p><strong>{{localize 'ABEA.Chat.Rank'}}:</strong> {{rank}}</p>
+            <p><strong>{{localize 'ABEA.Chat.Bonus'}}:</strong> +{{bonus}}</p>
+            {{else}}
+            <p><strong>{{localize 'ABEA.Chat.Bonus'}}:</strong> {{localize 'ABEA.Chat.NoProficiency'}}</p>
+            {{/if}}
+            {{#if difficulty}}
+            <p><strong>{{localize 'ABEA.Facanha.Card.Difficulty'}}:</strong> {{difficulty.label}} (CD {{difficulty.cd}})</p>
+            {{/if}}
+        </div>
+
+        <hr>
+
+        <div class="card-roll">{{{rollHTML}}}</div>
+
+        {{#if isCritical}}
+        <div class="card-result critical">{{localize 'ABEA.Chat.Critical'}}</div>
+        {{else if isFumble}}
+        <div class="card-result fumble">{{localize 'ABEA.Chat.Fumble'}}</div>
+        {{/if}}
+
+        {{#if difficulty}}
+        <div class="card-result {{#if passed}}success{{else}}failure{{/if}}">
+            {{#if passed}}{{localize 'ABEA.Facanha.Card.Success'}}{{else}}{{localize 'ABEA.Facanha.Card.Failure'}}{{/if}}
+            <small>{{localize 'ABEA.Chat.Total'}}: {{total}} / CD {{difficulty.cd}}</small>
+        </div>
+        {{/if}}
+    </div>
+</div>

@@ -1,7 +1,7 @@
 /**
  * A Bandeira do Elefante e da Arara (ABEA) System
- * Version: 1.0.0
- * Foundry VTT: 13.351
+ * Version: 1.1.0
+ * Foundry VTT: 14.360
  */
 
 // Import Modules
@@ -20,6 +20,9 @@ import { createItemMacro, rollItemMacro, rollSkillMacro } from "./helpers/macros
 import { checkFacanha } from "./helpers/utils.mjs";
 import { FacanhaSolicitorDialog } from "./facanha/facanha-dialog.mjs";
 import { FacanhaLogic } from "./facanha/facanha-logic.mjs";
+
+const { Actors, Items } = foundry.documents.collections;
+const { loadTemplates } = foundry.applications.handlebars;
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -50,7 +53,7 @@ Hooks.once("init", async function () {
     CONFIG.ABEA = ABEA;
 
     // Register Status Effects
-    CONFIG.statusEffects = ABEA.statusEffects;
+    CONFIG.statusEffects = Object.fromEntries(ABEA.statusEffects.map(effect => [effect.id, effect]));
 
     // Define custom Document classes
     CONFIG.Actor.documentClass = AbeaActor;
@@ -66,8 +69,7 @@ Hooks.once("init", async function () {
     };
     console.log("ABEA | Registered Item Types:", Object.keys(CONFIG.Item.dataModels));
 
-    // Register sheet application classes
-    Actors.unregisterSheet("core", ActorSheet);
+    // Register sheet application classes (V14 registers no core Actor/Item sheet to unregister)
     Actors.registerSheet("abea", AbeaActorSheet, {
         types: ["character"],
         makeDefault: true,
@@ -79,7 +81,6 @@ Hooks.once("init", async function () {
         label: "ABEA.Sheet.NPC"
     });
 
-    Items.unregisterSheet("core", ItemSheet);
     Items.registerSheet("abea", AbeaItemSheet, {
         types: ["item"],
         makeDefault: true,
@@ -130,7 +131,10 @@ Hooks.once("init", async function () {
         "systems/abea/templates/item/item-generic-sheet.hbs",
         "systems/abea/templates/item/item-weapon-sheet.hbs",
         "systems/abea/templates/item/item-skill-sheet.hbs",
-        "systems/abea/templates/chat/facanha-card.hbs"
+        "systems/abea/templates/chat/facanha-card.hbs",
+        "systems/abea/templates/chat/roll-card.hbs",
+        "systems/abea/templates/chat/attack-card.hbs",
+        "systems/abea/templates/chat/item-card.hbs"
     ]);
 });
 
@@ -167,19 +171,21 @@ Hooks.once("ready", async function () {
 Hooks.on("getSceneControlButtons", (controls) => {
     if (!game.user.isGM) return;
 
-    const abeaControl = {
+    controls.abea = {
         name: "abea",
         title: "ABEA",
         icon: "fas fa-shield-alt",
         layer: "notes",
+        order: Object.keys(controls).length,
         visible: true,
         tools: {
             facanhas: {
                 name: "facanhas",
                 title: "Solicitar Façanha",
                 icon: "fas fa-dice",
+                order: 0,
                 button: true,
-                onClick: () => {
+                onChange: () => {
                     console.log("ABEA | Botão Solicitar Façanha clicado!");
                     if (FacanhaSolicitorDialog?.show) {
                         FacanhaSolicitorDialog.show()
@@ -189,15 +195,8 @@ Hooks.on("getSceneControlButtons", (controls) => {
             }
         }
     };
-
-    // Add to controls list (supports Array or Object/Map)
-    if (Array.isArray(controls)) {
-        controls.push(abeaControl);
-    } else if (typeof controls === "object" && controls !== null) {
-        controls.abea = abeaControl;
-    }
 });
 
-Hooks.on("renderChatMessage", (message, html, data) => {
+Hooks.on("renderChatMessageHTML", (message, html) => {
     FacanhaLogic.activateChatListeners(html, message);
 });

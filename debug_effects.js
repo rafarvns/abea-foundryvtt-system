@@ -17,7 +17,7 @@
 
     // 3. Test retrieving effect data
     const effectId = "dead";
-    const effectConfig = CONFIG.statusEffects.find(e => e.id === effectId);
+    const effectConfig = CONFIG.statusEffects[effectId];
     console.log("ABEA | Effect Config for 'dead':", effectConfig);
 
     if (!effectConfig) {
@@ -27,10 +27,10 @@
 
     // 4. Test Manual Creation
     const effectData = {
-        name: game.i18n.localize(effectConfig.label),
-        img: effectConfig.icon, // V13 uses 'img' or 'icon'?
+        name: game.i18n.localize(effectConfig.name),
+        img: effectConfig.img,
         origin: actor.uuid,
-        "flags.core.statusId": effectId
+        statuses: [effectId]
     };
     console.log("ABEA | Attempting to create effect with data:", effectData);
 

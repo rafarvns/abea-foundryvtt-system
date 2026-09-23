@@ -1,0 +1,32 @@
+<div class="abea chat-card attack-card">
+    <header class="card-header flexrow">
+        <img src="{{weapon.img}}" title="{{weapon.name}}" />
+        <h3 class="item-name">{{weapon.name}}</h3>
+    </header>
+
+    <div class="card-content">
+        <div class="card-details">
+            <p><strong>{{localize 'ABEA.Chat.Skill'}}:</strong>
+                {{#if skill}}{{skill.name}} ({{localize 'ABEA.Chat.Rank'}} {{skill.rank}}){{else}}{{localize 'ABEA.Chat.NoSkill'}}{{/if}}
+            </p>
+            {{#if target}}
+            <p><strong>{{localize 'ABEA.Chat.Target'}}:</strong> {{target.name}}</p>
+            <p><strong>{{localize 'ABEA.Chat.Defense'}}:</strong> {{target.defense}}</p>
+            {{/if}}
+            <p><strong>{{localize 'ABEA.Chat.Goal'}}:</strong> {{goal}}+</p>
+        </div>
+
+        <hr>
+
+        <div class="card-roll">{{{rollHTML}}}</div>
+
+        <div class="card-result {{#if isHit}}success{{else}}failure{{/if}}">
+            {{#if isHit}}{{localize 'ABEA.Chat.Hit'}}{{else}}{{localize 'ABEA.Chat.Miss'}}{{/if}}
+            <small>{{localize 'ABEA.Chat.Total'}}: {{total}}{{#if isHit}} · {{localize 'ABEA.Chat.Damage'}}: {{damage}}{{/if}}</small>
+        </div>
+
+        {{#if damageNote}}
+        <p class="card-note">{{localize damageNote}}</p>
+        {{/if}}
+    </div>
+</div>

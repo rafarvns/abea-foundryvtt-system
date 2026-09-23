@@ -1,3 +1,6 @@
+const { renderTemplate } = foundry.applications.handlebars;
+const { TextEditor } = foundry.applications.ux;
+
 /**
  * Extend the base Item document for the ABEA system.
  * @extends {Item}
@@ -43,8 +46,9 @@ export class AbeaItem extends Item {
         const item = this;
         // Initialize chat data.
         const speaker = ChatMessage.getSpeaker({ actor: this.actor });
-        const rollMode = game.settings.get("core", "rollMode");
-        const label = `[${item.type}] ${item.name}`;
+        const messageMode = game.settings.get("core", "messageMode");
+        const template = "systems/abea/templates/chat/item-card.hbs";
+        const cardItem = { name: item.name, img: item.img };
 
         // Action Handling
         if (this.system.action?.type === "heal") {
@@ -55,19 +59,11 @@ export class AbeaItem extends Item {
 
                 await this.actor.update({ "system.attributes.condition.resistance": newRes });
 
-                ChatMessage.create({
-                    speaker: speaker,
-                    rollMode: rollMode,
-                    flavor: label,
-                    content: `<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                                <img src="${item.img}" width="36" height="36" style="border: none; margin-bottom: 6px;" />
-                                <h4 style="font-size: 1.2rem; margin: 0;">Item: <strong>${item.name}</strong></h4>
-                              </div><hr>
-                              <div class="card-content">
-                                    <p>${game.i18n.format("ABEA.Item.Action.HealMessage", { value: value })}</p>
-                                    <p><strong>${game.i18n.localize("ABEA.Actor.Condition.Resistance")}:</strong> ${currentRes} &rarr; ${newRes}</p>
-                                </div>`
+                const content = await renderTemplate(template, {
+                    item: cardItem,
+                    heal: { value, before: currentRes, after: newRes }
                 });
+                await ChatMessage.create({ speaker, content }, { messageMode });
 
                 // Consumption Logic
                 if (this.system.action.isConsumable) {
@@ -88,16 +84,11 @@ export class AbeaItem extends Item {
             // Check if it's a valid item type
             console.log(`ABEA | Rolling Item: ${item.name}`);
             // Basic chat message for items without actions
-            ChatMessage.create({
-                speaker: speaker,
-                rollMode: rollMode,
-                flavor: label,
-                content: `<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                            <img src="${item.img}" width="36" height="36" style="border: none; margin-bottom: 6px;" />
-                            <h4 style="font-size: 1.2rem; margin: 0;">Item: <strong>${item.name}</strong></h4>
-                          </div><hr>
-                          <div>${item.system.description || item.name}</div>`
+            const content = await renderTemplate(template, {
+                item: cardItem,
+                description: await TextEditor.implementation.enrichHTML(item.system.description, { relativeTo: item })
             });
+            await ChatMessage.create({ speaker, content }, { messageMode });
             return;
         }
     }

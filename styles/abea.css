@@ -2403,7 +2403,7 @@
 /* CHAT CARDS */
 /* ========================================= */
 
-.abea.chat-card.facanha-card {
+.abea.chat-card {
   background: var(--bg-main);
   border: 2px solid var(--border-color);
   border-radius: var(--radius);
@@ -2422,16 +2422,22 @@
 }
 
 .abea.chat-card .card-header img {
+  /* .flexrow gives every child flex: 1, which stretched the image */
+  flex: 0 0 36px;
   border: 2px solid var(--border-color);
   border-radius: var(--radius-sm);
   background: var(--abea-item-bg);
   padding: 2px;
   width: 36px;
   height: 36px;
+  aspect-ratio: 1;
   object-fit: cover;
 }
 
 .abea.chat-card .card-header h3 {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.2;
   border: none;
   margin: 0;
   font-family: var(--font-heading);
@@ -2441,7 +2447,7 @@
   text-transform: uppercase;
 }
 
-.abea.chat-card .facanha-details {
+.abea.chat-card .card-details {
   background: var(--bg-trans-40);
   border: 1px dashed var(--border-color);
   border-radius: var(--radius-sm);
@@ -2450,11 +2456,11 @@
   font-size: 0.9rem;
 }
 
-.abea.chat-card .facanha-details p {
+.abea.chat-card .card-details p {
   margin: 2px 0;
 }
 
-.abea.chat-card .facanha-details strong {
+.abea.chat-card .card-details strong {
   font-family: var(--font-heading);
   color: var(--abea-primary);
 }
@@ -2511,6 +2517,98 @@
   color: var(--color-danger);
 }
 
+.abea.chat-card .card-result {
+  background: var(--bg-trans-30);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--highlight);
+  padding: 6px 8px;
+  margin: 8px 0 4px;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--abea-primary);
+}
+
+.abea.chat-card .card-result small {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+.abea.chat-card .card-result.success {
+  border-left-color: var(--abea-accent);
+  background: rgba(60, 110, 56, 0.1);
+  color: var(--abea-accent);
+}
+
+.abea.chat-card .card-result.failure {
+  border-left-color: var(--color-danger);
+  background: rgba(192, 57, 43, 0.1);
+  color: var(--color-danger);
+}
+
+.abea.chat-card .card-result.critical {
+  border: 2px solid var(--abea-accent);
+  border-left-width: 6px;
+  background: rgba(60, 110, 56, 0.2);
+  color: var(--abea-accent);
+  text-transform: uppercase;
+}
+
+.abea.chat-card .card-result.fumble {
+  border: 2px solid var(--color-danger);
+  border-left-width: 6px;
+  background: rgba(192, 57, 43, 0.2);
+  color: var(--color-danger);
+  text-transform: uppercase;
+}
+
+.abea.chat-card .card-note {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  font-style: italic;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.abea.chat-card .card-description p {
+  margin: 4px 0;
+}
+
+.abea.chat-card .card-roll .dice-roll {
+  margin: 0;
+}
+
+.abea.chat-card .card-roll .dice-formula,
+.abea.chat-card .card-roll .dice-total {
+  background: var(--bg-trans-40);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+.abea.chat-card .card-roll .dice-total {
+  background: var(--abea-primary);
+  border-color: var(--abea-primary);
+  color: var(--text-contrast);
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  box-shadow: 0 0 6px rgba(92, 64, 51, 0.6);
+}
+
+.abea.chat-card:has(.card-result.critical) .card-roll .dice-total {
+  background: var(--abea-accent);
+  border-color: var(--abea-accent);
+  box-shadow: 0 0 8px rgba(60, 110, 56, 0.8);
+}
+
+.abea.chat-card:has(.card-result.fumble) .card-roll .dice-total {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+  box-shadow: 0 0 8px rgba(192, 57, 43, 0.8);
+}
+
 
 .abea.chat-card .facanha-rolar-btn {
   width: 100%;
@@ -2563,10 +2661,9 @@
 
   background: var(--bg-color);
   padding: 10px;
-  overflow: visible;
-  /* Allow dropdowns to overflow if needed */
-  height: auto !important;
-  /* Override any fixed height from sheet styles */
+  /* Scroll instead of clipping the buttons when the window is resized smaller */
+  min-height: 0;
+  overflow-y: auto;
   color: var(--text-main);
   /* Ensure text color is explicitly set */
 }
@@ -2620,7 +2717,8 @@
 }
 
 /* Button Styling Specific to Facanha Dialog */
-.dialog.abea.facanha-dialog .dialog-buttons {
+.dialog.abea.facanha-dialog .dialog-buttons,
+.dialog.abea.facanha-dialog .form-footer {
   display: flex !important;
   flex-direction: row-reverse !important;
   /* Context specific: Confirm on right */
@@ -2631,28 +2729,32 @@
 
 /* "Solicitar" Button - Fill Style */
 .dialog.abea.facanha-dialog .dialog-buttons button.default,
-.dialog.abea.facanha-dialog button[data-button="request"] {
+.dialog.abea.facanha-dialog button[data-button="request"],
+.dialog.abea.facanha-dialog button[data-action="request"] {
   background: var(--abea-primary);
   color: var(--bg-main);
   border: 2px solid var(--abea-primary);
 }
 
 .dialog.abea.facanha-dialog .dialog-buttons button.default:hover,
-.dialog.abea.facanha-dialog button[data-button="request"]:hover {
+.dialog.abea.facanha-dialog button[data-button="request"]:hover,
+.dialog.abea.facanha-dialog button[data-action="request"]:hover {
   background: var(--abea-accent);
   border-color: var(--abea-accent);
 }
 
 /* "Cancelar" Button - Outline Style */
 .dialog.abea.facanha-dialog button.cancel,
-.dialog.abea.facanha-dialog button[data-button="cancel"] {
+.dialog.abea.facanha-dialog button[data-button="cancel"],
+.dialog.abea.facanha-dialog button[data-action="cancel"] {
   background: transparent;
   color: var(--abea-primary);
   border: 2px solid var(--abea-primary);
 }
 
 .dialog.abea.facanha-dialog button.cancel:hover,
-.dialog.abea.facanha-dialog button[data-button="cancel"]:hover {
+.dialog.abea.facanha-dialog button[data-button="cancel"]:hover,
+.dialog.abea.facanha-dialog button[data-action="cancel"]:hover {
   background: var(--bg-trans-20);
   color: var(--color-danger);
   border-color: var(--color-danger);

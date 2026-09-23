@@ -41,7 +41,7 @@
     <!-- Skills List Grid -->
     <div class="skills-list-grid">
         {{#each skills as |skill index|}}
-        <div class="skill-row-grid" data-index="{{index}}" draggable="true">
+        <div class="skill-row-grid draggable" data-index="{{index}}" draggable="true">
             <input type="hidden" name="system.skills.{{index}}.name" value="{{skill.name}}">
             <input type="hidden" name="system.skills.{{index}}.img" value="{{skill.img}}">
 

@@ -42,12 +42,12 @@ ABEA.difficulties = {
 ABEA.statusEffects = [
     {
         id: "unconscious",
-        label: "ABEA.Status.Unconscious",
-        icon: "icons/svg/unconscious.svg"
+        name: "ABEA.Status.Unconscious",
+        img: "icons/svg/unconscious.svg"
     },
     {
         id: "dead",
-        label: "ABEA.Status.Dead",
-        icon: "icons/svg/skull.svg"
+        name: "ABEA.Status.Dead",
+        img: "icons/svg/skull.svg"
     }
 ];

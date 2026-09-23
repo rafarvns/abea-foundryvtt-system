@@ -4,6 +4,17 @@
  */
 export class CharacterData extends foundry.abstract.TypeDataModel {
     /** @override */
+    static migrateData(source) {
+        // Older data stored resistance/critical as { value, max }; V14 rejects it instead of falling back
+        const condition = source.attributes?.condition;
+        for (const key of ["resistance", "critical"]) {
+            const field = condition?.[key];
+            if (field && (typeof field === "object")) condition[key] = Number(field.value) || 0;
+        }
+        return super.migrateData(source);
+    }
+
+    /** @override */
     static defineSchema() {
         const fields = foundry.data.fields;
         return {

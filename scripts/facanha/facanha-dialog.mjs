@@ -2,6 +2,9 @@ import { FACANHAS } from "../constants/facanhas.mjs";
 import { CATEGORY_MAPPING } from "../constants/category-mapping.mjs";
 import { ABEA } from "../config.mjs";
 
+const { DialogV2 } = foundry.applications.api;
+const { renderTemplate } = foundry.applications.handlebars;
+
 export class FacanhaSolicitorDialog {
     static async show() {
         console.log("ABEA | FacanhaSolicitorDialog.show() called");
@@ -47,167 +50,161 @@ export class FacanhaSolicitorDialog {
 
         const content = await renderTemplate("systems/abea/templates/chat/facanha-dialog.hbs", context);
 
-        console.log("ABEA | Dialog content generated, creating Promise...");
-        return new Promise((resolve) => {
-            console.log("ABEA | Creating Dialog instance...");
-            const dialog = new Dialog({
-                title: game.i18n.localize("ABEA.Facanha.Card.Title"),
-                content: content,
-                buttons: {
-                    request: {
-                        label: "Solicitar",
-                        icon: '<i class="fas fa-dice"></i>',
-                        callback: (html) => {
-                            const formElement = html[0].tagName === "FORM" ? html[0] : (html[0].querySelector("form") || html[0]);
-                            const categoriaInput = formElement.querySelector('[name="facanha-categoria"]');
-                            const categoria = categoriaInput.value;
-                            let nome = "";
+        console.log("ABEA | Dialog content generated, opening DialogV2...");
+        const result = await DialogV2.wait({
+            window: { title: game.i18n.localize("ABEA.Facanha.Card.Title"), resizable: true },
+            classes: ["abea", "facanha-dialog", "sheet", "item"],
+            position: { width: 1000 },
+            content: content,
+            buttons: [{
+                action: "request",
+                label: "Solicitar",
+                icon: "fas fa-dice",
+                default: true,
+                callback: (event, button) => {
+                    const formElement = button.form;
+                    const categoriaInput = formElement.querySelector('[name="facanha-categoria"]');
+                    const categoria = categoriaInput.value;
+                    let nome = "";
 
-                            if (categoria === "custom") {
-                                nome = formElement.querySelector('[name="facanha-nome"]').value;
-                            } else {
-                                const featInput = formElement.querySelector('[name="facanha-selecionada"]');
-                                nome = featInput.value;
-                            }
-
-                            const selectElement = formElement.querySelector('[name="jogadores"]');
-                            const playerIds = Array.from(selectElement.selectedOptions).map(opt => opt.value);
-                            const cd = parseInt(formElement.querySelector('[name="dificuldade"]').value);
-
-                            // Find difficulty label from the active button
-                            const activeDiffBtn = formElement.querySelector(".difficulty-btn.active");
-                            const dificuldadeLabel = activeDiffBtn ? activeDiffBtn.innerText.trim() : "Intermediária";
-
-                            if (!nome || playerIds.length === 0) {
-                                ui.notifications.warn("Preencha o nome/selecione a façanha e selecione ao menos um jogador.");
-                                resolve(null);
-                                return;
-                            }
-
-                            resolve({
-                                nome,
-                                players: playerIds.map(id => ({
-                                    userId: id,
-                                    nome: game.users.get(id).name,
-                                    status: "aguardando",
-                                    resultado: null
-                                })),
-                                cd,
-                                dificuldadeLabel
-                            });
-                        }
-                    },
-                    cancel: {
-                        label: "Cancelar",
-                        icon: '<i class="fas fa-times"></i>',
-                        callback: () => resolve(null)
-                    }
-                },
-                default: "request",
-                render: (html) => {
-                    const form = html[0].tagName === "FORM" ? html[0] : html[0].querySelector("form") || html[0];
-                    const categoryBtns = form.querySelectorAll(".category-btn");
-                    const categoryInput = form.querySelector('[name="facanha-categoria"]');
-                    const featGroup = form.querySelector("#facanha-select-group");
-                    const customGroup = form.querySelector("#facanha-custom-group");
-                    const featListContainer = form.querySelector("#feat-list-container");
-                    const featInput = form.querySelector('[name="facanha-selecionada"]');
-                    const selectAllBtn = form.querySelector(".select-all-players");
-                    const playersSelect = form.querySelector('[name="jogadores"]');
-                    const difficultyBtns = form.querySelectorAll(".difficulty-btn");
-                    const difficultyInput = form.querySelector('[name="dificuldade"]');
-
-                    // --- Player Selection Logic ---
-                    if (selectAllBtn && playersSelect) {
-                        selectAllBtn.addEventListener("click", () => {
-                            for (let i = 0; i < playersSelect.options.length; i++) {
-                                playersSelect.options[i].selected = true;
-                            }
-                        });
+                    if (categoria === "custom") {
+                        nome = formElement.querySelector('[name="facanha-nome"]').value;
+                    } else {
+                        const featInput = formElement.querySelector('[name="facanha-selecionada"]');
+                        nome = featInput.value;
                     }
 
-                    // --- Difficulty Selection Logic ---
-                    difficultyBtns.forEach(btn => {
-                        btn.addEventListener("click", (e) => {
-                            difficultyBtns.forEach(b => b.classList.remove("active"));
-                            const clickedBtn = e.currentTarget;
-                            clickedBtn.classList.add("active");
-                            difficultyInput.value = clickedBtn.dataset.difficulty;
-                        });
-                    });
+                    const selectElement = formElement.querySelector('[name="jogadores"]');
+                    const playerIds = Array.from(selectElement.selectedOptions).map(opt => opt.value);
+                    const cd = parseInt(formElement.querySelector('[name="dificuldade"]').value);
 
-                    // --- Category Selection Logic ---
-                    categoryBtns.forEach(btn => {
-                        btn.addEventListener("click", (e) => {
-                            // 1. Update UI Active State
-                            categoryBtns.forEach(b => b.classList.remove("active"));
-                            const clickedBtn = e.currentTarget;
-                            clickedBtn.classList.add("active");
+                    // Find difficulty label from the active button
+                    const activeDiffBtn = formElement.querySelector(".difficulty-btn.active");
+                    const dificuldadeLabel = activeDiffBtn ? activeDiffBtn.innerText.trim() : "Intermediária";
 
-                            // 2. Update Input Value
-                            const selectedCategory = clickedBtn.dataset.category;
-                            categoryInput.value = selectedCategory;
+                    if (!nome || playerIds.length === 0) {
+                        ui.notifications.warn("Preencha o nome/selecione a façanha e selecione ao menos um jogador.");
+                        return null;
+                    }
 
-                            // 3. Handle Content Switching
-                            if (selectedCategory === "custom") {
-                                featGroup.style.display = "none";
-                                customGroup.style.display = "block";
-                                featListContainer.innerHTML = "";
-                                featInput.value = "";
-                            } else {
-                                featGroup.style.display = "block";
-                                customGroup.style.display = "none";
-
-                                // Reset feat selection
-                                featInput.value = "";
-
-                                // Populate Feat Buttons
-                                const feats = FACANHAS[selectedCategory] || [];
-                                featListContainer.innerHTML = "";
-
-                                feats.forEach(feat => {
-                                    const featBtn = document.createElement("button");
-                                    featBtn.type = "button";
-                                    featBtn.className = "feat-btn";
-                                    featBtn.dataset.feat = feat;
-                                    // Modified Structure with Image Placeholder
-                                    featBtn.innerHTML = `
-                                        <div class="feat-content">
-                                            <div class="feat-img-placeholder"><i class="fas fa-bolt"></i></div>
-                                            <span class="feat-name">${feat}</span>
-                                        </div>
-                                        <i class="fas fa-check check-icon" style="opacity: 0;"></i>
-                                    `;
-
-                                    featBtn.addEventListener("click", (ev) => {
-                                        // Feat Selection Logic
-                                        const allFeatBtns = featListContainer.querySelectorAll(".feat-btn");
-                                        allFeatBtns.forEach(fb => {
-                                            fb.classList.remove("checked");
-                                            fb.querySelector(".check-icon").style.opacity = "0";
-                                        });
-
-                                        const targetFeatBtn = ev.currentTarget;
-                                        targetFeatBtn.classList.add("checked");
-                                        targetFeatBtn.querySelector(".check-icon").style.opacity = "1";
-
-                                        featInput.value = targetFeatBtn.dataset.feat;
-                                    });
-
-                                    featListContainer.appendChild(featBtn);
-                                });
-                            }
-                        });
-                    });
+                    return {
+                        nome,
+                        players: playerIds.map(id => ({
+                            userId: id,
+                            nome: game.users.get(id).name,
+                            status: "aguardando",
+                            resultado: null
+                        })),
+                        cd,
+                        dificuldadeLabel
+                    };
                 }
             }, {
-                classes: ["abea", "dialog", "facanha-dialog", "sheet", "item"],
-                width: 1000,
-                height: 400,
-                resizable: false
-            });
-            dialog.render(true);
+                action: "cancel",
+                label: "Cancelar",
+                icon: "fas fa-times"
+            }],
+            render: (event, dialog) => {
+                const form = dialog.element.querySelector("form");
+                const categoryBtns = form.querySelectorAll(".category-btn");
+                const categoryInput = form.querySelector('[name="facanha-categoria"]');
+                const featGroup = form.querySelector("#facanha-select-group");
+                const customGroup = form.querySelector("#facanha-custom-group");
+                const featListContainer = form.querySelector("#feat-list-container");
+                const featInput = form.querySelector('[name="facanha-selecionada"]');
+                const selectAllBtn = form.querySelector(".select-all-players");
+                const playersSelect = form.querySelector('[name="jogadores"]');
+                const difficultyBtns = form.querySelectorAll(".difficulty-btn");
+                const difficultyInput = form.querySelector('[name="dificuldade"]');
+
+                // --- Player Selection Logic ---
+                if (selectAllBtn && playersSelect) {
+                    selectAllBtn.addEventListener("click", () => {
+                        for (let i = 0; i < playersSelect.options.length; i++) {
+                            playersSelect.options[i].selected = true;
+                        }
+                    });
+                }
+
+                // --- Difficulty Selection Logic ---
+                difficultyBtns.forEach(btn => {
+                    btn.addEventListener("click", (e) => {
+                        difficultyBtns.forEach(b => b.classList.remove("active"));
+                        const clickedBtn = e.currentTarget;
+                        clickedBtn.classList.add("active");
+                        difficultyInput.value = clickedBtn.dataset.difficulty;
+                    });
+                });
+
+                // --- Category Selection Logic ---
+                categoryBtns.forEach(btn => {
+                    btn.addEventListener("click", (e) => {
+                        // 1. Update UI Active State
+                        categoryBtns.forEach(b => b.classList.remove("active"));
+                        const clickedBtn = e.currentTarget;
+                        clickedBtn.classList.add("active");
+
+                        // 2. Update Input Value
+                        const selectedCategory = clickedBtn.dataset.category;
+                        categoryInput.value = selectedCategory;
+
+                        // 3. Handle Content Switching
+                        if (selectedCategory === "custom") {
+                            featGroup.style.display = "none";
+                            customGroup.style.display = "block";
+                            featListContainer.innerHTML = "";
+                            featInput.value = "";
+                        } else {
+                            featGroup.style.display = "block";
+                            customGroup.style.display = "none";
+
+                            // Reset feat selection
+                            featInput.value = "";
+
+                            // Populate Feat Buttons
+                            const feats = FACANHAS[selectedCategory] || [];
+                            featListContainer.innerHTML = "";
+
+                            feats.forEach(feat => {
+                                const featBtn = document.createElement("button");
+                                featBtn.type = "button";
+                                featBtn.className = "feat-btn";
+                                featBtn.dataset.feat = feat;
+                                // Modified Structure with Image Placeholder
+                                featBtn.innerHTML = `
+                                    <div class="feat-content">
+                                        <div class="feat-img-placeholder"><i class="fas fa-bolt"></i></div>
+                                        <span class="feat-name">${feat}</span>
+                                    </div>
+                                    <i class="fas fa-check check-icon" style="opacity: 0;"></i>
+                                `;
+
+                                featBtn.addEventListener("click", (ev) => {
+                                    // Feat Selection Logic
+                                    const allFeatBtns = featListContainer.querySelectorAll(".feat-btn");
+                                    allFeatBtns.forEach(fb => {
+                                        fb.classList.remove("checked");
+                                        fb.querySelector(".check-icon").style.opacity = "0";
+                                    });
+
+                                    const targetFeatBtn = ev.currentTarget;
+                                    targetFeatBtn.classList.add("checked");
+                                    targetFeatBtn.querySelector(".check-icon").style.opacity = "1";
+
+                                    featInput.value = targetFeatBtn.dataset.feat;
+                                });
+
+                                featListContainer.appendChild(featBtn);
+                            });
+                        }
+                    });
+                });
+            }
         });
+
+        // DialogV2 resolves with the button action name when a callback returns nothing,
+        // so only a data object counts as a valid request
+        return (result && typeof result === "object") ? result : null;
     }
 
     static _getSkillListOptions() {

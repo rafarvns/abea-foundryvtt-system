@@ -1,3 +1,5 @@
+const { renderTemplate } = foundry.applications.handlebars;
+
 /**
  * Extend the base Actor document for the ABEA system.
  * @extends {Actor}
@@ -40,7 +42,7 @@ export class AbeaActor extends Actor {
         if (game.user.id !== userId) return;
 
         // Check if resistance was updated for NPCs
-        if (this.type === "npc" && hasProperty(changed, "system.attributes.condition.resistance")) {
+        if (this.type === "npc" && foundry.utils.hasProperty(changed, "system.attributes.condition.resistance")) {
             console.log("ABEA | Detecada alteração de resistência em NPC via _onUpdate");
             await this._checkNpcDeathCondition();
         }
@@ -53,8 +55,7 @@ export class AbeaActor extends Actor {
         const resistance = Number(this.system.attributes.condition.resistance) || 0;
         const maxResistance = Number(this.system.attributes.condition.resistanceMax) || 0;
 
-        // Modern check for status effects in V11+ (statuses Set) with fallback to flag
-        const isDead = this.effects.some(e => e.statuses?.has("dead") || e.getFlag("core", "statusId") === "dead");
+        const isDead = this.statuses.has("dead");
 
         console.log(`ABEA | Checando Morte NPC: Res ${resistance}/${maxResistance} | Morto? ${isDead}`);
 
@@ -118,8 +119,7 @@ export class AbeaActor extends Actor {
 
         // Apply Status Effects
         for (let effectId of statusEffects) {
-            const hasEffect = this.effects.some(e => e.getFlag("core", "statusId") === effectId);
-            if (!hasEffect) {
+            if (!this.statuses.has(effectId)) {
                 await this.toggleStatusEffect(effectId, { active: true, overlay: effectId === "dead" });
             }
         }
@@ -176,20 +176,20 @@ export class AbeaActor extends Actor {
 
         if (skillIndex === -1) return ui.notifications.warn(`ABEA: Façanha "${skillName}" não encontrada.`);
 
-        let flavor = `<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                        <img src="${skill.img}" width="36" height="36" style="border: none; margin-bottom: 6px;" />
-                        <h4 style="font-size: 1.2rem; margin: 0;">Façanha: <strong>${skillName}</strong></h4>
-                      </div><hr> `;
-        if (isCritical) {
-            flavor += `<br><span style="color:green; font-weight:bold;">SUCESSO CRÍTICO! (Façanha)</span>`;
-        } else if (isFumble) {
-            flavor += `<br><span style="color:red; font-weight:bold;">FALHA CRÍTICA!</span>`;
-        }
-
-        // Send to Chat
-        roll.toMessage({
+        // Send to Chat (custom content replaces the default roll display, so the roll HTML goes inside the card)
+        const content = await renderTemplate("systems/abea/templates/chat/roll-card.hbs", {
+            name: skillName,
+            img: skill.img,
+            hasSkill: true,
+            rank,
+            bonus,
+            isCritical,
+            isFumble,
+            rollHTML: await roll.render()
+        });
+        await roll.toMessage({
             speaker: ChatMessage.getSpeaker({ actor: this }),
-            flavor: flavor
+            content
         });
     }
     /**
@@ -205,7 +205,7 @@ export class AbeaActor extends Actor {
         // 1. Skill Bonus
         let skillType = weapon.system.skillType;
         let skillBonus = 0;
-        let skillName = "Sem Façanha";
+        let skillInfo = null;
 
         // Resolve UUID if present
         if (skillType) {
@@ -221,7 +221,7 @@ export class AbeaActor extends Actor {
             if (skill) {
                 const rank = Number(skill.rank) || 0;
                 skillBonus = rank * 3;
-                skillName = `${skill.name} (Rank ${rank})`;
+                skillInfo = { name: skill.name, rank };
             }
         }
 
@@ -252,33 +252,12 @@ export class AbeaActor extends Actor {
 
         const damage = Number(weapon.system.damage) || 0;
 
-        // 4. Chat Message Flavor
-        let flavor = `<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                        <img src="${weapon.img}" width="36" height="36" style="border: none; margin-bottom: 6px;" />
-                        <h4 style="font-size: 1.2rem; margin: 0;">Ataque: <strong>${weapon.name}</strong></h4>
-                      </div>`;
-        flavor += `<div style="font-size: 0.9rem; margin-bottom: 5px;">Façanha: ${skillName}</div>`;
-
-        if (targetActor) {
-            flavor += `<div style="font-size: 0.9rem;">Alvo: <strong>${targetActor.name}</strong> (Defesa: ${targetDefense})</div>`;
-        }
-
-        flavor += `<hr>`;
-
-        if (isHit) {
-            flavor += `<div style="color:green; font-weight:bold; font-size: 1.1rem; text-align:center;">ACERTOU! (Total: ${total})</div>`;
-            flavor += `<div style="text-align:center; font-size: 0.8rem;">(Meta: ${façanha.target}+)</div>`;
-            flavor += `<div style="text-align:center;">Dano: <strong>${damage}</strong></div>`;
-        } else {
-            flavor += `<div style="color:red; font-weight:bold; font-size: 1.1rem; text-align:center;">ERROU! (Total: ${total})</div>`;
-            flavor += `<div style="text-align:center; font-size: 0.8rem;">(Meta: ${façanha.target}+)</div>`;
-        }
-
-        // 5. Apply Damage (Automation)
+        // 4. Apply Damage (Automation)
+        let damageNote = null;
         if (isHit && targetActor && damage > 0) {
             if (targetActor.isOwner) {
                 await targetActor.applyDamage(damage);
-                flavor += `<div style="margin-top:5px; font-style:italic; font-size:0.8rem; text-align:center;">Dano aplicado conforme as regras.</div>`;
+                damageNote = "ABEA.Chat.DamageApplied";
             } else {
                 // Emit socket event for GM to apply damage
                 game.socket.emit("system.abea", {
@@ -288,13 +267,25 @@ export class AbeaActor extends Actor {
                         damage: damage
                     }
                 });
-                flavor += `<div style="margin-top:5px; font-style:italic; font-size:0.8rem; text-align:center;">Solicitação de dano enviada ao Mestre.</div>`;
+                damageNote = "ABEA.Chat.DamageRequested";
             }
         }
 
-        roll.toMessage({
+        // 5. Chat Message
+        const content = await renderTemplate("systems/abea/templates/chat/attack-card.hbs", {
+            weapon: { name: weapon.name, img: weapon.img },
+            skill: skillInfo,
+            target: targetActor ? { name: targetActor.name, defense: targetDefense } : null,
+            goal: façanha.target,
+            total,
+            isHit,
+            damage,
+            damageNote,
+            rollHTML: await roll.render()
+        });
+        await roll.toMessage({
             speaker: ChatMessage.getSpeaker({ actor: this }),
-            flavor: flavor
+            content
         });
     }
 }

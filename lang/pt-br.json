@@ -126,5 +126,22 @@
     "ABEA.Facanha.Dialog.SelectFeat": "Selecionar Façanha",
     "ABEA.Facanha.Dialog.Title": "Solicitar Façanha",
     "ABEA.Status.Unconscious": "Inconsciente",
-    "ABEA.Status.Dead": "Morto"
+    "ABEA.Status.Dead": "Morto",
+    "ABEA.Chat.Skill": "Façanha",
+    "ABEA.Chat.Attack": "Ataque",
+    "ABEA.Chat.Rank": "Rank",
+    "ABEA.Chat.Bonus": "Bônus",
+    "ABEA.Chat.NoSkill": "Sem Façanha",
+    "ABEA.Chat.NoProficiency": "Sem perícia",
+    "ABEA.Chat.Target": "Alvo",
+    "ABEA.Chat.Defense": "Defesa",
+    "ABEA.Chat.Goal": "Meta",
+    "ABEA.Chat.Damage": "Dano",
+    "ABEA.Chat.Hit": "ACERTOU!",
+    "ABEA.Chat.Miss": "ERROU!",
+    "ABEA.Chat.Critical": "SUCESSO CRÍTICO!",
+    "ABEA.Chat.Fumble": "FALHA CRÍTICA!",
+    "ABEA.Chat.DamageApplied": "Dano aplicado conforme as regras.",
+    "ABEA.Chat.DamageRequested": "Solicitação de dano enviada ao Mestre.",
+    "ABEA.Chat.Total": "Total"
 }

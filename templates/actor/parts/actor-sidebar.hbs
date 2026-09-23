@@ -45,7 +45,7 @@
         <h3>{{localize "ABEA.Favorites.Title"}}</h3>
         <div class="favorites-grid">
             {{#each favorites}}
-            <div class="favorite-item {{#unless this.name}}empty{{/unless}}" data-index="{{this.index}}" {{#if
+            <div class="favorite-item {{#if this.name}}draggable{{else}}empty{{/if}}" data-index="{{this.index}}" {{#if
                 this.name}}draggable="true" data-action="rollFavorite" {{/if}}>
                 {{#if this.name}}
                 <div class="fav-img">

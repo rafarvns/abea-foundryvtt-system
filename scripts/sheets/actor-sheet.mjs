@@ -1,5 +1,7 @@
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
+const { TextEditor } = foundry.applications.ux;
+const { FilePicker } = foundry.applications.apps;
 
 /**
  * Extend the base ActorSheetV2 for the ABEA system.
@@ -42,8 +44,7 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         form: {
             submitOnChange: true,
             closeOnSubmit: false
-        },
-        dragDrop: [{ dragSelector: ".item-list .item, .skill-row-grid, .weapon-row-grid, .inventory-row-grid, .favorite-item", dropSelector: null }]
+        }
     };
 
     /** @override */
@@ -91,8 +92,8 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         context.inventory = items.filter(i => i.type !== "weapon");
 
         // Biography enrichment
-        context.enrichedCharacteristics = await TextEditor.enrichHTML(system.biography.characteristics, { async: true });
-        context.enrichedHistory = await TextEditor.enrichHTML(system.biography.history, { async: true });
+        context.enrichedCharacteristics = await TextEditor.implementation.enrichHTML(system.biography.characteristics);
+        context.enrichedHistory = await TextEditor.implementation.enrichHTML(system.biography.history);
 
         // Document for ProseMirror
         context.document = actor;
@@ -160,18 +161,11 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         return tabs;
     }
 
+    /** @override */
     async _onRender(context, options) {
-        super._onRender(context, options);
+        // ActorSheetV2 binds DragDrop for ".draggable" elements, calling _onDragStart/_onDrop
+        await super._onRender(context, options);
 
-        // Manually bind DragDrop for ActorSheetV2 (REQUIRED as it doesn't auto-bind from options)
-        new DragDrop({
-            dragSelector: ".item-list .item, .skill-row-grid, .weapon-row-grid, .inventory-row-grid, .favorite-item",
-            dropSelector: null,
-            callbacks: {
-                dragstart: this._onDragStart.bind(this),
-                drop: this._onDrop.bind(this)
-            }
-        }).bind(this.element);
         const slots = this.element.querySelectorAll(".favorite-item");
         slots.forEach(slot => {
             slot.addEventListener("dragover", this._onDragOverSlot.bind(this));
@@ -199,6 +193,11 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         const li = event.currentTarget;
         if (event.target.classList.contains("content-link")) return;
 
+        // Favorites also carry data-index, so they must be checked before skills
+        if (li.classList.contains("favorite-item")) {
+            return this._onDragStartFavorite(event);
+        }
+
         // Handle Skills
         if (li.dataset.index) {
             const index = parseInt(li.dataset.index);
@@ -211,10 +210,6 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
             };
             event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
             return;
-        }
-
-        if (li.classList.contains("favorite-item")) {
-            return this._onDragStartFavorite(event);
         }
 
         // Handle Items
@@ -246,7 +241,7 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     /** @override */
     async _onDrop(event) {
-        const data = TextEditor.getDragEventData(event);
+        const data = TextEditor.implementation.getDragEventData(event);
         const actor = this.document;
 
         // 1. Check Favorites Panel Drop (Priority)
@@ -322,26 +317,10 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
             const sourceItem = favorites[sourceIndex];
             const targetItem = favorites[targetIndex];
 
-            // Perform Swap
+            // Perform Swap (moving to an empty slot clears the source slot)
             favorites[targetIndex] = sourceItem;
-            if (targetItem) {
-                favorites[sourceIndex] = targetItem;
-            } else {
-                delete favorites[sourceIndex];
-                favorites[`-= ${sourceIndex}`] = null; // Explicit deletion
-            }
+            favorites[sourceIndex] = targetItem ?? _del;
 
-            // If moved to empty, ensure source is cleared
-            if (!targetItem) {
-                delete favorites[sourceIndex];
-                favorites[`-= ${sourceIndex}`] = null;
-            }
-
-            // Update flags - replacing the whole object is safest here to avoid merge weirdness with sparse keys
-            // But we can just use the expanded object with -= keys where needed, actually simplest is:
-            // Unset whole flag then Set whole flag to be 100% sure of structure, 
-            // OR just update.
-            // Let's try direct update first.
             await actor.update({ "flags.abea.favorites": favorites });
             return;
         }
@@ -479,7 +458,7 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     static async #onEditImage(event, target) {
         const actor = this.document;
         const current = actor.img;
-        const fp = new FilePicker({
+        const fp = new FilePicker.implementation({
             type: "image",
             current: current,
             callback: path => {
