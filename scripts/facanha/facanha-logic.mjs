@@ -142,6 +142,7 @@ export class FacanhaLogic {
             hasSkill: !!rollResult.skill,
             rank: Number(rollResult.skill?.rank) || 0,
             bonus: rollResult.bonus,
+            wounded: rollResult.wounded,
             isCritical: rollResult.isCritical,
             isFumble: rollResult.isFumble,
             difficulty: { label: flagData.dificuldadeLabel, cd },

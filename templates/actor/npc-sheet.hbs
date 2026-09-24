@@ -145,6 +145,18 @@
         <section class="npc-column weapons-column">
             <h3 class="npc-section-title">{{localize "ABEA.Tabs.Weapons"}}</h3>
 
+            <div class="combat-actions-bar">
+                <button type="button" data-action="combatDefend" data-tooltip="{{localize 'ABEA.Combat.Hint.Defend'}}">
+                    <i class="fas fa-shield-halved"></i> {{localize "ABEA.Combat.Action.Defend"}}
+                </button>
+                <button type="button" data-action="combatDodge" data-tooltip="{{localize 'ABEA.Combat.Hint.Dodge'}}">
+                    <i class="fas fa-person-running"></i> {{localize "ABEA.Combat.Action.Dodge"}}
+                </button>
+                <button type="button" data-action="combatAid" data-tooltip="{{localize 'ABEA.Combat.Hint.Aid'}}">
+                    <i class="fas fa-handshake-angle"></i> {{localize "ABEA.Combat.Action.Aid"}}
+                </button>
+            </div>
+
             <!-- Weapon Header -->
             <div class="npc-weapon-grid-layout npc-skill-header">
                 <div></div> <!-- Img -->
@@ -215,4 +227,20 @@
         </section>
 
     </main>
+
+    {{!-- TRAITS --}}
+    <footer class="npc-traits traits-list">
+        <span class="npc-section-title">{{localize "ABEA.Trait.Title"}}:</span>
+        {{#each traits as |trait|}}
+        <div class="trait-chip item" data-item-id="{{trait.id}}" data-tooltip="{{trait.system.description}}">
+            <img src="{{trait.img}}" alt="" />
+            <span class="trait-name">{{trait.name}}</span>
+            {{#if trait.system.flaw}}<span class="trait-flaw">{{localize "ABEA.Trait.Flaw"}}</span>{{/if}}
+            <a data-action="editItem" title="{{localize 'ABEA.Item.Edit'}}"><i class="fas fa-edit"></i></a>
+            <a data-action="deleteItem" title="{{localize 'ABEA.Item.Delete'}}"><i class="fas fa-trash"></i></a>
+        </div>
+        {{else}}
+        <span class="traits-empty">{{localize "ABEA.Trait.DropHere"}}</span>
+        {{/each}}
+    </footer>
 </div>

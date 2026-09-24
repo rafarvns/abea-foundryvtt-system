@@ -4,26 +4,26 @@
             style="cursor: pointer;" />
     </div>
 
-    <div class="defense-panel">
+    <div class="defense-panel" data-tooltip="{{defenseTooltip}}">
         <h3>{{localize "ABEA.Defense.Title"}}</h3>
         <div class="defense-diamonds">
             <div class="defense-diamond passive">
                 <div class="diamond"></div>
                 <div class="diamond-label">{{localize "ABEA.Defense.PassiveShort"}}</div>
-                <input name="system.attributes.defense.passive" type="number"
-                    value="{{system.attributes.defense.passive}}" />
+                <input type="number" value="{{system.attributes.defense.passive}}" disabled />
             </div>
             <div class="defense-diamond active">
                 <div class="diamond"></div>
                 <div class="diamond-label">{{localize "ABEA.Defense.ActiveShort"}}</div>
-                <input name="system.attributes.defense.active" type="number"
-                    value="{{system.attributes.defense.active}}" />
+                <input type="number" value="{{system.attributes.defense.active}}" disabled />
             </div>
         </div>
     </div>
 
     <div class="energy-panel">
-        <h3>{{localize "ABEA.Energy.Title"}}</h3>
+        <h3>{{localize "ABEA.Energy.Title"}}
+            <a class="energy-rest" data-action="restoreEnergy" data-tooltip="{{localize 'ABEA.Energy.RestHint'}}"><i class="fas fa-bed"></i></a>
+        </h3>
         <div class="energy-circles">
             <div class="energy-circle-container">
                 <div class="energy-circle">
@@ -34,7 +34,8 @@
             </div>
             <div class="energy-circle-container">
                 <div class="energy-circle">
-                    <input name="system.attributes.energy.max" type="number" value="{{system.attributes.energy.max}}" />
+                    <input type="number" value="{{system.attributes.energy.max}}" disabled
+                        data-tooltip="{{localize 'ABEA.Energy.MaxHint'}}" />
                 </div>
                 <div class="energy-label">{{localize "ABEA.Energy.Max"}}</div>
             </div>

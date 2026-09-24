@@ -1,6 +1,7 @@
 import { FACANHAS } from "../constants/facanhas.mjs";
 import { CATEGORY_MAPPING } from "../constants/category-mapping.mjs";
 import { ABEA } from "../config.mjs";
+import { normalizeName } from "../helpers/rules.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 const { renderTemplate } = foundry.applications.handlebars;
@@ -49,11 +50,12 @@ export class FacanhaSolicitorDialog {
         };
 
         const content = await renderTemplate("systems/abea/templates/chat/facanha-dialog.hbs", context);
+        const featImages = await this._getFeatImages();
 
         console.log("ABEA | Dialog content generated, opening DialogV2...");
         const result = await DialogV2.wait({
             window: { title: game.i18n.localize("ABEA.Facanha.Card.Title"), resizable: true },
-            classes: ["abea", "facanha-dialog", "sheet", "item"],
+            classes: ["abea", "abea-dialog", "facanha-dialog", "sheet", "item"],
             position: { width: 1000 },
             content: content,
             buttons: [{
@@ -170,10 +172,14 @@ export class FacanhaSolicitorDialog {
                                 featBtn.type = "button";
                                 featBtn.className = "feat-btn";
                                 featBtn.dataset.feat = feat;
-                                // Modified Structure with Image Placeholder
+                                // Skill art from the compendium, or a placeholder icon
+                                const img = featImages.get(normalizeName(feat));
+                                const icon = img
+                                    ? `<img class="feat-img" src="${img}" alt="">`
+                                    : `<div class="feat-img-placeholder"><i class="fas fa-bolt"></i></div>`;
                                 featBtn.innerHTML = `
                                     <div class="feat-content">
-                                        <div class="feat-img-placeholder"><i class="fas fa-bolt"></i></div>
+                                        ${icon}
                                         <span class="feat-name">${feat}</span>
                                     </div>
                                     <i class="fas fa-check check-icon" style="opacity: 0;"></i>
@@ -205,6 +211,17 @@ export class FacanhaSolicitorDialog {
         // DialogV2 resolves with the button action name when a callback returns nothing,
         // so only a data object counts as a valid request
         return (result && typeof result === "object") ? result : null;
+    }
+
+    /**
+     * Skill images from the Habilidades compendium, keyed by normalized name.
+     * @returns {Promise<Map<string, string>>}
+     */
+    static async _getFeatImages() {
+        const pack = game.packs.get("abea.abea-skills");
+        if (!pack) return new Map();
+        const index = await pack.getIndex({ fields: ["img"] });
+        return new Map(index.map(entry => [normalizeName(entry.name), entry.img]));
     }
 
     static _getSkillListOptions() {

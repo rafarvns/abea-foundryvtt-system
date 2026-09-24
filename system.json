@@ -69,6 +69,11 @@
         "htmlFields": [
           "description"
         ]
+      },
+      "trait": {
+        "htmlFields": [
+          "description"
+        ]
       }
     }
   },
@@ -105,6 +110,17 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    },
+    {
+      "name": "abea-traits",
+      "label": "Características",
+      "path": "packs/abea-traits",
+      "type": "Item",
+      "system": "abea",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "packFolders": [
@@ -114,7 +130,8 @@
       "packs": [
         "abea-weapons",
         "abea-skills",
-        "abea-items"
+        "abea-items",
+        "abea-traits"
       ]
     }
   ],

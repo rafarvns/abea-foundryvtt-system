@@ -1,5 +1,18 @@
 <div class="weapons-tab-content">
 
+    <!-- Combat actions without a weapon (p. 42-43) -->
+    <div class="combat-actions-bar">
+        <button type="button" data-action="combatDefend" data-tooltip="{{localize 'ABEA.Combat.Hint.Defend'}}">
+            <i class="fas fa-shield-halved"></i> {{localize "ABEA.Combat.Action.Defend"}}
+        </button>
+        <button type="button" data-action="combatDodge" data-tooltip="{{localize 'ABEA.Combat.Hint.Dodge'}}">
+            <i class="fas fa-person-running"></i> {{localize "ABEA.Combat.Action.Dodge"}}
+        </button>
+        <button type="button" data-action="combatAid" data-tooltip="{{localize 'ABEA.Combat.Hint.Aid'}}">
+            <i class="fas fa-handshake-angle"></i> {{localize "ABEA.Combat.Action.Aid"}}
+        </button>
+    </div>
+
     <!-- Headers Grid -->
     <div class="weapons-header-row">
         <div class="weapon-header-line-left"></div>
@@ -12,7 +25,7 @@
     <!-- Weapons List Grid -->
     <div class="weapons-list-grid">
         {{#each weapons as |item|}}
-        <div class="weapon-row-grid item draggable" data-item-id="{{item.id}}" data-tooltip="{{item.system.description}}"
+        <div class="weapon-row-grid item draggable" data-item-id="{{item.id}}" data-tooltip="{{abeaItemTooltip item}}"
             draggable="true">
             <!-- Image -->
             <div class="weapon-image">

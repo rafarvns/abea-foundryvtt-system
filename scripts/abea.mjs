@@ -9,13 +9,15 @@ import { ABEA } from "./config.mjs";
 import { registerSettings } from "./settings.mjs";
 import { AbeaActor } from "./documents/actor.mjs";
 import { AbeaItem } from "./documents/item.mjs";
+import { AbeaCombat } from "./documents/combat.mjs";
 import { AbeaActorSheet } from "./sheets/actor-sheet.mjs";
 import { AbeaNPCSheet } from "./sheets/npc-sheet.mjs";
 import { AbeaItemSheet } from "./sheets/item-sheet.mjs";
 import { AbeaWeaponSheet } from "./sheets/item-weapon-sheet.mjs";
 import { AbeaSkillSheet } from "./sheets/item-skill-sheet.mjs";
+import { AbeaTraitSheet } from "./sheets/item-trait-sheet.mjs";
 import { CharacterData } from "./models/character-data.mjs";
-import { AbeaItemData, AbeaWeaponData, AbeaSkillData } from "./models/item-data.mjs";
+import { AbeaItemData, AbeaWeaponData, AbeaSkillData, AbeaTraitData } from "./models/item-data.mjs";
 import { createItemMacro, rollItemMacro, rollSkillMacro } from "./helpers/macros.mjs";
 import { checkFacanha } from "./helpers/utils.mjs";
 import { FacanhaSolicitorDialog } from "./facanha/facanha-dialog.mjs";
@@ -62,10 +64,15 @@ Hooks.once("init", async function () {
         npc: CharacterData
     };
     CONFIG.Item.documentClass = AbeaItem;
+
+    // Combat: 3d6 initiative, players win ties (p. 40)
+    CONFIG.Combat.documentClass = AbeaCombat;
+    CONFIG.Combat.initiative = ABEA.initiative;
     CONFIG.Item.dataModels = {
         item: AbeaItemData,
         weapon: AbeaWeaponData,
-        skill: AbeaSkillData
+        skill: AbeaSkillData,
+        trait: AbeaTraitData
     };
     console.log("ABEA | Registered Item Types:", Object.keys(CONFIG.Item.dataModels));
 
@@ -96,6 +103,11 @@ Hooks.once("init", async function () {
         makeDefault: true,
         label: "ABEA.Sheet.Skill"
     });
+    Items.registerSheet("abea", AbeaTraitSheet, {
+        types: ["trait"],
+        makeDefault: true,
+        label: "ABEA.Sheet.Trait"
+    });
 
     // Register Handlebars helpers
     Handlebars.registerHelper("range", function (from, to) {
@@ -108,6 +120,16 @@ Hooks.once("init", async function () {
 
     Handlebars.registerHelper("eq", function (a, b) {
         return a === b;
+    });
+
+    // Row tooltip: description plus the reference price (p. 92-96)
+    Handlebars.registerHelper("abeaItemTooltip", function (item) {
+        const parts = [];
+        if (item.system.description) parts.push(item.system.description);
+        if (item.system.price) {
+            parts.push(`<strong>${game.i18n.localize("ABEA.Item.Price")}:</strong> ${Number(item.system.price).toLocaleString("pt-BR")} réis`);
+        }
+        return parts.join("<hr>");
     });
 
     Handlebars.registerHelper("formatNumber", function (value) {
@@ -134,7 +156,9 @@ Hooks.once("init", async function () {
         "systems/abea/templates/chat/facanha-card.hbs",
         "systems/abea/templates/chat/roll-card.hbs",
         "systems/abea/templates/chat/attack-card.hbs",
-        "systems/abea/templates/chat/item-card.hbs"
+        "systems/abea/templates/chat/item-card.hbs",
+        "systems/abea/templates/chat/action-card.hbs",
+        "systems/abea/templates/item/item-trait-sheet.hbs"
     ]);
 });
 
@@ -161,8 +185,40 @@ Hooks.once("ready", async function () {
                 console.log(`ABEA | Dano de ${damage} aplicado via socket em ${actor.name} seguindo as regras avançadas.`);
             }
         }
+
+        // Combat flags on actors the requesting user doesn't own (Auxiliar ataque)
+        if (packet.type === "setFlag" && game.users.activeGM?.isSelf) {
+            const { uuid, key, value } = packet.data;
+            const actor = await fromUuid(uuid);
+            if (!actor) return;
+            if (value === null) await actor.unsetFlag("abea", key);
+            else await actor.setFlag("abea", key, value);
+        }
     });
 });
+
+/* -------------------------------------------- */
+/*  Combat Hooks                                */
+/* -------------------------------------------- */
+
+/**
+ * Round-based bonuses (Defender-se, Esquivar-se) are derived from the current round,
+ * so refresh the combatants when the round changes or the combat ends.
+ * @param {Combat} combat
+ */
+function refreshCombatants(combat) {
+    for (const combatant of combat.combatants) {
+        const actor = combatant.actor;
+        if (!actor) continue;
+        actor.reset();
+        if (actor.sheet?.rendered) actor.sheet.render();
+    }
+}
+
+Hooks.on("updateCombat", (combat, changed) => {
+    if ("round" in changed) refreshCombatants(combat);
+});
+Hooks.on("deleteCombat", combat => refreshCombatants(combat));
 
 /* -------------------------------------------- */
 /*  Facanha Hooks                               */

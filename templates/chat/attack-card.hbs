@@ -1,7 +1,7 @@
 <div class="abea chat-card attack-card">
     <header class="card-header flexrow">
         <img src="{{weapon.img}}" title="{{weapon.name}}" />
-        <h3 class="item-name">{{weapon.name}}</h3>
+        <h3 class="item-name">{{weapon.name}}{{#if actionLabel}}<small class="card-subtitle">{{actionLabel}}</small>{{/if}}</h3>
     </header>
 
     <div class="card-content">
@@ -11,19 +11,40 @@
             </p>
             {{#if target}}
             <p><strong>{{localize 'ABEA.Chat.Target'}}:</strong> {{target.name}}</p>
-            <p><strong>{{localize 'ABEA.Chat.Defense'}}:</strong> {{target.defense}}</p>
+            {{#if target.defenseLabel}}
+            <p><strong>{{localize 'ABEA.Chat.Defense'}} ({{target.defenseLabel}}):</strong> &minus;{{target.defense}}</p>
             {{/if}}
-            <p><strong>{{localize 'ABEA.Chat.Goal'}}:</strong> {{goal}}+</p>
+            {{/if}}
+            <p><strong>{{localize 'ABEA.Facanha.Card.Difficulty'}}:</strong> {{difficulty.label}} (CD {{difficulty.cd}})</p>
+            {{#if band}}
+            <p><strong>{{localize 'ABEA.Combat.Distance'}}:</strong> {{band.distance}} ({{band.label}})</p>
+            {{/if}}
+            {{#each modifiers}}
+            <p><strong>{{label}}:</strong> {{#if (gt value 0)}}+{{/if}}{{value}}</p>
+            {{/each}}
+            {{#if wounded}}
+            <p class="card-note">{{localize 'ABEA.Chat.Wounded'}}</p>
+            {{/if}}
         </div>
 
         <hr>
 
         <div class="card-roll">{{{rollHTML}}}</div>
 
+        {{#if isCritical}}
+        <div class="card-result critical">{{localize 'ABEA.Chat.Critical'}}</div>
+        {{else if isFumble}}
+        <div class="card-result fumble">{{localize 'ABEA.Chat.Fumble'}}</div>
+        {{/if}}
+
         <div class="card-result {{#if isHit}}success{{else}}failure{{/if}}">
             {{#if isHit}}{{localize 'ABEA.Chat.Hit'}}{{else}}{{localize 'ABEA.Chat.Miss'}}{{/if}}
-            <small>{{localize 'ABEA.Chat.Total'}}: {{total}}{{#if isHit}} · {{localize 'ABEA.Chat.Damage'}}: {{damage}}{{/if}}</small>
+            <small>{{localize 'ABEA.Chat.Total'}}: {{total}}{{#if (and isHit showDamage)}} · {{localize 'ABEA.Chat.Damage'}}: {{damage}}{{/if}}</small>
         </div>
+
+        {{#if effectNote}}
+        <p class="card-note">{{localize effectNote}}</p>
+        {{/if}}
 
         {{#if damageNote}}
         <p class="card-note">{{localize damageNote}}</p>

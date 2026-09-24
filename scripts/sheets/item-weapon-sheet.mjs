@@ -29,6 +29,7 @@ export class AbeaWeaponSheet extends AbeaItemSheet {
         const context = await super._prepareContext(options);
 
         context.isGM = game.user.isGM;
+        context.conditionKey = String(context.system.condition ?? 0);
 
         // Resolve associated skill if present
         if (context.system.skillType) {

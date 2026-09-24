@@ -35,7 +35,8 @@
 
         <div class="inventory-list-grid">
             {{#each inventory as |item|}}
-            <div class="inventory-row-grid item draggable" data-item-id="{{item.id}}" draggable="true">
+            <div class="inventory-row-grid item draggable" data-item-id="{{item.id}}" draggable="true"
+                data-tooltip="{{abeaItemTooltip item}}">
                 <!-- Image -->
                 <div class="inventory-image">
                     <img src="{{item.img}}" title="{{item.name}}" data-action="rollItem" style="cursor: pointer;" />

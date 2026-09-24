@@ -12,8 +12,14 @@
             {{else}}
             <p><strong>{{localize 'ABEA.Chat.Bonus'}}:</strong> {{localize 'ABEA.Chat.NoProficiency'}}</p>
             {{/if}}
+            {{#if power}}
+            <p><strong>{{localize 'ABEA.Chat.PowerLevel'}}:</strong> {{power.level}} (&minus;{{power.cost}} {{localize 'ABEA.Energy.Title'}})</p>
+            {{/if}}
             {{#if difficulty}}
             <p><strong>{{localize 'ABEA.Facanha.Card.Difficulty'}}:</strong> {{difficulty.label}} (CD {{difficulty.cd}})</p>
+            {{/if}}
+            {{#if wounded}}
+            <p class="card-note">{{localize 'ABEA.Chat.Wounded'}}</p>
             {{/if}}
         </div>
 

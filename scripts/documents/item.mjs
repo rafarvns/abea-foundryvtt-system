@@ -7,6 +7,15 @@ const { TextEditor } = foundry.applications.ux;
  */
 export class AbeaItem extends Item {
 
+    /**
+     * Default icon for new items: traits use an eye instead of the item bag.
+     * @override
+     */
+    static getDefaultArtwork(itemData) {
+        if (itemData?.type === "trait") return { img: "icons/svg/eye.svg" };
+        return super.getDefaultArtwork(itemData);
+    }
+
     /** @override */
     prepareData() {
         super.prepareData();
