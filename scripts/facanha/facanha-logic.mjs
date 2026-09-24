@@ -1,6 +1,8 @@
 
 import { checkFacanha } from "../helpers/utils.mjs";
 
+const { renderTemplate } = foundry.applications.handlebars;
+
 export class FacanhaLogic {
     static get socketName() {
         return "system.abea";
@@ -128,19 +130,30 @@ export class FacanhaLogic {
             };
         }
 
-        // Send the detailed roll to chat (so dice are visible)
-        // We can use the existing rollSkill flavor or make a simple one.
-        // Let's rely on standard roll message for verification.
-        const flavor = `Rolagem de Façanha: ${skillName} ` + (rollResult.skill ? `(+${rollResult.bonus})` : "(Sem Perícia)");
-        await rollResult.roll.toMessage({
-            speaker: ChatMessage.getSpeaker({ actor: actor }),
-            flavor: flavor
-        });
-
         // Determine Success
         const cd = flagData.cd;
         const passed = rollResult.total >= cd;
         const status = passed ? "passou" : "falhou"; // or "sucesso" / "fracasso"? Legacy used "passou"/"falhou"
+
+        // Send the detailed roll to chat (so dice are visible)
+        const content = await renderTemplate("systems/abea/templates/chat/roll-card.hbs", {
+            name: skillName,
+            img: rollResult.skill?.img || "icons/svg/d20.svg",
+            hasSkill: !!rollResult.skill,
+            rank: Number(rollResult.skill?.rank) || 0,
+            bonus: rollResult.bonus,
+            wounded: rollResult.wounded,
+            isCritical: rollResult.isCritical,
+            isFumble: rollResult.isFumble,
+            difficulty: { label: flagData.dificuldadeLabel, cd },
+            passed,
+            total: rollResult.total,
+            rollHTML: await rollResult.roll.render()
+        });
+        await rollResult.roll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor: actor }),
+            content
+        });
 
         // Send Result to GM via Socket
         // If we are GM, process locally
@@ -199,14 +212,15 @@ export class FacanhaLogic {
         });
     }
 
+    /**
+     * @param {HTMLElement} html      The rendered chat message element
+     * @param {ChatMessage} message
+     */
     static activateChatListeners(html, message) {
         // Find the button inside the message
-        const button = html.find ? html.find(".facanha-rolar-btn") : $(html).find(".facanha-rolar-btn");
-        if (button.length > 0) {
-            button.on("click", (event) => {
-                event.preventDefault();
-                this.rollFacanha(message.id);
-            });
-        }
+        html.querySelector(".facanha-rolar-btn")?.addEventListener("click", (event) => {
+            event.preventDefault();
+            this.rollFacanha(message.id);
+        });
     }
 }

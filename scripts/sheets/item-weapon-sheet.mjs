@@ -1,5 +1,7 @@
 import { AbeaItemSheet } from "./item-sheet.mjs";
 
+const { TextEditor } = foundry.applications.ux;
+
 /**
  * Sheet for Weapon items.
  * @extends {AbeaItemSheet}
@@ -27,6 +29,7 @@ export class AbeaWeaponSheet extends AbeaItemSheet {
         const context = await super._prepareContext(options);
 
         context.isGM = game.user.isGM;
+        context.conditionKey = String(context.system.condition ?? 0);
 
         // Resolve associated skill if present
         if (context.system.skillType) {
@@ -79,19 +82,9 @@ export class AbeaWeaponSheet extends AbeaItemSheet {
         }
     }
 
-    /** @override */
-    _onRender(context, options) {
-        super._onRender(context, options);
-
-        // Manually bind Drag & Drop since ApplicationV2 doesn't use DEFAULT_OPTIONS.dragDrop automatically in the same way
-        // We assume the root element (this.element) is the drop target
-        this.element.addEventListener("drop", this._onDrop.bind(this));
-        // We also need dragover to allow dropping
-        this.element.addEventListener("dragover", (event) => event.preventDefault());
-    }
-
     /**
-     * Handle Drop Event
+     * Handle Drop Event (ItemSheetV2 binds DragDrop to the whole sheet and calls this method)
+     * @override
      * @param {DragEvent} event 
      */
     async _onDrop(event) {
@@ -99,7 +92,7 @@ export class AbeaWeaponSheet extends AbeaItemSheet {
         if (!game.user.isGM) return; // Only GM can drop items
         console.log("ABEA | Drop event detected on Weapon Sheet", event);
 
-        const data = TextEditor.getDragEventData(event);
+        const data = TextEditor.implementation.getDragEventData(event);
         console.log("ABEA | Drop data:", data);
 
         if (data.type !== "Item") return; // We only care about Items

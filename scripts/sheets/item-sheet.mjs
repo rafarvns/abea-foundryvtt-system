@@ -1,5 +1,6 @@
 const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
+const { FilePicker } = foundry.applications.apps;
 
 /**
  * Extend the base ItemSheetV2 for the ABEA system.
@@ -59,7 +60,7 @@ export class AbeaItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     static async #onEditImage(event, target) {
         const item = this.document;
         const current = item.img;
-        const fp = new FilePicker({
+        const fp = new FilePicker.implementation({
             type: "image",
             current: current,
             callback: path => {

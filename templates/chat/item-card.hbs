@@ -1,0 +1,17 @@
+<div class="abea chat-card item-card">
+    <header class="card-header flexrow">
+        <img src="{{item.img}}" title="{{item.name}}" />
+        <h3 class="item-name">{{item.name}}</h3>
+    </header>
+
+    <div class="card-content">
+        {{#if heal}}
+        <div class="card-details">
+            <p>{{localize 'ABEA.Item.Action.HealMessage' value=heal.value}}</p>
+            <p><strong>{{localize 'ABEA.Condition.Resistance'}}:</strong> {{heal.before}} &rarr; {{heal.after}}</p>
+        </div>
+        {{else if description}}
+        <div class="card-description">{{{description}}}</div>
+        {{/if}}
+    </div>
+</div>

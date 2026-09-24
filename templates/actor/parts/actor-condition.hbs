@@ -1,7 +1,9 @@
 <div class="physical-condition condition-panel-grid">
     <div class="condition-tracks-column">
         <div class="track resistance-track">
-            <label>{{localize "ABEA.Condition.Resistance"}}</label>
+            <label>{{localize "ABEA.Condition.Resistance"}}
+                {{#if system.attributes.condition.wounded}}<span class="wounded-tag" data-tooltip="{{localize 'ABEA.Condition.WoundedHint'}}">{{localize "ABEA.Condition.Wounded"}}</span>{{/if}}
+            </label>
             <div class="pips">
                 {{#each resistanceRange}}
                 <div class="pip {{#if (gte ../system.attributes.condition.resistance this)}}checked{{/if}}"
@@ -16,10 +18,14 @@
                 {{#each (range 1 10)}}
                 <div class="pip static checked"></div>
                 {{/each}}
-                <!-- 5 Toggleable Pips for Bonus -->
-                {{#each (range 1 5)}}
-                <div class="pip max-bonus {{#if (gte ../system.attributes.condition.resistanceMaxBonus this)}}checked{{/if}}"
-                    data-action="toggleCondition" data-field="resistanceMaxBonus" data-value="{{this}}"></div>
+                <!-- 5 extra pips: granted by skills (locked) or manual bonus (toggleable) -->
+                {{#each resistanceBonusPips}}
+                {{#if auto}}
+                <div class="pip max-bonus auto checked" data-tooltip="{{localize 'ABEA.Condition.SkillBonusHint'}}"></div>
+                {{else}}
+                <div class="pip max-bonus {{#if checked}}checked{{/if}}"
+                    data-action="toggleCondition" data-field="resistanceMaxBonus" data-value="{{value}}"></div>
+                {{/if}}
                 {{/each}}
             </div>
         </div>

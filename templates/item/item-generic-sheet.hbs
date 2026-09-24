@@ -19,6 +19,22 @@
     <div class="item-properties">
         <div class="type-properties">
             <div class="form-group">
+                <label>{{localize "ABEA.Item.Price"}}</label>
+                <div class="form-fields">
+                    <input type="number" name="system.price" value="{{system.price}}" min="0" step="1" />
+                </div>
+            </div>
+
+            <div class="form-group" data-tooltip="{{localize 'ABEA.Item.Armor.Hint'}}">
+                <label>{{localize "ABEA.Item.Armor.Label"}}</label>
+                <div class="form-fields">
+                    <select name="system.armor">
+                        {{selectOptions config.armorSlots selected=system.armor localize=true}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label>{{localize "ABEA.Item.Action.Label"}}</label>
                 <div class="form-fields">
                     <select name="system.action.type">

@@ -1,0 +1,123 @@
+---
+title: "TokenMovementWaypoint | Foundry Virtual Tabletop - API Documentation - Version 14"
+url: "https://foundryvtt.com/api/v14/interfaces/foundry.documents.types.TokenMovementWaypoint.html"
+category: "interfaces"
+---
+
+# Interface TokenMovementWaypoint
+
+interface TokenMovementWaypoint {  
+Â Â Â Â [action](#action): string;  
+Â Â Â Â [checkpoint](#checkpoint): boolean;  
+Â Â Â Â [depth](#depth): number;  
+Â Â Â Â [elevation](#elevation): number;  
+Â Â Â Â [explicit](#explicit): boolean;  
+Â Â Â Â [height](#height): number;  
+Â Â Â Â [level](#level): string;  
+Â Â Â Â [shape](#shape): [TokenShapeType](../types/CONST.TokenShapeType.md);  
+Â Â Â Â [snapped](#snapped): boolean;  
+Â Â Â Â [width](#width): number;  
+Â Â Â Â [x](#x): number;  
+Â Â Â Â [y](#y): number;  
+}
+
+##### Index
+
+### Properties
+
+[action](#action)
+[checkpoint](#checkpoint)
+[depth](#depth)
+[elevation](#elevation)
+[explicit](#explicit)
+[height](#height)
+[level](#level)
+[shape](#shape)
+[snapped](#snapped)
+[width](#width)
+[x](#x)
+[y](#y)
+
+## Properties
+
+### action
+
+action: string
+
+The movement action from the previous to this waypoint.
+Default: the prepared movement action.
+
+### checkpoint
+
+checkpoint: boolean
+
+Is this waypoint a checkpoint? There's an update/movement operation
+for each checkpoint in a movement path. At a checkpoint the movement
+can be stopped or paused. Default: `false`.
+
+### depth
+
+depth: number
+
+The depth in grid spaces (nonnegative).
+Default: the previous or source depth.
+
+### elevation
+
+elevation: number
+
+The elevation in grid units.
+Default: the previous or source elevation.
+
+### explicit
+
+explicit: boolean
+
+Was this waypoint explicitly placed by the user? Default: `false`.
+
+### height
+
+height: number
+
+The height in grid spaces (positive).
+Default: the previous or source height.
+
+### level
+
+level: string
+
+The level ID. Default: the previous or source level ID.
+
+### shape
+
+shape: [TokenShapeType](../types/CONST.TokenShapeType.md)
+
+The shape type (see [CONST.TOKEN\_SHAPES](../variables/CONST.TOKEN_SHAPES.md)).
+Default: the previous or source shape.
+
+### snapped
+
+snapped: boolean
+
+Was this waypoint snapped to the grid? Default: `false`.
+
+### width
+
+width: number
+
+The width in grid spaces (positive).
+Default: the previous or source width.
+
+### x
+
+x: number
+
+The top-left x-coordinate in pixels (integer).
+Default: the previous or source x-coordinate.
+
+### y
+
+y: number
+
+The top-left y-coordinate in pixels (integer).
+Default: the previous or source y-coordinate.

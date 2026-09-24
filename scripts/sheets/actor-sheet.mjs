@@ -1,5 +1,11 @@
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
+const { TextEditor } = foundry.applications.ux;
+const { FilePicker } = foundry.applications.apps;
+const { DialogV2 } = foundry.applications.api;
+
+// Book advice: two or three traits, at least one of them a flaw (p. 33)
+const TRAIT_LIMIT = 3;
 
 /**
  * Extend the base ActorSheetV2 for the ABEA system.
@@ -37,13 +43,17 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
             rollWeapon: AbeaActorSheet.#onRollWeapon,
             deleteFavorite: AbeaActorSheet.#onDeleteFavorite,
             rollFavorite: AbeaActorSheet.#onRollFavorite,
-            rollItem: AbeaActorSheet.#onRollItem
+            rollItem: AbeaActorSheet.#onRollItem,
+            restoreEnergy: AbeaActorSheet.#onRestoreEnergy,
+            grantLearningPoints: AbeaActorSheet.#onGrantLearningPoints,
+            combatDefend: AbeaActorSheet.#onCombatDefend,
+            combatDodge: AbeaActorSheet.#onCombatDodge,
+            combatAid: AbeaActorSheet.#onCombatAid
         },
         form: {
             submitOnChange: true,
             closeOnSubmit: false
-        },
-        dragDrop: [{ dragSelector: ".item-list .item, .skill-row-grid, .weapon-row-grid, .inventory-row-grid, .favorite-item", dropSelector: null }]
+        }
     };
 
     /** @override */
@@ -79,20 +89,37 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
             img: s.img || "icons/svg/item-bag.svg"
         }));
 
-        // Dynamic Resistance Calculation
-        const minRes = 10;
-        const resBonus = system.attributes.condition.resistanceMaxBonus || 0;
-        const currentMaxRes = minRes + resBonus;
-        context.resistanceRange = Array.from({ length: currentMaxRes }, (_, i) => i + 1);
+        // Resistance: one damage pip per point of the (derived) maximum
+        const condition = system.attributes.condition;
+        context.resistanceRange = Array.from({ length: condition.resistanceMax }, (_, i) => i + 1);
+
+        // The 5 extra max pips: first the ones granted by skills (locked), then the manual bonus (clickable)
+        const auto = Math.min(5, condition.resistanceAuto || 0);
+        const manual = condition.resistanceMaxBonus || 0;
+        context.resistanceBonusPips = Array.from({ length: 5 }, (_, i) => ({
+            auto: i < auto,
+            checked: i < auto + manual,
+            value: i + 1 - auto
+        }));
+
+        // Derived defense, with a tooltip explaining where it comes from
+        const breakdown = system.attributes.defense.breakdown ?? {};
+        context.defenseTooltip = game.i18n.format("ABEA.Defense.Breakdown", {
+            head: breakdown.head ?? 0,
+            torso: breakdown.torso ?? 0,
+            weapon: breakdown.weapon ?? 0,
+            shield: breakdown.shield ?? 0
+        });
 
         // Prepare Items
         const items = actor.items;
         context.weapons = items.filter(i => i.type === "weapon");
-        context.inventory = items.filter(i => i.type !== "weapon");
+        context.inventory = items.filter(i => i.type === "item");
+        context.traits = items.filter(i => i.type === "trait");
+        context.isGM = game.user.isGM;
 
         // Biography enrichment
-        context.enrichedCharacteristics = await TextEditor.enrichHTML(system.biography.characteristics, { async: true });
-        context.enrichedHistory = await TextEditor.enrichHTML(system.biography.history, { async: true });
+        context.enrichedHistory = await TextEditor.implementation.enrichHTML(system.biography.history);
 
         // Document for ProseMirror
         context.document = actor;
@@ -160,18 +187,11 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         return tabs;
     }
 
+    /** @override */
     async _onRender(context, options) {
-        super._onRender(context, options);
+        // ActorSheetV2 binds DragDrop for ".draggable" elements, calling _onDragStart/_onDrop
+        await super._onRender(context, options);
 
-        // Manually bind DragDrop for ActorSheetV2 (REQUIRED as it doesn't auto-bind from options)
-        new DragDrop({
-            dragSelector: ".item-list .item, .skill-row-grid, .weapon-row-grid, .inventory-row-grid, .favorite-item",
-            dropSelector: null,
-            callbacks: {
-                dragstart: this._onDragStart.bind(this),
-                drop: this._onDrop.bind(this)
-            }
-        }).bind(this.element);
         const slots = this.element.querySelectorAll(".favorite-item");
         slots.forEach(slot => {
             slot.addEventListener("dragover", this._onDragOverSlot.bind(this));
@@ -199,6 +219,11 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         const li = event.currentTarget;
         if (event.target.classList.contains("content-link")) return;
 
+        // Favorites also carry data-index, so they must be checked before skills
+        if (li.classList.contains("favorite-item")) {
+            return this._onDragStartFavorite(event);
+        }
+
         // Handle Skills
         if (li.dataset.index) {
             const index = parseInt(li.dataset.index);
@@ -211,10 +236,6 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
             };
             event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
             return;
-        }
-
-        if (li.classList.contains("favorite-item")) {
-            return this._onDragStartFavorite(event);
         }
 
         // Handle Items
@@ -246,7 +267,7 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     /** @override */
     async _onDrop(event) {
-        const data = TextEditor.getDragEventData(event);
+        const data = TextEditor.implementation.getDragEventData(event);
         const actor = this.document;
 
         // 1. Check Favorites Panel Drop (Priority)
@@ -268,6 +289,9 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         // 3. Resolve Item for standard drops
         const item = await Item.implementation.fromDropData(data);
         if (!item) return super._onDrop(event);
+
+        // Traits can be dropped on any tab
+        if (item.type === "trait") return this._onDropTrait(item);
 
         // 4. Tab-specific Logic
         let activeTab = this.tabGroups.primary;
@@ -322,26 +346,10 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
             const sourceItem = favorites[sourceIndex];
             const targetItem = favorites[targetIndex];
 
-            // Perform Swap
+            // Perform Swap (moving to an empty slot clears the source slot)
             favorites[targetIndex] = sourceItem;
-            if (targetItem) {
-                favorites[sourceIndex] = targetItem;
-            } else {
-                delete favorites[sourceIndex];
-                favorites[`-= ${sourceIndex}`] = null; // Explicit deletion
-            }
+            favorites[sourceIndex] = targetItem ?? _del;
 
-            // If moved to empty, ensure source is cleared
-            if (!targetItem) {
-                delete favorites[sourceIndex];
-                favorites[`-= ${sourceIndex}`] = null;
-            }
-
-            // Update flags - replacing the whole object is safest here to avoid merge weirdness with sparse keys
-            // But we can just use the expanded object with -= keys where needed, actually simplest is:
-            // Unset whole flag then Set whole flag to be 100% sure of structure, 
-            // OR just update.
-            // Let's try direct update first.
             await actor.update({ "flags.abea.favorites": favorites });
             return;
         }
@@ -371,6 +379,24 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         // 3. Save to specific index
         // We use the object key notation for updates
         await actor.update({ [`flags.abea.favorites.${targetIndex}`]: favData });
+    }
+
+    /**
+     * Handle dropping a trait (Característica). Warns, without blocking, about the book's advice.
+     * @param {Item} item
+     */
+    async _onDropTrait(item) {
+        const actor = this.document;
+        const traits = actor.items.filter(i => i.type === "trait");
+        if (traits.some(t => t.name === item.name)) return;
+        const created = await actor.createEmbeddedDocuments("Item", [item.toObject()]);
+        const all = [...traits, ...created];
+        if (all.length > TRAIT_LIMIT) {
+            ui.notifications.info(game.i18n.format("ABEA.Trait.TooMany", { limit: TRAIT_LIMIT }));
+        } else if ((all.length >= 2) && !all.some(t => t.system.flaw)) {
+            ui.notifications.info("ABEA.Trait.NoFlaw", { localize: true });
+        }
+        return created;
     }
 
     /**
@@ -479,7 +505,7 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     static async #onEditImage(event, target) {
         const actor = this.document;
         const current = actor.img;
-        const fp = new FilePicker({
+        const fp = new FilePicker.implementation({
             type: "image",
             current: current,
             callback: path => {
@@ -581,6 +607,48 @@ export class AbeaActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
             }
         }
     }
+    /**
+     * Rest: restore the daily energy of supernatural powers (p. 47).
+     */
+    static async #onRestoreEnergy(event, target) {
+        const energy = this.document.system.attributes.energy;
+        await this.document.update({ "system.attributes.energy.value": energy.max });
+    }
+
+    /**
+     * GM: grant learning points (default: the per-session award).
+     */
+    static async #onGrantLearningPoints(event, target) {
+        if (!game.user.isGM) return;
+        const actor = this.document;
+        const amount = await DialogV2.prompt({
+            window: { title: game.i18n.localize("ABEA.Learning.Grant") },
+            classes: ["abea", "abea-dialog"],
+            content: `<div class="form-group"><label>${game.i18n.localize("ABEA.Learning.Amount")}</label>
+                <div class="form-fields"><input type="number" name="amount" step="1" value="${CONFIG.ABEA.learning.sessionAward}" autofocus></div></div>`,
+            ok: { callback: (event, button) => Number(button.form.elements.amount.value) || 0 },
+            rejectClose: false
+        });
+        if (!amount) return;
+        const points = Number(actor.system.attributes.skillPoints) || 0;
+        await actor.update({ "system.attributes.skillPoints": Math.max(0, points + amount) });
+    }
+
+    /** Defender-se */
+    static async #onCombatDefend(event, target) {
+        return this.document.defend();
+    }
+
+    /** Esquivar-se */
+    static async #onCombatDodge(event, target) {
+        return this.document.dodge();
+    }
+
+    /** Auxiliar ataque */
+    static async #onCombatAid(event, target) {
+        return this.document.aid();
+    }
+
     /**
      * Handle rolling an item.
      * @param {Event} event 

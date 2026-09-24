@@ -40,7 +40,7 @@ export const FACANHAS = {
     ],
     "Línguas": [
         "Português", "Latim", "Espanhol", "Francês", "Árabe", "Tupi", "Guarani",
-        "Aimoré", "Goitacá", "Maracá", "Tremembé", "Ewe", "Fon", "Ioruba",
+        "Aimoré", "Goitacá", "Maracá", "Tremembé", "Evê", "Fon", "Ioruba",
         "Quicongo", "Quimbundo", "Umbundo"
     ]
 };

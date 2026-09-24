@@ -1,0 +1,26 @@
+---
+title: "WORLD_DOCUMENT_TYPES | Foundry Virtual Tabletop - API Documentation - Version 14"
+url: "https://foundryvtt.com/api/v14/variables/CONST.WORLD_DOCUMENT_TYPES.html"
+category: "variables"
+---
+
+# Variable WORLD\_DOCUMENT\_TYPES`Const`
+
+WORLD\_DOCUMENT\_TYPES: readonly [  
+Â Â Â Â "Actor",  
+Â Â Â Â "Cards",  
+Â Â Â Â "ChatMessage",  
+Â Â Â Â "Combat",  
+Â Â Â Â "FogExploration",  
+Â Â Â Â "Folder",  
+Â Â Â Â "Item",  
+Â Â Â Â "JournalEntry",  
+Â Â Â Â "Macro",  
+Â Â Â Â "Playlist",  
+Â Â Â Â "RollTable",  
+Â Â Â Â "Scene",  
+Â Â Â Â "Setting",  
+Â Â Â Â "User",  
+] = ...
+
+The allowed primary Document types which may exist within a World.
