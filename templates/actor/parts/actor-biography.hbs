@@ -1,10 +1,21 @@
 <div class="biography-tab">
     <div class="biography-panel">
         <div class="biography-grid">
-            <div class="bio-col-33">
-                <div class="skill-header-label">{{localize "ABEA.Biography.Characteristics"}}</div>
-                <textarea name="system.biography.characteristics"
-                    placeholder="{{localize 'ABEA.Biography.Characteristics'}}">{{system.biography.characteristics}}</textarea>
+            <div class="bio-col-33 traits-panel">
+                <div class="skill-header-label">{{localize "ABEA.Trait.Title"}}</div>
+                <div class="traits-list">
+                    {{#each traits as |trait|}}
+                    <div class="trait-chip item" data-item-id="{{trait.id}}" data-tooltip="{{trait.system.description}}">
+                        <img src="{{trait.img}}" alt="" />
+                        <span class="trait-name">{{trait.name}}</span>
+                        {{#if trait.system.flaw}}<span class="trait-flaw">{{localize "ABEA.Trait.Flaw"}}</span>{{/if}}
+                        <a data-action="editItem" title="{{localize 'ABEA.Item.Edit'}}"><i class="fas fa-edit"></i></a>
+                        <a data-action="deleteItem" title="{{localize 'ABEA.Item.Delete'}}"><i class="fas fa-trash"></i></a>
+                    </div>
+                    {{else}}
+                    <span class="traits-empty">{{localize "ABEA.Trait.DropHere"}}</span>
+                    {{/each}}
+                </div>
             </div>
             <div class="bio-col-66">
                 <div class="skill-header-label">{{localize "ABEA.Biography.History"}}</div>

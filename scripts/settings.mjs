@@ -8,6 +8,6 @@ export const registerSettings = function () {
         type: String,
         choices: CONFIG.supportedLanguages,
         default: "pt-BR",
-        onChange: () => SettingsConfig.reloadConfirm({ world: true })
+        onChange: () => foundry.applications.settings.SettingsConfig.reloadConfirm({ world: true })
     });
 };

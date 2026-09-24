@@ -53,6 +53,41 @@
             </div>
         </div>
         <div class="form-group">
+            <label>{{localize "ABEA.Weapon.Usage.Label"}}</label>
+            <div class="form-fields">
+                <select name="system.usage">
+                    {{selectOptions config.weaponUsage selected=system.usage localize=true}}
+                </select>
+            </div>
+        </div>
+        <div class="form-group" data-tooltip="{{localize 'ABEA.Weapon.Range.Hint'}}">
+            <label>{{localize "ABEA.Weapon.Range.Label"}}</label>
+            <div class="form-fields weapon-ranges">
+                <input type="number" name="system.ranges.normal" value="{{system.ranges.normal}}" min="0"
+                    data-tooltip="{{localize 'ABEA.Weapon.Range.Normal'}}" />
+                <input type="number" name="system.ranges.extended" value="{{system.ranges.extended}}" min="0"
+                    data-tooltip="{{localize 'ABEA.Weapon.Range.Extended'}}" />
+                <input type="number" name="system.ranges.distant" value="{{system.ranges.distant}}" min="0"
+                    data-tooltip="{{localize 'ABEA.Weapon.Range.Distant'}}" />
+                <input type="number" name="system.ranges.max" value="{{system.ranges.max}}" min="0"
+                    data-tooltip="{{localize 'ABEA.Weapon.Range.Max'}}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label>{{localize "ABEA.Weapon.Condition.Label"}}</label>
+            <div class="form-fields">
+                <select name="system.condition" data-dtype="Number">
+                    {{selectOptions config.weaponConditions selected=conditionKey localize=true}}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>{{localize "ABEA.Item.Price"}}</label>
+            <div class="form-fields">
+                <input type="number" name="system.price" value="{{system.price}}" min="0" step="1" />
+            </div>
+        </div>
+        <div class="form-group">
             <label>{{localize "ABEA.Item.Range"}}</label>
             <div class="form-fields">
                 <input type="text" name="system.range" value="{{document.system.range}}"

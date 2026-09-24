@@ -8,8 +8,14 @@
             <div class="points-field">
 
                 <label>{{localize "ABEA.Skill.PointsToSpend"}}</label>
-                <input type="text" name="system.attributes.skillPoints" value="{{system.attributes.skillPoints}}"
-                    placeholder="0" data-dtype="Number" />
+                <input type="number" name="system.attributes.skillPoints" value="{{system.attributes.skillPoints}}"
+                    placeholder="0" min="0" {{#unless isGM}}disabled{{/unless}}
+                    data-tooltip="{{localize 'ABEA.Learning.Hint'}}" />
+                {{#if isGM}}
+                <a class="grant-points" data-action="grantLearningPoints" data-tooltip="{{localize 'ABEA.Learning.Grant'}}">
+                    <i class="fas fa-plus-circle"></i>
+                </a>
+                {{/if}}
             </div>
         </div>
 
@@ -41,7 +47,7 @@
     <!-- Skills List Grid -->
     <div class="skills-list-grid">
         {{#each skills as |skill index|}}
-        <div class="skill-row-grid" data-index="{{index}}" draggable="true">
+        <div class="skill-row-grid draggable" data-index="{{index}}" draggable="true">
             <input type="hidden" name="system.skills.{{index}}.name" value="{{skill.name}}">
             <input type="hidden" name="system.skills.{{index}}.img" value="{{skill.img}}">
 

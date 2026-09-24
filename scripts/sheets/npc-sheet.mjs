@@ -1,5 +1,7 @@
 import { AbeaActorSheet } from "./actor-sheet.mjs";
 
+const { TextEditor } = foundry.applications.ux;
+
 /**
  * Simplified NPC Sheet for ABEA.
  * Single-page layout, optimized for GM workflow.
@@ -34,8 +36,7 @@ export class AbeaNPCSheet extends AbeaActorSheet {
         form: {
             submitOnChange: true,
             closeOnSubmit: false
-        },
-        dragDrop: [{ dragSelector: ".item-list .item, .skill-row-grid", dropSelector: null }]
+        }
     };
 
     /** @override */
@@ -54,7 +55,7 @@ export class AbeaNPCSheet extends AbeaActorSheet {
      * @override 
      */
     async _onDrop(event) {
-        const data = TextEditor.getDragEventData(event);
+        const data = TextEditor.implementation.getDragEventData(event);
 
         if (data.type !== "Item") return super._onDrop(event);
 

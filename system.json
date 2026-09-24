@@ -10,10 +10,10 @@
       "thumbnail": "systems/abea/assets/thumb.png"
     }
   ],
-  "version": "1.0.6",
+  "version": "1.1.1",
   "compatibility": {
-    "minimum": "13",
-    "verified": "13.351"
+    "minimum": "14",
+    "verified": "14.360"
   },
   "authors": [
     {
@@ -42,26 +42,38 @@
   "documentTypes": {
     "Actor": {
       "character": {
-        "html": "templates/actor/actor-sheet.hbs",
-        "label": "ABEA.Actor.Character"
+        "htmlFields": [
+          "biography.characteristics",
+          "biography.history"
+        ]
       },
       "npc": {
-        "html": "templates/actor/npc-sheet.hbs",
-        "label": "ABEA.Actor.NPC"
+        "htmlFields": [
+          "biography.characteristics",
+          "biography.history"
+        ]
       }
     },
     "Item": {
       "item": {
-        "html": "systems/abea/templates/item/item-generic-sheet.hbs",
-        "label": "ABEA.Item.Base"
+        "htmlFields": [
+          "description"
+        ]
       },
       "weapon": {
-        "html": "systems/abea/templates/item/item-weapon-sheet.hbs",
-        "label": "ABEA.Item.Weapon"
+        "htmlFields": [
+          "description"
+        ]
       },
       "skill": {
-        "html": "systems/abea/templates/item/item-skill-sheet.hbs",
-        "label": "ABEA.Item.Skill"
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "trait": {
+        "htmlFields": [
+          "description"
+        ]
       }
     }
   },
@@ -98,6 +110,17 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    },
+    {
+      "name": "abea-traits",
+      "label": "Características",
+      "path": "packs/abea-traits",
+      "type": "Item",
+      "system": "abea",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "packFolders": [
@@ -107,7 +130,8 @@
       "packs": [
         "abea-weapons",
         "abea-skills",
-        "abea-items"
+        "abea-items",
+        "abea-traits"
       ]
     }
   ],

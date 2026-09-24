@@ -1,0 +1,27 @@
+<div class="{{cssClass}}">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{document.img}}" data-action="editImage" title="{{document.name}}" height="100"
+            width="100" />
+        <div class="header-details-panel">
+            <div class="header-details charname">
+                <input name="name" type="text" value="{{document.name}}" placeholder="{{localize 'ABEA.Item.Name'}}" />
+            </div>
+            <div class="form-group type-margin" data-tooltip="{{localize 'ABEA.Trait.FlawHint'}}">
+                <label>{{localize "ABEA.Trait.Flaw"}}</label>
+                <div class="form-fields">
+                    <input type="checkbox" name="system.flaw" {{checked system.flaw}} />
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="item-properties">
+        <section class="sheet-body">
+            <label class="description-label">{{localize "ABEA.Item.Description"}}</label>
+            <div class="item-description-panel">
+                <textarea placeholder="{{localize 'ABEA.Item.Description'}}" name="system.description"
+                    id="system.description" rows="1">{{document.system.description}}</textarea>
+            </div>
+        </section>
+    </div>
+</div>
