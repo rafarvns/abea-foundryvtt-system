@@ -30,7 +30,6 @@ jobs:
           mkdir dist
           # Copy core files
           cp system.json dist/
-          cp template.json dist/
           cp README.md dist/
           # Copy directories (if they exist)
           [ -d assets ] && cp -r assets dist/
