@@ -1,5 +1,14 @@
-2026/09/23-18:32:47.072 4158 Log #39: 0 ops saved to Table #40 OK
-2026/09/23-18:32:47.077 4158 Archiving C:\Users\RAFA-PC\AppData\Local\FoundryVTT\Data\systems\abea\packs\abea-skills/000039.log: OK
-2026/09/23-18:32:47.079 4158 Table #37: 112 entries OK
-2026/09/23-18:32:47.086 4158 Archiving C:\Users\RAFA-PC\AppData\Local\FoundryVTT\Data\systems\abea\packs\abea-skills/MANIFEST-000038: OK
-2026/09/23-18:32:47.094 4158 **** Repaired leveldb C:\Users\RAFA-PC\AppData\Local\FoundryVTT\Data\systems\abea\packs\abea-skills; recovered 1 files; 42308 bytes. Some data may have been lost. ****
+2026/09/23-22:49:38.819 32d4 Recovering log #115
+2026/09/23-22:49:38.831 32d4 Delete type=0 #115
+2026/09/23-22:49:38.831 32d4 Delete type=3 #113
+2026/09/23-22:49:38.879 5bbc Level-0 table #121: started
+2026/09/23-22:49:38.885 5bbc Level-0 table #121: 4610 bytes OK
+2026/09/23-22:49:38.887 5bbc Delete type=0 #119
+2026/09/23-22:49:38.887 5bbc Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at '!items!wQ4p1hPiuTAz36LZ' @ 469 : 1
+2026/09/23-22:49:38.887 5bbc Compacting 1@0 + 1@1 files
+2026/09/23-22:49:38.895 5bbc Generated table #122@0: 112 keys, 42578 bytes
+2026/09/23-22:49:38.895 5bbc Compacted 1@0 + 1@1 files => 42578 bytes
+2026/09/23-22:49:38.897 5bbc compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/09/23-22:49:38.897 5bbc Delete type=2 #117
+2026/09/23-22:49:38.899 5bbc Delete type=2 #121
+2026/09/23-22:49:38.899 5bbc Manual compaction at level-0 from '!items!wQ4p1hPiuTAz36LZ' @ 469 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
